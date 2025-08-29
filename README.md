@@ -66,7 +66,29 @@ graph TB
     style MON fill:#96ceb4
 ```
 
-## 📋 **Table of Contents**
+### 🔍 **Detailed Architecture Documentation**
+
+For comprehensive architectural views, see our detailed diagrams:
+
+- 🏗️ [**Complete Architecture Diagrams**](docs/DIAGRAMAS_ARQUITETURA_COMPLETOS.md)
+  - Kubernetes deployment with resource specifications
+  - Kafka topics with partition and replication details
+  - Sequence diagrams showing sync/async flows
+  - Hexagonal architecture internal structure
+  - Topic routing strategy and data flow
+  - Complete monitoring and observability setup
+
+### 📋 **Architecture Highlights**
+
+| Component | Technology | Sync/Async | Purpose |
+|-----------|------------|------------|---------|
+| **HTTP API** | Spring Boot REST | ⚡ SYNC | Log ingestion endpoint |
+| **Message Publishing** | Kafka Producer | 🔄 ASYNC | Reliable message delivery |
+| **Message Consumption** | Kafka Consumer | 🔄 ASYNC | Background processing |
+| **External Integration** | REST Client | ⚡ SYNC | Third-party API calls |
+| **Metrics Collection** | Micrometer/Prometheus | 🔄 ASYNC | Observability |
+
+---
 
 - [🎯 Project Overview](#-project-overview)
 - [🏛️ Architecture Diagram](#️-architecture-diagram)
@@ -321,6 +343,7 @@ logs_level_error_total{level="ERROR"} 23
 - 🏗️ [**Hexagonal Architecture Guide**](docs/ARQUITETURA_HEXAGONAL.md)
 - 🔄 [**Integration Workflow**](docs/WORKFLOW_INTEGRACAO.md)
 - 📊 [**Implementation Status**](docs/HEXAGONAL_IMPLEMENTATION_STATUS.md)
+- 🎨 [**Complete Architecture Diagrams**](docs/DIAGRAMAS_ARQUITETURA_COMPLETOS.md)
 - 🚀 [**Deployment Guide**](hybrid-deployment/README.md)
 - ⚙️ [**VS Code Setup**](.vscode/README.md)
 - 🧪 [**Testing Guide**](docs/TESTING.md)
