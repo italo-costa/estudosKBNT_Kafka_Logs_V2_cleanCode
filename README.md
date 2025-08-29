@@ -17,16 +17,18 @@ Este projeto contém estudos e exemplos práticos de como usar Apache Kafka e Ku
 ## 🎯 Sobre o Projeto
 
 Este repositório foi criado para estudar e demonstrar:
-- Configuração do Apache Kafka em Kubernetes
-- Coleta e processamento de logs usando Kafka
+- Configuração do Red Hat AMQ Streams (Kafka) em Kubernetes
+- Coleta e processamento de logs usando AMQ Streams
 - Implementação de produtores e consumidores de logs
 - Monitoramento e observabilidade
 - Padrões de arquitetura para logs distribuídos
 
 ## 🚀 Tecnologias
 
-- **Apache Kafka** - Plataforma de streaming distribuída
+- **Red Hat AMQ Streams** - Plataforma Kafka enterprise (versão community)
+- **Apache Kafka** - Base do AMQ Streams
 - **Kubernetes** - Orquestração de containers
+- **Strimzi Operator** - Operador Kafka para Kubernetes
 - **Docker** - Containerização
 - **Python** - Aplicações de exemplo
 - **Java** - Aplicações Kafka nativas
@@ -91,11 +93,15 @@ minikube start
 kubectl config current-context
 ```
 
-### 3. Deploy do Kafka no Kubernetes
+### 3. Deploy do AMQ Streams no Kubernetes
 ```bash
-# Deploy usando Helm
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install kafka bitnami/kafka -f kubernetes/kafka/values.yaml
+# Instalar operador AMQ Streams
+kubectl create namespace kafka
+kubectl apply -f https://strimzi.io/install/latest?namespace=kafka -n kafka
+
+# Deploy usando Custom Resources do Strimzi
+kubectl apply -f kubernetes/kafka/kafka-cluster.yaml
+kubectl apply -f kubernetes/kafka/kafka-topics.yaml
 ```
 
 ### 4. Execute os exemplos

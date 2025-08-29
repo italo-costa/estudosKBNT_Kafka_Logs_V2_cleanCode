@@ -1,15 +1,26 @@
-# Configuração do Kafka para Logs
+# Configuração do Red Hat AMQ Streams para Logs
 
 ## Visão Geral
 
-Este documento explica como configurar o Apache Kafka especificamente para processamento de logs em um ambiente de estudos.
+Este documento explica como configurar o Red Hat AMQ Streams especificamente para processamento de logs em um ambiente de estudos.
+
+## 🔴 Sobre o Red Hat AMQ Streams
+
+O AMQ Streams é baseado no projeto open-source **Strimzi** e fornece:
+- Apache Kafka com suporte enterprise
+- Operadores Kubernetes nativos
+- Configuração declarativa via Custom Resources
+- Monitoramento e métricas integradas
+- Gestão simplificada de clusters Kafka
+- **Versão Community gratuita disponível**
 
 ## 🎯 Objetivos
 
-- Configurar Kafka para alta performance com logs
+- Configurar AMQ Streams para alta performance com logs
 - Otimizar retenção e particionamento para dados de log
 - Configurar produtores e consumidores eficientes
 - Implementar padrões de monitoramento
+- Utilizar recursos enterprise na versão community
 
 ## 📋 Tópicos Recomendados
 

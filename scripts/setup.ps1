@@ -19,8 +19,8 @@ function Write-Error {
     Write-Host $args[0] -ForegroundColor Red 
 }
 
-Write-Info "🚀 Configurando ambiente de estudos Kafka + Kubernetes"
-Write-Info "================================================="
+Write-Info "🚀 Configurando ambiente de estudos AMQ Streams (Kafka) + Kubernetes"
+Write-Info "============================================================="
 
 # Função para verificar se um comando existe
 function Test-Command {
@@ -68,31 +68,29 @@ pip install -r requirements.txt
 Write-Info "🏗️  Configurando namespace Kafka no Kubernetes..."
 kubectl create namespace kafka --dry-run=client -o yaml | kubectl apply -f -
 
-# Deploy do Zookeeper
-Write-Info "🐘 Fazendo deploy do Zookeeper..."
-kubectl apply -f kubernetes/zookeeper/zookeeper-deployment.yaml
+# Instalar operador Strimzi (AMQ Streams community)
+Write-Info "� Instalando operador Strimzi (AMQ Streams)..."
+kubectl apply -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
 
-# Aguardar Zookeeper estar pronto
-Write-Info "⏳ Aguardando Zookeeper estar pronto..."
-kubectl wait --for=condition=ready pod -l app=zookeeper -n kafka --timeout=300s
+# Aguardar operador estar pronto
+Write-Info "⏳ Aguardando operador Strimzi estar pronto..."
+kubectl wait pod -l=name=strimzi-cluster-operator --for=condition=Ready -n kafka --timeout=300s
 
-# Deploy do Kafka
-Write-Info "📨 Fazendo deploy do Kafka..."
-kubectl apply -f kubernetes/kafka/kafka-deployment.yaml
+# Deploy do cluster Kafka via Custom Resources
+Write-Info "📨 Fazendo deploy do cluster Kafka (AMQ Streams)..."
+kubectl apply -f kubernetes/kafka/kafka-cluster.yaml
 
-# Aguardar Kafka estar pronto
-Write-Info "⏳ Aguardando Kafka estar pronto..."
-kubectl wait --for=condition=ready pod -l app=kafka -n kafka --timeout=300s
+# Aguardar cluster Kafka estar pronto
+Write-Info "⏳ Aguardando cluster Kafka estar pronto..."
+kubectl wait kafka/kafka-cluster --for=condition=Ready -n kafka --timeout=600s
 
-# Criar tópicos básicos
-Write-Info "📋 Criando tópicos básicos..."
-kubectl exec -n kafka kafka-0 -- kafka-topics --create --topic application-logs --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1 --if-not-exists
-kubectl exec -n kafka kafka-0 -- kafka-topics --create --topic error-logs --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1 --if-not-exists
-kubectl exec -n kafka kafka-0 -- kafka-topics --create --topic metrics --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1 --if-not-exists
+# Criar tópicos via Custom Resources
+Write-Info "📋 Criando tópicos via Custom Resources..."
+kubectl apply -f kubernetes/kafka/kafka-topics.yaml
 
 # Port-forward para acesso local
-Write-Info "🌐 Configurando port-forward para Kafka..."
-Start-Process -NoNewWindow kubectl -ArgumentList "port-forward", "-n", "kafka", "svc/kafka", "9092:9092"
+Write-Info "🌐 Configurando port-forward para AMQ Streams..."
+Start-Process -NoNewWindow kubectl -ArgumentList "port-forward", "-n", "kafka", "svc/kafka-cluster-kafka-bootstrap", "9092:9092"
 
 Write-Success ""
 Write-Success "✅ Setup concluído com sucesso!"
@@ -106,9 +104,13 @@ Write-Info "2. Testar o consumidor de logs (em outro terminal):"
 Write-Info "   python consumers/python/log-consumer.py"
 Write-Info ""
 Write-Info "3. Ver tópicos criados:"
-Write-Info "   kubectl exec -n kafka kafka-0 -- kafka-topics --list --bootstrap-server localhost:9092"
+Write-Info "   kubectl get kafkatopics -n kafka"
 Write-Info ""
-Write-Info "4. Monitorar pods:"
+Write-Info "   # Ou via linha de comando:"
+Write-Info "   kubectl exec -n kafka kafka-cluster-kafka-0 -- /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list"
+Write-Info ""
+Write-Info "4. Monitorar cluster AMQ Streams:"
+Write-Info "   kubectl get kafka -n kafka"
 Write-Info "   kubectl get pods -n kafka"
 Write-Info ""
 Write-Info "5. Para usar Docker Compose (alternativa local):"

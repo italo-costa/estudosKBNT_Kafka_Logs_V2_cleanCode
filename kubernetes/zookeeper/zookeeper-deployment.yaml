@@ -16,7 +16,9 @@ spec:
     spec:
       containers:
       - name: zookeeper
-        image: confluentinc/cp-zookeeper:7.4.0
+        image: registry.redhat.io/amq7/amq-streams-kafka-34-rhel8:2.4.0
+        command: ["/opt/kafka/bin/zookeeper-server-start.sh"]
+        args: ["/opt/kafka/config/zookeeper.properties"]
         ports:
         - containerPort: 2181
         - containerPort: 2888

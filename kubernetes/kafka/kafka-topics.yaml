@@ -1,0 +1,88 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: application-logs
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka-cluster
+spec:
+  partitions: 6
+  replicas: 3
+  config:
+    retention.ms: 604800000  # 7 dias
+    segment.ms: 86400000     # 1 dia
+    compression.type: "snappy"
+    cleanup.policy: "delete"
+    min.insync.replicas: 2
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: error-logs
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka-cluster
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    retention.ms: 2592000000  # 30 dias
+    segment.ms: 86400000      # 1 dia
+    compression.type: "gzip"   # Melhor compressão para erros
+    cleanup.policy: "delete"
+    min.insync.replicas: 2
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: audit-logs
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka-cluster
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    retention.ms: -1          # Retenção infinita
+    segment.ms: 86400000      # 1 dia
+    compression.type: "gzip"
+    cleanup.policy: "compact" # Manter último valor por chave
+    min.insync.replicas: 2
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: metrics
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka-cluster
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    retention.ms: 259200000   # 3 dias
+    segment.ms: 3600000       # 1 hora
+    compression.type: "snappy"
+    cleanup.policy: "delete"
+    min.insync.replicas: 2
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: security-events
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka-cluster
+spec:
+  partitions: 2
+  replicas: 3
+  config:
+    retention.ms: 7776000000  # 90 dias
+    segment.ms: 86400000      # 1 dia
+    compression.type: "gzip"
+    cleanup.policy: "delete"
+    min.insync.replicas: 3    # Máxima durabilidade para segurança
