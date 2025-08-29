@@ -26,20 +26,30 @@ Este repositório foi criado para estudar e demonstrar:
 ## 🚀 Tecnologias
 
 - **Red Hat AMQ Streams** - Plataforma Kafka enterprise (versão community)
+- **Spring Boot 3.2** - Microserviços Java
+- **Spring Kafka** - Integração Kafka com Spring
+- **Spring Cloud Gateway** - API Gateway
 - **Apache Kafka** - Base do AMQ Streams
 - **Kubernetes** - Orquestração de containers
 - **Strimzi Operator** - Operador Kafka para Kubernetes
 - **Docker** - Containerização
 - **Python** - Aplicações de exemplo
-- **Java** - Aplicações Kafka nativas
-- **Helm** - Gerenciamento de pacotes Kubernetes
-- **Prometheus & Grafana** - Monitoramento
-- **ELK Stack** - Elasticsearch, Logstash, Kibana
+- **Java 17** - Aplicações enterprise
+- **Maven** - Build e gerenciamento de dependências
+- **VS Code** - IDE otimizada para desenvolvimento
+- **PostgreSQL** - Banco de dados para analytics
+- **Redis** - Cache distribuído
 
 ## 📁 Estrutura do Projeto
 
 ```
 estudosKBNT_Kafka_Logs/
+├── microservices/             # Microserviços Spring Boot
+│   ├── api-gateway/          # Gateway de APIs
+│   ├── log-producer-service/ # Produtor de logs (Spring Boot)
+│   ├── log-consumer-service/ # Consumidor de logs (Spring Boot)
+│   ├── log-analytics-service/# Análise de logs (Spring Boot)
+│   └── docker-compose.yml   # Container dos microserviços
 ├── kafka/                     # Configurações do Kafka
 │   ├── configs/              # Configurações do broker
 │   ├── topics/               # Definições de tópicos
@@ -104,20 +114,53 @@ kubectl apply -f kubernetes/kafka/kafka-cluster.yaml
 kubectl apply -f kubernetes/kafka/kafka-topics.yaml
 ```
 
-### 4. Execute os exemplos
+### 4. Executar Microserviços Spring Boot
+
+#### Opção A: VS Code (Desenvolvimento)
 ```bash
-# Produtor de logs
+# Abrir no VS Code
+code .
+
+# Instalar extensões Java (automático)
+# Usar Spring Boot Dashboard para executar serviços
+```
+
+#### Opção B: Docker Compose
+```bash
+# Build e executar todos os microserviços
+cd microservices
+./build-all.ps1
+docker-compose up -d
+```
+
+#### Opção C: Individual (Maven)
+```bash
+cd microservices/log-producer-service
+mvn spring-boot:run -Dspring-boot.run.profiles=local
+```
+
+### 5. Testar o Sistema Completo
+```bash
+# Testar APIs dos microserviços (Spring Boot)
+curl -X POST http://localhost:8081/api/v1/logs \
+  -H "Content-Type: application/json" \
+  -d '{"service":"test","level":"INFO","message":"Hello from microservice"}'
+
+# Ou usar Python (scripts originais)
 python producers/python/log-producer.py
 
-# Consumidor de logs
+# Consumidor Python
 python consumers/python/log-consumer.py
 ```
 
 ## 📚 Exemplos
 
+- [Microserviços Spring Boot](microservices/README.md)
+- [Desenvolvimento com VS Code](docs/vscode-development.md)
 - [Produtor de Logs Simples](examples/simple-log-producer/)
 - [Consumidor com Processamento](examples/log-processor/)
 - [Pipeline Completo de Logs](examples/complete-pipeline/)
+- [Exemplo AMQ Streams](examples/amq-streams-example.md)
 - [Monitoramento com Grafana](examples/monitoring/)
 
 ## 📖 Documentação
