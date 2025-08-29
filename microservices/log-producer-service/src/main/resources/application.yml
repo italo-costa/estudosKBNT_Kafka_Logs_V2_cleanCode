@@ -1,9 +1,9 @@
-# Log Producer Service Configuration
+# Configurações do Log Producer Service
 
 server:
   port: 8081
   servlet:
-    context-path: /
+    context-path: /log-producer
 
 spring:
   application:
@@ -15,17 +15,12 @@ spring:
       acks: all
       retries: 3
       batch-size: 16384
-      linger-ms: 10
+      linger-ms: 1
       buffer-memory: 33554432
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      properties:
-        enable.idempotence: true
-        compression.type: snappy
-        max.in.flight.requests.per.connection: 5
-        request.timeout.ms: 30000
-        delivery.timeout.ms: 120000
-
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      compression-type: snappy
+      enable-idempotence: true
 # Configurações dos tópicos
 app:
   kafka:
@@ -33,6 +28,17 @@ app:
       application-logs: application-logs
       error-logs: error-logs
       audit-logs: audit-logs
+      financial-logs: financial-logs
+  
+  processing:
+    batch-size: 100
+    max-processing-time: 30000
+    
+  validation:
+    max-message-length: 10000
+    max-service-name-length: 100
+    enable-duplicate-detection: true
+    duplicate-cache-ttl: 3600
 
 # Actuator - Monitoramento
 management:
@@ -59,13 +65,13 @@ logging:
     org.springframework.kafka: INFO
     org.apache.kafka: WARN
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%logger{36}] [%X{correlationId}] - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%logger{36}] [%X{correlationId}] - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%logger{36}] [%X{requestId}] - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%logger{36}] [%X{requestId}] - %msg%n"
 
 # Info para o Actuator
 info:
   app:
     name: Log Producer Service
-    description: Microserviço para produção de logs no AMQ Streams
+    description: Microserviço para produção de logs no AMQ Streams usando arquitetura hexagonal
     version: 1.0.0
     profiles: ${spring.profiles.active:default}
