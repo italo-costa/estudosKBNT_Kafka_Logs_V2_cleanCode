@@ -2,6 +2,8 @@
 
 Este projeto contém estudos e exemplos práticos de como usar Apache Kafka e Kubernetes para processamento e gerenciamento de logs.
 
+> 📚 **Projeto de Estudos**: Este é um repositório privado dedicado ao aprendizado e experimentação com tecnologias de logs distribuídos.
+
 ## 📋 Índice
 
 - [Sobre o Projeto](#sobre-o-projeto)
@@ -78,6 +80,8 @@ git clone https://github.com/seu-usuario/estudosKBNT_Kafka_Logs.git
 cd estudosKBNT_Kafka_Logs
 ```
 
+> ⚠️ **Nota**: Este é um repositório privado. Certifique-se de ter as permissões adequadas para acessá-lo.
+
 ### 2. Configure o ambiente Kubernetes
 ```bash
 # Inicie o minikube (se estiver usando)
@@ -120,11 +124,19 @@ python consumers/python/log-consumer.py
 
 ## 🤝 Contribuindo
 
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
+Como este é um projeto de estudos privado:
+
+1. Use branches para diferentes experimentos (`git checkout -b experimento/nova-funcionalidade`)
+2. Faça commits descritivos (`git commit -m 'Adiciona: novo padrão de processamento de logs'`)
+3. Documente suas descobertas na pasta `docs/`
+4. Crie issues para rastrear objetivos de aprendizado
+
+## 📝 Registro de Aprendizado
+
+Mantenha um registro dos seus estudos:
+- Crie arquivos `docs/experimento-YYYY-MM-DD.md` para documentar descobertas
+- Use issues para rastrear objetivos e progresso
+- Marque commits com tags para marcos importantes
 
 ## 📄 Licença
 
