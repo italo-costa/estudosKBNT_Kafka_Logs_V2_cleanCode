@@ -60,10 +60,14 @@ class LogConsumer:
                 self.handle_error_log(log_entry)
             elif level == 'WARN':
                 self.handle_warning_log(log_entry)
+            elif level == 'AUDIT':
+                self.handle_audit_log(log_entry)
             elif service == 'payment-service' and 'Payment processed' in log_entry.get('message', ''):
                 self.handle_payment_log(log_entry)
             elif 'stock alert' in log_entry.get('message', '').lower():
                 self.handle_inventory_alert(log_entry)
+            elif log_entry.get('hexagonal_layer'):
+                self.handle_hexagonal_layer_log(log_entry)
             
             # Log básico do processamento
             timestamp = log_entry.get('timestamp', 'unknown')
@@ -120,12 +124,45 @@ class LogConsumer:
         logger.warning(f"📦 Low stock: {item_id} = {current_stock} units")
         
         # Aqui você poderia disparar reposição automática
+    
+    def handle_hexagonal_layer_log(self, log_entry):
+        """Processa logs da arquitetura hexagonal"""
+        layer = log_entry.get('hexagonal_layer')
+        domain = log_entry.get('domain', 'unknown')
+        operation = log_entry.get('operation', 'unknown')
+        
+        logger.info(f"🏗️  {layer.upper()}: {domain} - {operation}")
+        
+        # Rastrea operações por camada
+        if layer not in self.stats:
+            self.stats[layer] = 0
+        self.stats[layer] += 1
+        
+        # Operações específicas
+        if layer == 'domain' and operation in ['stock-updated', 'payment-processed']:
+            logger.info(f"   ⭐ Evento de domínio crítico: {operation}")
+        elif layer == 'application' and operation == 'command-processed':
+            logger.info(f"   📝 Comando de aplicação executado")
+        elif layer == 'infrastructure' and operation in ['database-updated', 'kafka-published']:
+            logger.info(f"   🔧 Operação de infraestrutura: {operation}")
+    
+    def handle_audit_log(self, log_entry):
+        """Processa logs de auditoria"""
+        user = log_entry.get('user', 'system')
+        action = log_entry.get('action', 'unknown')
+        resource = log_entry.get('resource', 'unknown')
+        
+        logger.info(f"📋 AUDITORIA: {user} executou {action} em {resource}")
+        
+        if 'audit' not in self.stats:
+            self.stats['audit'] = 0
+        self.stats['audit'] += 1
 
     def print_stats(self):
         """Imprime estatísticas de processamento"""
-        print("\n" + "="*50)
-        print("📊 PROCESSING STATISTICS")
-        print("="*50)
+        print("\n" + "="*60)
+        print("📊 PROCESSING STATISTICS - HEXAGONAL ARCHITECTURE")
+        print("="*60)
         print(f"Total messages processed: {self.stats['total_messages']}")
         print(f"Processing errors: {self.stats['errors']}")
         
@@ -136,7 +173,26 @@ class LogConsumer:
         print("\n🚦 By Level:")
         for level, count in sorted(self.stats['by_level'].items()):
             print(f"  {level}: {count}")
-        print("="*50)
+        
+        # Estatísticas de arquitetura hexagonal
+        hexagonal_layers = ['domain', 'application', 'infrastructure']
+        hexagonal_stats = {layer: self.stats.get(layer, 0) for layer in hexagonal_layers if self.stats.get(layer, 0) > 0}
+        
+        if hexagonal_stats:
+            print("\n🏗️  By Hexagonal Layer:")
+            for layer, count in hexagonal_stats.items():
+                print(f"  {layer}: {count}")
+        
+        # Estatísticas especiais
+        special_stats = ['audit', 'inventory_alerts']
+        special_counts = {stat: self.stats.get(stat, 0) for stat in special_stats if self.stats.get(stat, 0) > 0}
+        
+        if special_counts:
+            print("\n🎯 Special Events:")
+            for stat, count in special_counts.items():
+                print(f"  {stat}: {count}")
+                
+        print("="*60)
 
     def start_consuming(self):
         """Inicia o consumo de mensagens"""

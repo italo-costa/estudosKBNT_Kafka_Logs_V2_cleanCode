@@ -1,0 +1,64 @@
+# TYPE kbnt_virtual_stock_total gauge
+kbnt_virtual_stock_total{product="PROD-001"} 1969 1756580914292
+kbnt_virtual_stock_total{product="PROD-002"} 1487 1756580914292
+kbnt_virtual_stock_total{product="PROD-003"} 987 1756580914292
+kbnt_virtual_stock_total{product="PROD-004"} 2466 1756580914292
+kbnt_virtual_stock_total{product="PROD-005"} 2951 1756580914292
+# TYPE kbnt_virtual_stock_reserved gauge
+kbnt_virtual_stock_reserved{product="PROD-001"} 1969 1756580914292
+kbnt_virtual_stock_reserved{product="PROD-002"} 1487 1756580914292
+kbnt_virtual_stock_reserved{product="PROD-003"} 987 1756580914292
+kbnt_virtual_stock_reserved{product="PROD-004"} 2466 1756580914292
+kbnt_virtual_stock_reserved{product="PROD-005"} 2951 1756580914292
+# TYPE kbnt_virtual_stock_available gauge
+kbnt_virtual_stock_available{product="PROD-001"} 0 1756580914292
+kbnt_virtual_stock_available{product="PROD-002"} 0 1756580914292
+kbnt_virtual_stock_available{product="PROD-003"} 0 1756580914292
+kbnt_virtual_stock_available{product="PROD-004"} 0 1756580914292
+kbnt_virtual_stock_available{product="PROD-005"} 0 1756580914292
+# TYPE kbnt_virtual_stock_utilization_percent gauge
+kbnt_virtual_stock_utilization_percent{product="PROD-001"} 100.0 1756580914292
+kbnt_virtual_stock_utilization_percent{product="PROD-002"} 100.0 1756580914292
+kbnt_virtual_stock_utilization_percent{product="PROD-003"} 100.0 1756580914292
+kbnt_virtual_stock_utilization_percent{product="PROD-004"} 100.0 1756580914292
+kbnt_virtual_stock_utilization_percent{product="PROD-005"} 100.0 1756580914292
+# TYPE kbnt_virtual_reservations_active_total gauge
+kbnt_virtual_reservations_active_total 3301 1756580914292
+# TYPE kbnt_virtual_stock_requests_total gauge
+kbnt_virtual_stock_requests_total{operation="RESERVE,product="PROD-003,service="virtual-stock-service"} 2588.0 1756580914292
+kbnt_virtual_stock_requests_total{operation="RESERVE,product="PROD-005,service="virtual-stock-service"} 2692.0 1756580914292
+kbnt_virtual_stock_requests_total{operation="RELEASE,product="PROD-002,service="virtual-stock-service"} 339.0 1756580914292
+kbnt_virtual_stock_requests_total{operation="RESERVE,product="PROD-001,service="virtual-stock-service"} 2583.0 1756580914292
+kbnt_virtual_stock_requests_total{operation="RESERVE,product="PROD-004,service="virtual-stock-service"} 2597.0 1756580914292
+kbnt_virtual_stock_requests_total{operation="CONFIRM,product="PROD-003,service="virtual-stock-service"} 735.0 1756580914292
+kbnt_virtual_stock_requests_total{operation="CONFIRM,product="PROD-001,service="virtual-stock-service"} 707.0 1756580914292
+kbnt_virtual_stock_requests_total{operation="RELEASE,product="PROD-005,service="virtual-stock-service"} 380.0 1756580914292
+kbnt_virtual_stock_requests_total{operation="CONFIRM,product="PROD-002,service="virtual-stock-service"} 788.0 1756580914292
+kbnt_virtual_stock_requests_total{operation="RELEASE,product="PROD-001,service="virtual-stock-service"} 333.0 1756580914292
+kbnt_virtual_stock_requests_total{operation="RESERVE,product="PROD-002,service="virtual-stock-service"} 2603.0 1756580914292
+kbnt_virtual_stock_requests_total{operation="CONFIRM,product="PROD-004,service="virtual-stock-service"} 786.0 1756580914292
+kbnt_virtual_stock_requests_total{operation="RELEASE,product="PROD-003,service="virtual-stock-service"} 372.0 1756580914292
+kbnt_virtual_stock_requests_total{operation="CONFIRM,product="PROD-005,service="virtual-stock-service"} 768.0 1756580914292
+kbnt_virtual_stock_requests_total{operation="RELEASE,product="PROD-004,service="virtual-stock-service"} 329.0 1756580914292
+# TYPE kbnt_amq_messages_sent_total gauge
+kbnt_amq_messages_sent_total{service="virtual-stock-service,topic="virtual-stock-events"} 3449.0 1756580914292
+# TYPE kbnt_virtual_stock_operations_successful_total gauge
+kbnt_virtual_stock_operations_successful_total{operation="RESERVE,service="virtual-stock-service"} 3375.0 1756580914292
+kbnt_virtual_stock_operations_successful_total{operation="RELEASE,service="virtual-stock-service"} 29.0 1756580914292
+kbnt_virtual_stock_operations_successful_total{operation="CONFIRM,service="virtual-stock-service"} 45.0 1756580914292
+# TYPE kbnt_virtual_stock_operations_failed_total gauge
+kbnt_virtual_stock_operations_failed_total{operation="RELEASE,reason="NO_MATCHING_RESERVATION,service="virtual-stock-service"} 1724.0 1756580914292
+kbnt_virtual_stock_operations_failed_total{operation="CONFIRM,reason="NO_MATCHING_RESERVATION,service="virtual-stock-service"} 3739.0 1756580914292
+kbnt_virtual_stock_operations_failed_total{operation="RESERVE,reason="INSUFFICIENT_STOCK,service="virtual-stock-service"} 9688.0 1756580914292
+# TYPE kbnt_virtual_stock_operation_duration_seconds histogram
+kbnt_virtual_stock_operation_duration_seconds_count 18600 1756580914292
+kbnt_virtual_stock_operation_duration_seconds_sum 4.231287717819214 1756580914292
+kbnt_virtual_stock_operation_duration_seconds_bucket{le="0.001"} 18599 1756580914292
+kbnt_virtual_stock_operation_duration_seconds_bucket{le="0.005"} 18600 1756580914292
+kbnt_virtual_stock_operation_duration_seconds_bucket{le="0.01"} 18600 1756580914292
+kbnt_virtual_stock_operation_duration_seconds_bucket{le="0.05"} 18600 1756580914292
+kbnt_virtual_stock_operation_duration_seconds_bucket{le="0.1"} 18600 1756580914292
+kbnt_virtual_stock_operation_duration_seconds_bucket{le="0.5"} 18600 1756580914292
+kbnt_virtual_stock_operation_duration_seconds_bucket{le="1.0"} 18600 1756580914292
+kbnt_virtual_stock_operation_duration_seconds_bucket{le="5.0"} 18600 1756580914292
+kbnt_virtual_stock_operation_duration_seconds_bucket{le="10.0"} 18600 1756580914292
