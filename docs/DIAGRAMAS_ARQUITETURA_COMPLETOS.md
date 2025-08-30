@@ -297,23 +297,23 @@ sequenceDiagram
     participant MON as Monitoring
     
     Note over C,API: Fluxo Síncrono - Produção de Logs
-    
-    C->>+LB: POST /api/logs Log Request
-    LB->>+P1: Route to Producer 1
-    P1->>P1: Validate Log Entry
-    P1->>+KT: Publish to Topic
-    KT-->>-P1: Ack
-    P1-->>-LB: 200 OK
-    LB-->>-C: Request Processed
+
+    C->>+LB: [1] POST /api/logs Log Request
+    LB->>+P1: [2] Route to Producer 1
+    P1->>P1: [3] Validate Log Entry
+    P1->>+KT: [4] Publish to Topic
+    KT-->>-P1: [5] Ack
+    P1-->>-LB: [6] 200 OK
+    LB-->>-C: [7] Request Processed
     
     Note over C1,MON: Fluxo Assíncrono - Consumo
     
-    KT->>+C1: Consume Log Event
-    C1->>+API: Forward to External System
-    API-->>-C1: Response
-    C1->>+MON: Record Metrics
-    MON-->>-C1: Metrics Saved
-    C1-->>-KT: Commit Offset
+    KT->>+C1: [8] Consume Log Event
+    C1->>+API: [9] Forward to External System
+    API-->>-C1: [10] Response
+    C1->>+MON: [11] Record Metrics
+    MON-->>-C1: [12] Metrics Saved
+    C1-->>-KT: [13] Commit Offset
 ```
 
 ## 🔄 Fluxo de Mensagens Kafka - Virtual Stock System
@@ -336,139 +336,139 @@ sequenceDiagram
 
     Note over TC,MON: 📦 Stock Creation Workflow
 
-    TC->>+LB: POST /api/v1/virtual-stock/stocks<br/>{productId: "AAPL", quantity: 150, price: 150.00}
-    LB->>+VS: Route to Virtual Stock Instance
+    TC->>+LB: [1] POST /api/v1/virtual-stock/stocks<br/>{productId: "AAPL", quantity: 150, price: 150.00}
+    LB->>+VS: [2] Route to Virtual Stock Instance
 
-    VS->>+DOM: createStock CreateStockCommand
+    VS->>+DOM: [3] createStock CreateStockCommand
     
     Note over DOM: 🎯 Domain Processing
-    DOM->>DOM: validateStockCreation
-    DOM->>DOM: Stock.builder build
-    DOM->>DOM: StockUpdatedEvent forCreation
+    DOM->>DOM: [4] validateStockCreation
+    DOM->>DOM: [5] Stock.builder build
+    DOM->>DOM: [6] StockUpdatedEvent forCreation
     
-    DOM-->>-VS: StockCreationResult success
+    DOM-->>-VS: [7] StockCreationResult success
     
-    VS->>+KP: publishStockUpdatedAsync event
+    VS->>+KP: [8] publishStockUpdatedAsync event
     
     Note over KP: 📤 Event Publishing Strategy
     alt High Priority Stock (Price > $100)
-        KP->>+K: send high-priority-updates event
+        KP->>+K: [9a] send high-priority-updates event
     else Normal Priority Stock  
-        KP->>+K: send virtual-stock-updates event
+        KP->>+K: [9b] send virtual-stock-updates event
     end
-    K-->>-KP: Ack (at-least-once delivery)
-    KP-->>-VS: Event published successfully
+    K-->>-KP: [10] Ack (at-least-once delivery)
+    KP-->>-VS: [11] Event published successfully
     
-    VS-->>-LB: 201 CREATED {stockId: "STK-001", totalValue: "$22,500"}
-    LB-->>-TC: HTTP 201 Stock Created
+    VS-->>-LB: [12] 201 CREATED {stockId: "STK-001", totalValue: "$22,500"}
+    LB-->>-TC: [13] HTTP 201 Stock Created
 
     Note over K,MON: 🔄 Asynchronous Processing Flow
 
     par ACL Consumer Processing
-        K->>+KC: consume StockUpdatedEvent from high-priority-updates
-        KC->>+ACL: processStockUpdateEvent event
+        K->>+KC: [14] consume StockUpdatedEvent from high-priority-updates
+        KC->>+ACL: [15] processStockUpdateEvent event
         
         Note over ACL: 🛡️ Anti-Corruption Translation
-        ACL->>ACL: translateToExternalFormat event
-        ACL->>ACL: enrichWithBusinessContext
+        ACL->>ACL: [16] translateToExternalFormat event
+        ACL->>ACL: [17] enrichWithBusinessContext
         
-        ACL->>+EXT: POST /api/v1/trading/stock-created<br/>{symbol: "AAPL", quantity: 150, ...}
-        EXT-->>-ACL: 200 OK {externalId: "EXT-AAPL-001"}
+        ACL->>+EXT: [18] POST /api/v1/trading/stock-created<br/>{symbol: "AAPL", quantity: 150, ...}
+        EXT-->>-ACL: [19] 200 OK {externalId: "EXT-AAPL-001"}
         
-        ACL->>+DB: INSERT consumption_log PROCESSED external_id
-        DB-->>-ACL: Audit log saved
+        ACL->>+DB: [20] INSERT consumption_log PROCESSED external_id
+        DB-->>-ACL: [21] Audit log saved
         
-        ACL->>+MON: increment stock.created tags symbol AAPL
-        MON-->>-ACL: Metrics recorded
+        ACL->>+MON: [22] increment stock.created tags symbol AAPL
+        MON-->>-ACL: [23] Metrics recorded
         
-        ACL-->>-KC: Processing completed successfully
-        KC-->>-K: Commit offset
+        ACL-->>-KC: [24] Processing completed successfully
+        KC-->>-K: [25] Commit offset
     end
 
     Note over TC,MON: 🔄 Stock Update Workflow
 
-    TC->>+LB: PUT /api/v1/virtual-stock/stocks/STK-001/quantity<br/>{newQuantity: 200, reason: "Replenishment"}
-    LB->>+VS: Route to Virtual Stock Instance
+    TC->>+LB: [26] PUT /api/v1/virtual-stock/stocks/STK-001/quantity<br/>{newQuantity: 200, reason: "Replenishment"}
+    LB->>+VS: [27] Route to Virtual Stock Instance
 
-    VS->>+DOM: updateStockQuantity UpdateStockQuantityCommand
+    VS->>+DOM: [28] updateStockQuantity UpdateStockQuantityCommand
     
     Note over DOM: 🎯 Business Rule Validation
-    DOM->>DOM: stock = repository.findById STK-001
-    DOM->>DOM: stock.updateQuantity 200 system
-    DOM->>DOM: StockUpdatedEvent forQuantityUpdate
+    DOM->>DOM: [29] stock = repository.findById STK-001
+    DOM->>DOM: [30] stock.updateQuantity 200 system
+    DOM->>DOM: [31] StockUpdatedEvent forQuantityUpdate
     
-    DOM-->>-VS: StockUpdateResult success
+    DOM-->>-VS: [32] StockUpdateResult success
     
-    VS->>+KP: publishStockUpdatedAsync event
-    KP->>+K: send virtual-stock-updates event
-    K-->>-KP: Ack confirmed
-    KP-->>-VS: Update event published
+    VS->>+KP: [33] publishStockUpdatedAsync event
+    KP->>+K: [34] send virtual-stock-updates event
+    K-->>-KP: [35] Ack confirmed
+    KP-->>-VS: [36] Update event published
     
-    VS-->>-LB: 200 OK {quantity: 200, totalValue: "$30,000"}
-    LB-->>-TC: HTTP 200 Stock Updated
+    VS-->>-LB: [37] 200 OK {quantity: 200, totalValue: "$30,000"}
+    LB-->>-TC: [38] HTTP 200 Stock Updated
 
     par ACL Consumer Processing - Update
-        K->>+KC: consume StockUpdatedEvent from virtual-stock-updates
-        KC->>+ACL: processStockUpdateEvent event
+        K->>+KC: [39] consume StockUpdatedEvent from virtual-stock-updates
+        KC->>+ACL: [40] processStockUpdateEvent event
         
-        ACL->>ACL: translateQuantityUpdate event
-        ACL->>+EXT: PUT api v1 trading stock-updated EXT-AAPL-001<br/>quantity 200 operation QUANTITY_UPDATE
-        EXT-->>-ACL: 200 OK updated true
+        ACL->>ACL: [41] translateQuantityUpdate event
+        ACL->>+EXT: [42] PUT api v1 trading stock-updated EXT-AAPL-001<br/>quantity 200 operation QUANTITY_UPDATE
+        EXT-->>-ACL: [43] 200 OK updated true
         
-        ACL->>+DB: INSERT consumption_log PROCESSED quantity_update
-        DB-->>-ACL: Update audit saved
+        ACL->>+DB: [44] INSERT consumption_log PROCESSED quantity_update
+        DB-->>-ACL: [45] Update audit saved
         
-        ACL->>+MON: increment stock.updated tags operation quantity symbol AAPL
-        MON-->>-ACL: Metrics updated
+        ACL->>+MON: [46] increment stock.updated tags operation quantity symbol AAPL
+        MON-->>-ACL: [47] Metrics updated
         
-        ACL-->>-KC: Update processing completed
-        KC-->>-K: Commit offset
+        ACL-->>-KC: [48] Update processing completed
+        KC-->>-K: [49] Commit offset
     end
 
     Note over TC,MON: 🔒 Stock Reservation Workflow
 
-    TC->>+LB: POST /api/v1/virtual-stock/stocks/STK-001/reserve<br/>{quantityToReserve: 50, reason: "Client order"}
-    LB->>+VS: Route for reservation
+    TC->>+LB: [50] POST /api/v1/virtual-stock/stocks/STK-001/reserve<br/>{quantityToReserve: 50, reason: "Client order"}
+    LB->>+VS: [51] Route for reservation
 
-    VS->>+DOM: reserveStock ReserveStockCommand
+    VS->>+DOM: [52] reserveStock ReserveStockCommand
     
     Note over DOM: 🎯 Reservation Business Logic
-    DOM->>DOM: stock = repository.findById("STK-001")
-    DOM->>DOM: if stock.canReserve then reserve
-    DOM->>DOM: StockUpdatedEvent.forReservation()
+    DOM->>DOM: [53] stock = repository.findById("STK-001")
+    DOM->>DOM: [54] if stock.canReserve then reserve
+    DOM->>DOM: [55] StockUpdatedEvent.forReservation()
     
-    DOM-->>-VS: StockReservationResult.success()
+    DOM-->>-VS: [56] StockReservationResult.success()
     
-    VS->>+KP: publishStockUpdatedAsync(event)
-    KP->>+K: send("high-priority-updates", event) # Reservations are critical
-    K-->>-KP: Ack for reservation event
-    KP-->>-VS: Reservation event published
+    VS->>+KP: [57] publishStockUpdatedAsync(event)
+    KP->>+K: [58] send("high-priority-updates", event) # Reservations are critical
+    K-->>-KP: [59] Ack for reservation event
+    KP-->>-VS: [60] Reservation event published
     
-    VS-->>-LB: 200 OK {reserved: 50, remaining: 150}
-    LB-->>-TC: HTTP 200 Stock Reserved
+    VS-->>-LB: [61] 200 OK {reserved: 50, remaining: 150}
+    LB-->>-TC: [62] HTTP 200 Stock Reserved
 
     par ACL Consumer Processing - Reservation
-        K->>+KC: consume(StockUpdatedEvent) from high-priority-updates
-        KC->>+ACL: processStockUpdateEvent(event)
+        K->>+KC: [63] consume(StockUpdatedEvent) from high-priority-updates
+        KC->>+ACL: [64] processStockUpdateEvent(event)
         
-        ACL->>ACL: translateReservation(event)
-        ACL->>+EXT: POST /api/v1/trading/stock-reserved<br/>{symbol: "AAPL", reserved: 50, remaining: 150}
-        EXT-->>-ACL: 200 OK {reservationId: "RSV-001"}
+        ACL->>ACL: [65] translateReservation(event)
+        ACL->>+EXT: [66] POST /api/v1/trading/stock-reserved<br/>{symbol: "AAPL", reserved: 50, remaining: 150}
+        EXT-->>-ACL: [67] 200 OK {reservationId: "RSV-001"}
         
-        ACL->>+DB: INSERT consumption_log (PROCESSED, "reservation", "RSV-001")
-        DB-->>-ACL: Reservation audit saved
+        ACL->>+DB: [68] INSERT consumption_log (PROCESSED, "reservation", "RSV-001")
+        DB-->>-ACL: [69] Reservation audit saved
         
-        ACL->>+MON: increment("stock.reserved", tags=["symbol:AAPL", "quantity:50"])
-        MON-->>-ACL: Reservation metrics recorded
+        ACL->>+MON: [70] increment("stock.reserved", tags=["symbol:AAPL", "quantity:50"])
+        MON-->>-ACL: [71] Reservation metrics recorded
         
-        ACL-->>-KC: Reservation processing completed
-        KC-->>-K: Commit offset
+        ACL-->>-KC: [72] Reservation processing completed
+        KC-->>-K: [73] Commit offset
     end
 
-    Note over MON: 📊 Continuous Observability
-    MON->>MON: aggregate_stock_metrics()
-    MON->>MON: calculate_sla_compliance()
-    MON->>MON: generate_alerts_if_needed()
+    Note over MON: 📊 Continuous Observability - 73 Steps Total
+    MON->>MON: [74] aggregate_stock_metrics()
+    MON->>MON: [75] calculate_sla_compliance()
+    MON->>MON: [76] generate_alerts_if_needed()
 ```
 
 ### 🎯 Kafka Topics Strategy - Virtual Stock System
@@ -807,38 +807,38 @@ Este documento apresenta a **arquitetura completa do Sistema de Gerenciamento Vi
 
 ```mermaid
 flowchart TD
-    START([Log Entry Received]) --> VALIDATE{Validate Entry?}
+    START([1️⃣ Log Entry Received]) --> VALIDATE{2️⃣ Validate Entry?}
     
-    VALIDATE -->|Invalid| REJECT[Reject Request<br/>Return 400 Bad Request]
-    VALIDATE -->|Valid| EXTRACT[Extract Log Level<br/>& Service Name]
+    VALIDATE -->|Invalid| REJECT[3️⃣ Reject Request<br/>Return 400 Bad Request]
+    VALIDATE -->|Valid| EXTRACT[4️⃣ Extract Log Level<br/>& Service Name]
     
-    EXTRACT --> ROUTE_DECISION{Route by Level}
+    EXTRACT --> ROUTE_DECISION{5️⃣ Route by Level}
     
-    ROUTE_DECISION -->|ERROR/FATAL| ERROR_TOPIC[error-logs Topic<br/>Partitions: 3<br/>Replication: 2<br/>Retention: 7 days<br/>High Priority Queue]
+    ROUTE_DECISION -->|ERROR/FATAL| ERROR_TOPIC[6️⃣ error-logs Topic<br/>Partitions: 3<br/>Replication: 2<br/>Retention: 7 days<br/>High Priority Queue]
     
-    ROUTE_DECISION -->|INFO/DEBUG/TRACE| CHECK_SERVICE{Check Service Type}
+    ROUTE_DECISION -->|INFO/DEBUG/TRACE| CHECK_SERVICE{7️⃣ Check Service Type}
     
-    CHECK_SERVICE -->|audit-service<br/>auth-service<br/>security-service| AUDIT_TOPIC[audit-logs Topic<br/>Partitions: 2<br/>Replication: 2<br/>Retention: 30 days<br/>Compliance Required]
+    CHECK_SERVICE -->|audit-service<br/>auth-service<br/>security-service| AUDIT_TOPIC[8️⃣ audit-logs Topic<br/>Partitions: 2<br/>Replication: 2<br/>Retention: 30 days<br/>Compliance Required]
     
-    CHECK_SERVICE -->|payment-service<br/>transaction-service<br/>billing-service| FINANCIAL_TOPIC[financial-logs Topic<br/>Partitions: 3<br/>Replication: 2<br/>Retention: 90 days<br/>Regulatory Compliance]
+    CHECK_SERVICE -->|payment-service<br/>transaction-service<br/>billing-service| FINANCIAL_TOPIC[9️⃣ financial-logs Topic<br/>Partitions: 3<br/>Replication: 2<br/>Retention: 90 days<br/>Regulatory Compliance]
     
-    CHECK_SERVICE -->|Other Services| APP_TOPIC[application-logs Topic<br/>Partitions: 3<br/>Replication: 2<br/>Retention: 3 days<br/>General Purpose]
+    CHECK_SERVICE -->|Other Services| APP_TOPIC[🔟 application-logs Topic<br/>Partitions: 3<br/>Replication: 2<br/>Retention: 3 days<br/>General Purpose]
     
-    ERROR_TOPIC --> ERROR_CONSUMER[Error Consumer<br/>Real-time Alerts<br/>Incident Management<br/>Auto-scaling Trigger]
+    ERROR_TOPIC --> ERROR_CONSUMER[1️⃣1️⃣ Error Consumer<br/>Real-time Alerts<br/>Incident Management<br/>Auto-scaling Trigger]
     
-    AUDIT_TOPIC --> AUDIT_CONSUMER[Audit Consumer<br/>Compliance Reporting<br/>Security Analysis<br/>Long-term Storage]
+    AUDIT_TOPIC --> AUDIT_CONSUMER[1️⃣2️⃣ Audit Consumer<br/>Compliance Reporting<br/>Security Analysis<br/>Long-term Storage]
     
-    FINANCIAL_TOPIC --> FINANCIAL_CONSUMER[Financial Consumer<br/>Transaction Monitoring<br/>Fraud Detection<br/>Regulatory Reporting]
+    FINANCIAL_TOPIC --> FINANCIAL_CONSUMER[1️⃣3️⃣ Financial Consumer<br/>Transaction Monitoring<br/>Fraud Detection<br/>Regulatory Reporting]
     
-    APP_TOPIC --> APP_CONSUMER[Application Consumer<br/>Performance Monitoring<br/>Usage Analytics<br/>General Logging]
+    APP_TOPIC --> APP_CONSUMER[1️⃣4️⃣ Application Consumer<br/>Performance Monitoring<br/>Usage Analytics<br/>General Logging]
     
-    ERROR_CONSUMER --> EXTERNAL_ALERTS[External Alert System<br/>PagerDuty/Slack<br/>Immediate Notification]
+    ERROR_CONSUMER --> EXTERNAL_ALERTS[1️⃣5️⃣ External Alert System<br/>PagerDuty/Slack<br/>Immediate Notification]
     
-    AUDIT_CONSUMER --> EXTERNAL_COMPLIANCE[Compliance System<br/>Audit Trail Storage<br/>Regulatory Reports]
+    AUDIT_CONSUMER --> EXTERNAL_COMPLIANCE[1️⃣6️⃣ Compliance System<br/>Audit Trail Storage<br/>Regulatory Reports]
     
-    FINANCIAL_CONSUMER --> EXTERNAL_FINANCE[Financial System<br/>Transaction Processing<br/>Risk Management]
+    FINANCIAL_CONSUMER --> EXTERNAL_FINANCE[1️⃣7️⃣ Financial System<br/>Transaction Processing<br/>Risk Management]
     
-    APP_CONSUMER --> EXTERNAL_ANALYTICS[Analytics Platform<br/>Business Intelligence<br/>Performance Metrics]
+    APP_CONSUMER --> EXTERNAL_ANALYTICS[1️⃣8️⃣ Analytics Platform<br/>Business Intelligence<br/>Performance Metrics]
 ```
 
 ## 5. Monitoramento e Observabilidade
