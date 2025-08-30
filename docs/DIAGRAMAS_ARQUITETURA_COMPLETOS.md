@@ -7,56 +7,56 @@ Este documento contém todos os diagramas detalhados da arquitetura do projeto e
 ```mermaid
 graph TB
     subgraph "External World"
-        CLIENT[Client Applications<br/>Web/Mobile/APIs]
-        EXT_API[External REST API<br/>https://api.external.com<br/>Third-party Integration]
-        PROMETHEUS[Prometheus<br/>Monitoring & Alerting<br/>Port: 9090]
+        CLIENT[Client Applications<br/>Web Mobile APIs]
+        EXT_API[External REST API<br/>api.external.com<br/>Third-party Integration]
+        PROMETHEUS[Prometheus<br/>Monitoring Alerting<br/>Port 9090]
     end
     
     subgraph "Kubernetes Cluster"
-        subgraph "Namespace: kafka"
+        subgraph "Namespace kafka"
             subgraph "Producer Deployment"
-                PROD_POD1[log-producer-service-0<br/>Spring Boot 3.2<br/>Hexagonal Architecture<br/>Port: 8081<br/>CPU: 250m Memory: 512Mi]
-                PROD_POD2[log-producer-service-1<br/>Spring Boot 3.2<br/>Hexagonal Architecture<br/>Port: 8081<br/>CPU: 250m Memory: 512Mi]
-                PROD_POD3[log-producer-service-2<br/>Spring Boot 3.2<br/>Hexagonal Architecture<br/>Port: 8081<br/>CPU: 250m Memory: 512Mi]
+                PROD_POD1[log-producer-service-0<br/>Spring Boot 3.2<br/>Hexagonal Architecture<br/>Port 8081<br/>CPU 250m Memory 512Mi]
+                PROD_POD2[log-producer-service-1<br/>Spring Boot 3.2<br/>Hexagonal Architecture<br/>Port 8081<br/>CPU 250m Memory 512Mi]
+                PROD_POD3[log-producer-service-2<br/>Spring Boot 3.2<br/>Hexagonal Architecture<br/>Port 8081<br/>CPU 250m Memory 512Mi]
             end
             
             subgraph "AMQ Streams Kafka Cluster"
                 subgraph "Kafka Topics"
-                    T1[application-logs<br/>Partitions: 3<br/>Replication: 2<br/>General application logs]
-                    T2[error-logs<br/>Partitions: 3<br/>Replication: 2<br/>Error & Fatal logs]
-                    T3[audit-logs<br/>Partitions: 2<br/>Replication: 2<br/>Security & Auth logs]
-                    T4[financial-logs<br/>Partitions: 3<br/>Replication: 2<br/>Transaction logs]
+                    T1[application-logs<br/>Partitions 3<br/>Replication 2<br/>General application logs]
+                    T2[error-logs<br/>Partitions 3<br/>Replication 2<br/>Error Fatal logs]
+                    T3[audit-logs<br/>Partitions 2<br/>Replication 2<br/>Security Auth logs]
+                    T4[financial-logs<br/>Partitions 3<br/>Replication 2<br/>Transaction logs]
                 end
                 
                 subgraph "Kafka Brokers"
-                    KAFKA1[kafka-cluster-kafka-0<br/>Port: 9092<br/>CPU: 500m Memory: 1Gi]
-                    KAFKA2[kafka-cluster-kafka-1<br/>Port: 9092<br/>CPU: 500m Memory: 1Gi]
-                    KAFKA3[kafka-cluster-kafka-2<br/>Port: 9092<br/>CPU: 500m Memory: 1Gi]
+                    KAFKA1[kafka-cluster-kafka-0<br/>Port 9092<br/>CPU 500m Memory 1Gi]
+                    KAFKA2[kafka-cluster-kafka-1<br/>Port 9092<br/>CPU 500m Memory 1Gi]
+                    KAFKA3[kafka-cluster-kafka-2<br/>Port 9092<br/>CPU 500m Memory 1Gi]
                 end
             end
             
             subgraph "Consumer Deployment"
-                CONS_POD1[log-consumer-service-0<br/>Spring Boot 3.2<br/>API Integration<br/>Port: 8082<br/>CPU: 250m Memory: 512Mi]
-                CONS_POD2[log-consumer-service-1<br/>Spring Boot 3.2<br/>API Integration<br/>Port: 8082<br/>CPU: 250m Memory: 512Mi]
+                CONS_POD1[log-consumer-service-0<br/>Spring Boot 3.2<br/>API Integration<br/>Port 8082<br/>CPU 250m Memory 512Mi]
+                CONS_POD2[log-consumer-service-1<br/>Spring Boot 3.2<br/>API Integration<br/>Port 8082<br/>CPU 250m Memory 512Mi]
             end
             
             subgraph "Zookeeper Cluster"
-                ZK1[zookeeper-0<br/>Port: 2181<br/>CPU: 100m-250m Memory: 256Mi-512Mi<br/>Storage: 5Gi data + 5Gi logs]
-                ZK2[zookeeper-1<br/>Port: 2181<br/>CPU: 100m-250m Memory: 256Mi-512Mi<br/>Storage: 5Gi data + 5Gi logs]
-                ZK3[zookeeper-2<br/>Port: 2181<br/>CPU: 100m-250m Memory: 256Mi-512Mi<br/>Storage: 5Gi data + 5Gi logs]
+                ZK1[zookeeper-0<br/>Port 2181<br/>CPU 100m-250m Memory 256Mi-512Mi<br/>Storage 5Gi data + 5Gi logs]
+                ZK2[zookeeper-1<br/>Port 2181<br/>CPU 100m-250m Memory 256Mi-512Mi<br/>Storage 5Gi data + 5Gi logs]
+                ZK3[zookeeper-2<br/>Port 2181<br/>CPU 100m-250m Memory 256Mi-512Mi<br/>Storage 5Gi data + 5Gi logs]
             end
         end
         
-        subgraph "Namespace: monitoring"
-            GRAFANA[grafana<br/>Port: 3000<br/>CPU: 200m Memory: 256Mi]
-            PROM_SERVER[prometheus-server<br/>Port: 9090<br/>CPU: 500m Memory: 1Gi]
+        subgraph "Namespace monitoring"
+            GRAFANA[grafana<br/>Port 3000<br/>CPU 200m Memory 256Mi]
+            PROM_SERVER[prometheus-server<br/>Port 9090<br/>CPU 500m Memory 1Gi]
         end
     end
     
     subgraph "Persistent Storage"
-        PV1[kafka-data-pvc<br/>Size: 10Gi<br/>AccessMode: RWO]
-        PV2[zookeeper-data-pvc<br/>Size: 5Gi<br/>AccessMode: RWO]
-        PV3[prometheus-data-pvc<br/>Size: 8Gi<br/>AccessMode: RWO]
+        PV1[kafka-data-pvc<br/>Size 10Gi<br/>AccessMode RWO]
+        PV2[zookeeper-data-pvc<br/>Size 5Gi<br/>AccessMode RWO]
+        PV3[prometheus-data-pvc<br/>Size 8Gi<br/>AccessMode RWO]
     end
 
     CLIENT -->|HTTP REST| PROD_POD1
@@ -121,28 +121,28 @@ sequenceDiagram
     
     Note over C,API: Fluxo Síncrono - Produção de Logs
     
-    C->>+LB: POST /api/logs (Log Request)
+    C->>+LB: POST /api/logs Log Request
     LB->>+P1: Route to Producer Instance
     
-    P1->>P1: Validate Request (Hexagonal)
+    P1->>P1: Validate Request Hexagonal
     P1->>P1: Apply Business Rules
     P1->>P1: Route by Log Level
     
     alt Error/Fatal Logs
         P1->>+KT: Publish to error-logs topic
-        KT-->>-P1: Ack (Sync)
+        KT-->>-P1: Ack Sync
     else Audit Logs
         P1->>+KT: Publish to audit-logs topic
-        KT-->>-P1: Ack (Sync)
+        KT-->>-P1: Ack Sync
     else Financial Logs
         P1->>+KT: Publish to financial-logs topic
-        KT-->>-P1: Ack (Sync)
+        KT-->>-P1: Ack Sync
     else General Logs
         P1->>+KT: Publish to application-logs topic
-        KT-->>-P1: Ack (Sync)
+        KT-->>-P1: Ack Sync
     end
     
-    P1-->>-LB: 201 Created (Response)
+    P1-->>-LB: 201 Created Response
     LB-->>-C: HTTP 201 Success
     
     Note over KT,API: Fluxo Assíncrono - Consumo e Integração
@@ -150,24 +150,24 @@ sequenceDiagram
     par Consumer 1 Processing
         KT->>+C1: Poll error-logs
         C1->>C1: Process Error Logs
-        C1->>+API: POST /alerts (External Integration)
+        C1->>+API: POST /alerts External Integration
         API-->>-C1: 200 OK
         C1->>+MON: Update Metrics
         
         KT->>+C1: Poll application-logs
         C1->>C1: Process Application Logs
-        C1->>+API: POST /logs (External Integration)
+        C1->>+API: POST /logs External Integration
         API-->>-C1: 200 OK
     and Consumer 2 Processing
         KT->>+C2: Poll audit-logs
         C2->>C2: Process Audit Logs
-        C2->>+API: POST /audit (External Integration)
+        C2->>+API: POST /audit External Integration
         API-->>-C2: 200 OK
         C2->>+MON: Update Metrics
         
         KT->>+C2: Poll financial-logs
         C2->>C2: Process Financial Logs
-        C2->>+API: POST /transactions (External Integration)
+        C2->>+API: POST /transactions External Integration
         API-->>-C2: 200 OK
     end
     
