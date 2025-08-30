@@ -540,46 +540,46 @@ graph TB
 
 ```mermaid
 sequenceDiagram
-    participant Trader as 👤 Stock Trader
-    participant VS as 🏛️ Virtual Stock Service
-    participant Kafka as 🔥 AMQ Streams
-    participant ACL as 🛡️ ACL Service
-    participant ExtAPI as 🌐 External Trading API
+    participant Trader as Stock_Trader
+    participant VS as Virtual_Stock_Service
+    participant Kafka as AMQ_Streams
+    participant ACL as ACL_Service
+    participant ExtAPI as External_Trading_API
 
-    Note over Trader,ExtAPI: 📦 Stock Creation & Update Flow
+    Note over Trader,ExtAPI: Stock Creation and Update Flow
 
-    Trader->>+VS: POST /api/v1/virtual-stock/stocks<br/>{symbol: "AAPL", quantity: 150, price: 150.00}
+    Trader->>+VS: POST /api/v1/virtual-stock/stocks<br/>symbol AAPL quantity 150 price 150.00
     
-    VS->>VS: 🎯 Domain Validation<br/>Business Rules Check
-    VS->>VS: 📦 Create Stock Aggregate<br/>Generate StockUpdatedEvent
+    VS->>VS: Domain Validation<br/>Business Rules Check
+    VS->>VS: Create Stock Aggregate<br/>Generate StockUpdatedEvent
     
-    VS->>+Kafka: 📢 Publish StockUpdatedEvent<br/>Topic: virtual-stock-updates
-    Kafka-->>-VS: ✅ Event Published
+    VS->>+Kafka: Publish StockUpdatedEvent<br/>Topic virtual-stock-updates
+    Kafka-->>-VS: Event Published
     
-    VS-->>-Trader: 201 CREATED<br/>{stockId: "STK-001", totalValue: "$22,500"}
+    VS-->>-Trader: 201 CREATED<br/>stockId STK-001 totalValue 22500
 
-    Note over Kafka,ExtAPI: 🔄 Asynchronous Processing
+    Note over Kafka,ExtAPI: Asynchronous Processing
 
-    Kafka->>+ACL: 📥 Consume StockUpdatedEvent
-    ACL->>ACL: 🛡️ Anti-Corruption Translation<br/>Internal → External Format
-    ACL->>+ExtAPI: 🌐 POST /api/trading/stock-created<br/>Notify External Systems
+    Kafka->>+ACL: Consume StockUpdatedEvent
+    ACL->>ACL: Anti-Corruption Translation<br/>Internal to External Format
+    ACL->>+ExtAPI: POST /api/trading/stock-created<br/>Notify External Systems
     ExtAPI-->>-ACL: 200 OK
-    ACL-->>-Kafka: ✅ Processing Complete
+    ACL-->>-Kafka: Processing Complete
 
-    Note over Trader,ExtAPI: 🔄 Stock Update Flow
+    Note over Trader,ExtAPI: Stock Update Flow
 
-    Trader->>+VS: PUT /api/v1/virtual-stock/stocks/STK-001/quantity<br/>{newQuantity: 200}
+    Trader->>+VS: PUT /api/v1/virtual-stock/stocks/STK-001/quantity<br/>newQuantity 200
     
-    VS->>VS: 🔄 Update Stock Aggregate<br/>Generate QuantityUpdateEvent
-    VS->>+Kafka: 📢 Publish UpdateEvent
-    Kafka-->>-VS: ✅ Event Published
+    VS->>VS: Update Stock Aggregate<br/>Generate QuantityUpdateEvent
+    VS->>+Kafka: Publish UpdateEvent
+    Kafka-->>-VS: Event Published
     
-    VS-->>-Trader: 200 OK<br/>{quantity: 200, totalValue: "$30,000"}
+    VS-->>-Trader: 200 OK<br/>quantity 200 totalValue 30000
 
-    Kafka->>+ACL: 📥 Consume UpdateEvent  
-    ACL->>+ExtAPI: 🌐 PUT /api/trading/stock-updated
+    Kafka->>+ACL: Consume UpdateEvent  
+    ACL->>+ExtAPI: PUT /api/trading/stock-updated
     ExtAPI-->>-ACL: 200 OK
-    ACL-->>-Kafka: ✅ Update Complete
+    ACL-->>-Kafka: Update Complete
 ```
 
 ### � **Business Domain: Virtual Stock Management**

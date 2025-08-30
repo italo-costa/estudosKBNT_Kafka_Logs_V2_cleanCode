@@ -20,103 +20,102 @@
 
 ```mermaid
 graph TB
-    subgraph "🌐 External Clients"
-        TRADER[👤 Stock Trader]
-        MOBILE[📱 Mobile App]
-        WEB[🌐 Web Portal]
-        API_CLIENT[🔗 API Client]
+    subgraph "External_Clients"
+        TRADER["Stock Trader"]
+        MOBILE["Mobile App"]
+        WEB["Web Portal"]
+        API_CLIENT["API Client"]
     end
     
-    subgraph "🏛️ Virtual Stock Service (Hexagonal Architecture)"
-        subgraph "🔌 Input Adapters"
-            REST_CTRL[🌐 VirtualStockController<br/>@RestController<br/>Handles HTTP requests]
-            HEALTH_CTRL[💚 HealthController<br/>@RestController<br/>Actuator endpoints]
-            MGMT_CTRL[⚙️ ManagementController<br/>@RestController<br/>Admin operations]
+    subgraph "Virtual_Stock_Service"
+        subgraph "Input_Adapters"
+            REST_CTRL["VirtualStockController<br/>RestController<br/>HTTP requests"]
+            HEALTH_CTRL["HealthController<br/>RestController<br/>Actuator endpoints"]
+            MGMT_CTRL["ManagementController<br/>RestController<br/>Admin operations"]
         end
         
-        subgraph "📥 Input Ports"
-            STOCK_UC[🎯 StockManagementUseCase<br/>Interface<br/>Business operations]
-            HEALTH_PORT[💚 HealthCheckPort<br/>Interface<br/>System health]
+        subgraph "Input_Ports"
+            STOCK_UC["StockManagementUseCase<br/>Interface<br/>Business operations"]
+            HEALTH_PORT["HealthCheckPort<br/>Interface<br/>System health"]
         end
         
-        subgraph "⚙️ Application Layer"
-            STOCK_APP[⚙️ StockManagementApplicationService<br/>@Service<br/>Orchestrates use cases]
-            EVENT_PUB[📤 StockEventPublisher<br/>@Service<br/>Publishes domain events]
-            VALIDATION[✅ ValidationService<br/>@Service<br/>Business rule validation]
+        subgraph "Application_Layer"
+            STOCK_APP["StockApplicationService<br/>Service<br/>Orchestrates use cases"]
+            EVENT_PUB["StockEventPublisher<br/>Service<br/>Domain events"]
+            VALIDATION["ValidationService<br/>Service<br/>Business validation"]
         end
         
-        subgraph "🎯 Domain Core"
-            STOCK_AGG[📦 Stock<br/>Aggregate Root<br/>stockId, productId, quantity, price]
-            STOCK_EVENT[📢 StockUpdatedEvent<br/>Domain Event<br/>CREATION, UPDATE, RESERVATION]
-            VALUE_OBJ[💎 Value Objects<br/>StockId, ProductId<br/>Immutable identifiers]
-            BIZ_RULES[📋 Business Rules<br/>canReserve, isLowStock<br/>Domain logic]
+        subgraph "Domain_Core"
+            STOCK_AGG["Stock Aggregate<br/>Root Entity<br/>stockId productId quantity"]
+            STOCK_EVENT["StockUpdatedEvent<br/>Domain Event<br/>CREATE UPDATE RESERVE"]
+            VALUE_OBJ["Value Objects<br/>StockId ProductId<br/>Immutable"]
+            BIZ_RULES["Business Rules<br/>canReserve isLowStock<br/>Domain logic"]
         end
         
-        subgraph "📤 Output Ports"
-            REPO_PORT[🗄️ StockRepository<br/>Interface<br/>Persistence abstraction]
-            EVENT_PORT[📤 EventPublisherPort<br/>Interface<br/>Event publishing]
-            METRICS_PORT[📊 MetricsPort<br/>Interface<br/>Metrics collection]
+        subgraph "Output_Ports"
+            REPO_PORT["StockRepository<br/>Interface<br/>Persistence"]
+            EVENT_PORT["EventPublisherPort<br/>Interface<br/>Event publishing"]
+            METRICS_PORT["MetricsPort<br/>Interface<br/>Metrics collection"]
         end
         
-        subgraph "🔌 Output Adapters"
-            JPA_REPO[🗄️ JpaStockRepositoryAdapter<br/>@Repository<br/>PostgreSQL persistence]
-            KAFKA_PUB[🔥 KafkaEventPublisherAdapter<br/>@Service<br/>Kafka message publishing]
-            PROMETHEUS[📊 PrometheusMetricsAdapter<br/>@Component<br/>Metrics export]
-        end
-    end
-    
-    subgraph "🔥 Red Hat AMQ Streams (Event Backbone)"
-        TOPIC_STOCK[📢 virtual-stock-updates<br/>Partitions 3<br/>Replication 3<br/>Main events]
-        TOPIC_HIGH[⚡ high-priority-updates<br/>Partitions 3<br/>Replication 3<br/>Critical events]
-        TOPIC_RETRY[🔄 retry-topic<br/>Partitions 3<br/>Replication 3<br/>Failed messages]
-        TOPIC_DLT[💀 dead-letter-topic<br/>Partitions 1<br/>Replication 3<br/>Unprocessable]
-    end
-    
-    subgraph "🛡️ ACL Virtual Stock Service (Anti-Corruption Layer)"
-        subgraph "🔌 Input Adapters ACL"
-            KAFKA_CONS[🔥 KafkaConsumerAdapter<br/>@KafkaListener<br/>Consumes stock events]
-            HEALTH_ACL[💚 HealthController<br/>@RestController<br/>Service health]
-        end
-        
-        subgraph "⚙️ Application Layer ACL"
-            MSG_PROC[⚙️ MessageProcessingService<br/>@Service<br/>Processes stock events]
-            TRANS_SERVICE[🔄 TranslationService<br/>@Service<br/>Internal→External format]
-            API_INT[🌐 ExternalApiIntegration<br/>@Service<br/>Third-party integration]
-        end
-        
-        subgraph "🎯 Domain Core ACL"
-            EXT_STOCK[🔗 ExternalStockIntegration<br/>Domain Model<br/>External system representation]
-            AUDIT_LOG[📋 ConsumptionLog<br/>Entity<br/>Processing audit trail]
-            TRANS_RULES[🔄 TranslationRules<br/>Domain Logic<br/>Format conversion rules]
-        end
-        
-        subgraph "🔌 Output Adapters ACL"
-            POSTGRES_ACL[🐘 PostgreSQLAdapter<br/>@Repository<br/>Audit persistence]
-            EXT_CLIENT[🌐 ExternalApiClient<br/>@Service<br/>HTTP client for external APIs]
-            ELASTIC_ACL[🔍 ElasticsearchAdapter<br/>@Service<br/>Log aggregation]
+        subgraph "Output_Adapters"
+            JPA_REPO["JpaRepositoryAdapter<br/>Repository<br/>PostgreSQL"]
+            KAFKA_PUB["KafkaPublisherAdapter<br/>Service<br/>Message publishing"]
+            PROMETHEUS["PrometheusAdapter<br/>Component<br/>Metrics export"]
         end
     end
     
-    subgraph "🌐 External Systems"
-        EXT_TRADING[📈 Trading Platform API<br/>External REST API<br/>Stock price feeds]
-        EXT_INVENTORY[📦 Inventory System<br/>Legacy ERP<br/>Stock management]
-        EXT_ANALYTICS[📊 Analytics Platform<br/>Data Warehouse<br/>Business intelligence]
+    subgraph "AMQ_Streams"
+        TOPIC_STOCK["virtual-stock-updates<br/>Partitions 3<br/>Main events"]
+        TOPIC_HIGH["high-priority-updates<br/>Partitions 3<br/>Critical events"]
+        TOPIC_RETRY["retry-topic<br/>Partitions 3<br/>Failed messages"]
+        TOPIC_DLT["dead-letter-topic<br/>Partitions 1<br/>Unprocessable"]
     end
     
-    subgraph "💾 Data & Monitoring"
-        POSTGRES_DB[🐘 PostgreSQL<br/>Primary Database<br/>ACID transactions]
-        ELASTIC_DB[🔍 Elasticsearch<br/>Log Aggregation<br/>Search & Analytics]
-        PROMETHEUS_DB[📊 Prometheus<br/>Metrics Storage<br/>Time series data]
-        GRAFANA[📊 Grafana Dashboard<br/>Visualization<br/>Real-time monitoring]
+    subgraph "ACL_Virtual_Stock_Service"
+        subgraph "Input_Adapters_ACL"
+            KAFKA_CONS["KafkaConsumerAdapter<br/>KafkaListener<br/>Stock events"]
+            HEALTH_ACL["HealthController<br/>RestController<br/>Service health"]
+        end
+        
+        subgraph "Application_Layer_ACL"
+            MSG_PROC["MessageProcessingService<br/>Service<br/>Process events"]
+            TRANS_SERVICE["TranslationService<br/>Service<br/>Format conversion"]
+            API_INT["ExternalApiIntegration<br/>Service<br/>Third-party"]
+        end
+        
+        subgraph "Domain_Core_ACL"
+            EXT_STOCK["ExternalStockIntegration<br/>Domain Model<br/>External system"]
+            AUDIT_LOG["ConsumptionLog<br/>Entity<br/>Audit trail"]
+            TRANS_RULES["TranslationRules<br/>Logic<br/>Conversion rules"]
+        end
+        
+        subgraph "Output_Adapters_ACL"
+            POSTGRES_ACL["PostgreSQLAdapter<br/>Repository<br/>Audit data"]
+            EXT_CLIENT["ExternalApiClient<br/>Service<br/>HTTP client"]
+            ELASTIC_ACL["ElasticsearchAdapter<br/>Service<br/>Log aggregation"]
+        end
+    end
+    
+    subgraph "External_Systems"
+        EXT_TRADING["Trading Platform API<br/>External REST<br/>Price feeds"]
+        EXT_INVENTORY["Inventory System<br/>Legacy ERP<br/>Stock mgmt"]
+        EXT_ANALYTICS["Analytics Platform<br/>Data Warehouse<br/>BI"]
+    end
+    
+    subgraph "Data_Monitoring"
+        POSTGRES_DB["PostgreSQL<br/>Primary DB<br/>ACID transactions"]
+        ELASTIC_DB["Elasticsearch<br/>Log Aggregation<br/>Search Analytics"]
+        PROMETHEUS_DB["Prometheus<br/>Metrics Storage<br/>Time series"]
+        GRAFANA["Grafana Dashboard<br/>Visualization<br/>Monitoring"]
     end
 
-    %% External to Virtual Stock Service
+    %% Flow connections
     TRADER --> REST_CTRL
     MOBILE --> REST_CTRL
     WEB --> REST_CTRL
     API_CLIENT --> REST_CTRL
     
-    %% Input flow within Virtual Stock Service
     REST_CTRL --> STOCK_UC
     HEALTH_CTRL --> HEALTH_PORT
     STOCK_UC --> STOCK_APP
@@ -125,7 +124,6 @@ graph TB
     STOCK_AGG --> STOCK_EVENT
     STOCK_APP --> EVENT_PUB
     
-    %% Output flow within Virtual Stock Service
     EVENT_PUB --> EVENT_PORT
     STOCK_APP --> REPO_PORT
     EVENT_PORT --> KAFKA_PUB
@@ -133,31 +131,26 @@ graph TB
     STOCK_APP --> METRICS_PORT
     METRICS_PORT --> PROMETHEUS
     
-    %% Kafka message flow
     KAFKA_PUB --> TOPIC_STOCK
     KAFKA_PUB --> TOPIC_HIGH
     TOPIC_STOCK --> KAFKA_CONS
     TOPIC_HIGH --> KAFKA_CONS
     TOPIC_RETRY --> KAFKA_CONS
     
-    %% ACL processing flow
     KAFKA_CONS --> MSG_PROC
     MSG_PROC --> TRANS_SERVICE
     TRANS_SERVICE --> EXT_STOCK
     MSG_PROC --> API_INT
     MSG_PROC --> AUDIT_LOG
     
-    %% ACL output flow
     API_INT --> EXT_CLIENT
     AUDIT_LOG --> POSTGRES_ACL
     MSG_PROC --> ELASTIC_ACL
     
-    %% External integrations
     EXT_CLIENT --> EXT_TRADING
     EXT_CLIENT --> EXT_INVENTORY
     EXT_CLIENT --> EXT_ANALYTICS
     
-    %% Data persistence
     JPA_REPO --> POSTGRES_DB
     POSTGRES_ACL --> POSTGRES_DB
     ELASTIC_ACL --> ELASTIC_DB
