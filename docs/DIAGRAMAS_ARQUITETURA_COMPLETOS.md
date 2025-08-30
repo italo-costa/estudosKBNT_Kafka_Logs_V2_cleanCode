@@ -162,61 +162,61 @@ graph TB
 
 ## 🚀 Deployment Kubernetes Enterprise
 
-### 🎯 Production-Ready Infrastructure
+### Production-Ready Infrastructure
 
 ```mermaid
 graph TB
-    subgraph "🌐 Load Balancer & Ingress"
-        LB[⚖️ AWS Load Balancer<br/>Application Load Balancer<br/>SSL Termination<br/>Multi-AZ]
-        INGRESS[🌐 NGINX Ingress Controller<br/>Host-based routing<br/>TLS certificates<br/>Rate limiting]
+    subgraph "Load_Balancer_Ingress"
+        LB["AWS Load Balancer<br/>Application Load Balancer<br/>SSL Termination Multi-AZ"]
+        INGRESS["NGINX Ingress Controller<br/>Host-based routing<br/>TLS certificates Rate limiting"]
     end
     
-    subgraph "☸️ Kubernetes Cluster (EKS/OpenShift)"
-        subgraph "🏛️ Namespace: virtual-stock-system"
-            subgraph "📦 Virtual Stock Service Deployment"
-                VS_POD1[🏛️ virtual-stock-service-0<br/>Image: virtual-stock:2.0.0<br/>CPU: 500m-1000m<br/>Memory: 1Gi-2Gi<br/>Port: 8080]
-                VS_POD2[🏛️ virtual-stock-service-1<br/>Image: virtual-stock:2.0.0<br/>CPU: 500m-1000m<br/>Memory: 1Gi-2Gi<br/>Port: 8080]
-                VS_POD3[🏛️ virtual-stock-service-2<br/>Image: virtual-stock:2.0.0<br/>CPU: 500m-1000m<br/>Memory: 1Gi-2Gi<br/>Port: 8080]
+    subgraph "Kubernetes_Cluster_EKS_OpenShift"
+        subgraph "Namespace_virtual_stock_system"
+            subgraph "Virtual_Stock_Service_Deployment"
+                VS_POD1["virtual-stock-service-0<br/>Image virtual-stock:2.0.0<br/>CPU 500m-1000m Memory 1Gi-2Gi Port 8080"]
+                VS_POD2["virtual-stock-service-1<br/>Image virtual-stock:2.0.0<br/>CPU 500m-1000m Memory 1Gi-2Gi Port 8080"]
+                VS_POD3["virtual-stock-service-2<br/>Image virtual-stock:2.0.0<br/>CPU 500m-1000m Memory 1Gi-2Gi Port 8080"]
                 
-                VS_SVC[🌐 virtual-stock-service<br/>ClusterIP Service<br/>Port: 8080<br/>LoadBalancer algorithm]
-                VS_HPA[📈 HorizontalPodAutoscaler<br/>Min replicas: 2<br/>Max replicas: 10<br/>CPU target: 70%]
+                VS_SVC["virtual-stock-service<br/>ClusterIP Service<br/>Port 8080 LoadBalancer algorithm"]
+                VS_HPA["HorizontalPodAutoscaler<br/>Min replicas 2 Max replicas 10<br/>CPU target 70%"]
             end
             
-            subgraph "🛡️ ACL Service Deployment"  
-                ACL_POD1[🛡️ acl-virtual-stock-service-0<br/>Image: acl-stock:2.0.0<br/>CPU: 300m-600m<br/>Memory: 768Mi-1.5Gi<br/>Port: 8081]
-                ACL_POD2[🛡️ acl-virtual-stock-service-1<br/>Image: acl-stock:2.0.0<br/>CPU: 300m-600m<br/>Memory: 768Mi-1.5Gi<br/>Port: 8081]
+            subgraph "ACL_Service_Deployment"
+                ACL_POD1["acl-virtual-stock-service-0<br/>Image acl-stock:2.0.0<br/>CPU 300m-600m Memory 768Mi-1.5Gi Port 8081"]
+                ACL_POD2["acl-virtual-stock-service-1<br/>Image acl-stock:2.0.0<br/>CPU 300m-600m Memory 768Mi-1.5Gi Port 8081"]
                 
-                ACL_SVC[🌐 acl-virtual-stock-service<br/>ClusterIP Service<br/>Port: 8081<br/>Internal only]
-                ACL_HPA[📈 HorizontalPodAutoscaler<br/>Min replicas: 2<br/>Max replicas: 8<br/>CPU target: 75%]
+                ACL_SVC["acl-virtual-stock-service<br/>ClusterIP Service<br/>Port 8081 Internal only"]
+                ACL_HPA["HorizontalPodAutoscaler<br/>Min replicas 2 Max replicas 8<br/>CPU target 75%"]
             end
             
-            subgraph "🔥 Red Hat AMQ Streams"
-                KAFKA_CLUSTER[🔥 Kafka Cluster<br/>Strimzi Operator managed<br/>Version: 3.5.0<br/>Brokers: 3]
+            subgraph "Red_Hat_AMQ_Streams"
+                KAFKA_CLUSTER["Kafka Cluster<br/>Strimzi Operator managed<br/>Version 3.5.0 Brokers 3"]
                 
-                KAFKA_POD1[🔥 kafka-cluster-kafka-0<br/>CPU: 1000m-2000m<br/>Memory: 2Gi-4Gi<br/>Storage: 100Gi SSD<br/>Port: 9092]
-                KAFKA_POD2[🔥 kafka-cluster-kafka-1<br/>CPU: 1000m-2000m<br/>Memory: 2Gi-4Gi<br/>Storage: 100Gi SSD<br/>Port: 9092]
-                KAFKA_POD3[🔥 kafka-cluster-kafka-2<br/>CPU: 1000m-2000m<br/>Memory: 2Gi-4Gi<br/>Storage: 100Gi SSD<br/>Port: 9092]
+                KAFKA_POD1["kafka-cluster-kafka-0<br/>CPU 1000m-2000m Memory 2Gi-4Gi<br/>Storage 100Gi SSD Port 9092"]
+                KAFKA_POD2["kafka-cluster-kafka-1<br/>CPU 1000m-2000m Memory 2Gi-4Gi<br/>Storage 100Gi SSD Port 9092"]
+                KAFKA_POD3["kafka-cluster-kafka-2<br/>CPU 1000m-2000m Memory 2Gi-4Gi<br/>Storage 100Gi SSD Port 9092"]
                 
-                ZK_POD1[🌿 zookeeper-0<br/>CPU: 200m-500m<br/>Memory: 512Mi-1Gi<br/>Storage: 10Gi SSD<br/>Port: 2181]
-                ZK_POD2[🌿 zookeeper-1<br/>CPU: 200m-500m<br/>Memory: 512Mi-1Gi<br/>Storage: 10Gi SSD<br/>Port: 2181]
-                ZK_POD3[🌿 zookeeper-2<br/>CPU: 200m-500m<br/>Memory: 512Mi-1Gi<br/>Storage: 10Gi SSD<br/>Port: 2181]
+                ZK_POD1["zookeeper-0<br/>CPU 200m-500m Memory 512Mi-1Gi<br/>Storage 10Gi SSD Port 2181"]
+                ZK_POD2["zookeeper-1<br/>CPU 200m-500m Memory 512Mi-1Gi<br/>Storage 10Gi SSD Port 2181"]
+                ZK_POD3["zookeeper-2<br/>CPU 200m-500m Memory 512Mi-1Gi<br/>Storage 10Gi SSD Port 2181"]
             end
             
-            subgraph "📊 Monitoring Stack"
-                PROMETHEUS[📊 Prometheus<br/>CPU: 500m-1000m<br/>Memory: 2Gi-4Gi<br/>Storage: 50Gi<br/>Port: 9090]
-                GRAFANA[📈 Grafana<br/>CPU: 200m-400m<br/>Memory: 512Mi-1Gi<br/>Port: 3000<br/>Admin UI]
-                ALERTMANAGER[🚨 AlertManager<br/>CPU: 100m-200m<br/>Memory: 256Mi-512Mi<br/>Port: 9093]
+            subgraph "Monitoring_Stack"
+                PROMETHEUS["Prometheus<br/>CPU 500m-1000m Memory 2Gi-4Gi<br/>Storage 50Gi Port 9090"]
+                GRAFANA["Grafana<br/>CPU 200m-400m Memory 512Mi-1Gi<br/>Port 3000 Admin UI"]
+                ALERTMANAGER["AlertManager<br/>CPU 100m-200m Memory 256Mi-512Mi<br/>Port 9093"]
             end
         end
         
-        subgraph "💾 Namespace: data-persistence"
-            POSTGRES_CLUSTER[🐘 PostgreSQL Cluster<br/>Primary + 2 Replicas<br/>CPU: 1000m-2000m<br/>Memory: 2Gi-4Gi<br/>Storage: 200Gi SSD]
+        subgraph "Namespace_data_persistence"
+            POSTGRES_CLUSTER["PostgreSQL Cluster<br/>Primary + 2 Replicas<br/>CPU 1000m-2000m Memory 2Gi-4Gi Storage 200Gi SSD"]
             
-            POSTGRES_PRIMARY[🐘 postgresql-primary<br/>Read/Write operations<br/>Streaming replication<br/>Port: 5432]
-            POSTGRES_REPLICA1[🐘 postgresql-replica-1<br/>Read-only operations<br/>Hot standby<br/>Port: 5432]
-            POSTGRES_REPLICA2[🐘 postgresql-replica-2<br/>Read-only operations<br/>Hot standby<br/>Port: 5432]
+            POSTGRES_PRIMARY["postgresql-primary<br/>Read/Write operations<br/>Streaming replication Port 5432"]
+            POSTGRES_REPLICA1["postgresql-replica-1<br/>Read-only operations<br/>Hot standby Port 5432"]
+            POSTGRES_REPLICA2["postgresql-replica-2<br/>Read-only operations<br/>Hot standby Port 5432"]
             
-            ELASTIC_CLUSTER[🔍 Elasticsearch Cluster<br/>3 Master + 3 Data nodes<br/>CPU: 1000m-2000m<br/>Memory: 4Gi-8Gi<br/>Storage: 500Gi SSD]
+            ELASTIC_CLUSTER["Elasticsearch Cluster<br/>3 Master + 3 Data nodes<br/>CPU 1000m-2000m Memory 4Gi-8Gi Storage 500Gi SSD"]
         end
         
         subgraph "🔐 Security & Configuration"
