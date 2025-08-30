@@ -163,23 +163,6 @@ graph TB
     ELASTIC_ACL --> ELASTIC_DB
     PROMETHEUS --> PROMETHEUS_DB
     PROMETHEUS_DB --> GRAFANA
-    
-    %% Styling
-    classDef inputAdapter fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    classDef outputAdapter fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    classDef domain fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
-    classDef application fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-    classDef external fill:#fce4ec,stroke:#c2185b,stroke-width:2px
-    classDef kafka fill:#ffebee,stroke:#d32f2f,stroke-width:2px
-    classDef database fill:#e0f2f1,stroke:#00796b,stroke-width:2px
-    
-    class REST_CTRL,HEALTH_CTRL,MGMT_CTRL,KAFKA_CONS,HEALTH_ACL inputAdapter
-    class JPA_REPO,KAFKA_PUB,PROMETHEUS,POSTGRES_ACL,EXT_CLIENT,ELASTIC_ACL outputAdapter
-    class STOCK_AGG,STOCK_EVENT,VALUE_OBJ,BIZ_RULES,EXT_STOCK,AUDIT_LOG,TRANS_RULES domain
-    class STOCK_APP,EVENT_PUB,VALIDATION,MSG_PROC,TRANS_SERVICE,API_INT application
-    class EXT_TRADING,EXT_INVENTORY,EXT_ANALYTICS external
-    class TOPIC_STOCK,TOPIC_HIGH,TOPIC_RETRY,TOPIC_DLT kafka
-    class POSTGRES_DB,ELASTIC_DB,PROMETHEUS_DB,GRAFANA database
 ```
 
 ---
@@ -304,30 +287,6 @@ graph TB
     RDS -.->|Alternative| POSTGRES_PRIMARY
     MSK -.->|Alternative| KAFKA_POD1
     CLOUDWATCH -.->|Alternative| PROMETHEUS
-    
-    %% Styling
-    classDef virtualStock fill:#e1f5fe,stroke:#0277bd,stroke-width:3px
-    classDef aclService fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
-    classDef kafka fill:#fff3e0,stroke:#ef6c00,stroke-width:3px
-    classDef database fill:#e8f5e8,stroke:#2e7d32,stroke-width:3px
-    classDef monitoring fill:#fce4ec,stroke:#c2185b,stroke-width:3px
-    classDef infrastructure fill:#f5f5f5,stroke:#424242,stroke-width:2px
-    classDef cloud fill:#e0f2f1,stroke:#00695c,stroke-width:2px
-    
-    class VS_POD1,VS_POD2,VS_POD3,VS_SVC,VS_HPA virtualStock
-    class ACL_POD1,ACL_POD2,ACL_SVC,ACL_HPA aclService
-    class KAFKA_POD1,KAFKA_POD2,KAFKA_POD3,KAFKA_CLUSTER,ZK_POD1,ZK_POD2,ZK_POD3 kafka
-    class POSTGRES_PRIMARY,POSTGRES_REPLICA1,POSTGRES_REPLICA2,POSTGRES_CLUSTER,ELASTIC_CLUSTER database
-    class PROMETHEUS,GRAFANA,ALERTMANAGER monitoring
-    class LB,INGRESS,SECRETS,CONFIG_MAPS,RBAC infrastructure
-    class RDS,MSK,CLOUDWATCH cloud
-```
-    
-    class PROD_POD1,PROD_POD2,PROD_POD3 prodClass
-    class CONS_POD1,CONS_POD2 consClass
-    class KAFKA1,KAFKA2,KAFKA3,T1,T2,T3,T4 kafkaClass
-    class ZK1,ZK2,ZK3 zkClass
-    class PROMETHEUS,PROM_SERVER,GRAFANA monClass
 ```
 
 ## 2. Fluxo de Processamento de Logs - Sequência Completa
@@ -510,18 +469,18 @@ sequenceDiagram
 graph LR
     subgraph "📢 Topic Architecture"
         subgraph "🔥 High Priority Topics"
-            TOPIC_HIGH[⚡ high-priority-updates<br/>📊 Partitions: 3<br/>🔄 Replication: 3<br/>⏰ Retention: 7 days<br/>🎯 Use: Reservations, Price alerts]
-            TOPIC_CRITICAL[🚨 critical-stock-events<br/>📊 Partitions: 3<br/>🔄 Replication: 3<br/>⏰ Retention: 30 days<br/>🎯 Use: Out of stock, System errors]
+            TOPIC_HIGH[⚡ high-priority-updates<br/>📊 Partitions 3<br/>🔄 Replication 3<br/>⏰ Retention 7 days<br/>🎯 Use Reservations Price alerts]
+            TOPIC_CRITICAL[🚨 critical-stock-events<br/>📊 Partitions 3<br/>🔄 Replication 3<br/>⏰ Retention 30 days<br/>🎯 Use Out of stock System errors]
         end
         
         subgraph "📈 Normal Priority Topics"
-            TOPIC_STOCK[📢 virtual-stock-updates<br/>📊 Partitions: 6<br/>🔄 Replication: 3<br/>⏰ Retention: 14 days<br/>🎯 Use: Quantity updates, Status changes]
-            TOPIC_AUDIT[📋 stock-audit-logs<br/>📊 Partitions: 2<br/>🔄 Replication: 3<br/>⏰ Retention: 90 days<br/>🎯 Use: Compliance, Audit trail]
+            TOPIC_STOCK[📢 virtual-stock-updates<br/>📊 Partitions 6<br/>🔄 Replication 3<br/>⏰ Retention 14 days<br/>🎯 Use Quantity updates Status changes]
+            TOPIC_AUDIT[📋 stock-audit-logs<br/>📊 Partitions 2<br/>🔄 Replication 3<br/>⏰ Retention 90 days<br/>🎯 Use Compliance Audit trail]
         end
         
         subgraph "🔄 Error Handling Topics"
-            TOPIC_RETRY[🔄 stock-retry-topic<br/>📊 Partitions: 3<br/>🔄 Replication: 3<br/>⏰ Retention: 3 days<br/>🎯 Use: Failed message retry]
-            TOPIC_DLT[💀 stock-dead-letter-topic<br/>📊 Partitions: 1<br/>🔄 Replication: 3<br/>⏰ Retention: 30 days<br/>🎯 Use: Unprocessable messages]
+            TOPIC_RETRY[🔄 stock-retry-topic<br/>📊 Partitions 3<br/>🔄 Replication 3<br/>⏰ Retention 3 days<br/>🎯 Use Failed message retry]
+            TOPIC_DLT[💀 stock-dead-letter-topic<br/>📊 Partitions 1<br/>🔄 Replication 3<br/>⏰ Retention 30 days<br/>🎯 Use Unprocessable messages]
         end
     end
     
@@ -536,9 +495,9 @@ graph LR
     end
     
     subgraph "👥 Consumer Groups"
-        CG1[🛡️ acl-stock-consumer-group<br/>Consumers: 2<br/>Processing: Anti-corruption]
-        CG2[📊 analytics-consumer-group<br/>Consumers: 1<br/>Processing: Business intelligence]
-        CG3[🚨 alerting-consumer-group<br/>Consumers: 1<br/>Processing: Real-time alerts]
+        CG1[🛡️ acl-stock-consumer-group<br/>Consumers 2<br/>Processing Anti-corruption]
+        CG2[📊 analytics-consumer-group<br/>Consumers 1<br/>Processing Business intelligence]
+        CG3[🚨 alerting-consumer-group<br/>Consumers 1<br/>Processing Real-time alerts]
     end
 
     ROUTER --> RULE1
@@ -560,18 +519,6 @@ graph LR
     
     TOPIC_RETRY --> CG1
     TOPIC_DLT --> CG2
-
-    classDef highPriority fill:#ffebee,stroke:#c62828,stroke-width:3px
-    classDef normalPriority fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
-    classDef errorHandling fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
-    classDef routing fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
-    classDef consumers fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
-    
-    class TOPIC_HIGH,TOPIC_CRITICAL highPriority
-    class TOPIC_STOCK,TOPIC_AUDIT normalPriority  
-    class TOPIC_RETRY,TOPIC_DLT errorHandling
-    class ROUTER,RULE1,RULE2,RULE3,RULE4,RULE5 routing
-    class CG1,CG2,CG3 consumers
 ```
     MON->>MON: Generate Alerts
     MON->>MON: Update Dashboards
