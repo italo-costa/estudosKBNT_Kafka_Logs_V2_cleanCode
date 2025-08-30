@@ -616,20 +616,6 @@ graph TB
     ALERTMANAGER --> EMAIL
     ALERTMANAGER --> PAGERDUTY
     ALERTMANAGER --> WEBHOOK
-
-    classDef businessMetrics fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
-    classDef systemMetrics fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
-    classDef kafkaMetrics fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
-    classDef monitoring fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
-    classDef dashboards fill:#fce4ec,stroke:#ad1457,stroke-width:2px
-    classDef alerts fill:#ffebee,stroke:#c62828,stroke-width:2px
-    
-    class VSM1,ACLM3,DASH1 businessMetrics
-    class VSM2,VSM3,ACLM2,DASH2,DASH3 systemMetrics
-    class KM1,KM2,KM3,ACLM1,DASH4 kafkaMetrics
-    class PROMETHEUS,ALERTMANAGER,GRAFANA monitoring
-    class DASH1,DASH2,DASH3,DASH4 dashboards
-    class SLACK,EMAIL,PAGERDUTY,WEBHOOK alerts
 ```
 
 ### 🔍 Observabilidade Estruturada - Logging Strategy
@@ -694,19 +680,6 @@ graph TB
     KIBANA --> SECURITY_DASH
     KIBANA --> AUDIT_DASH
 
-    classDef businessLogs fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
-    classDef technicalLogs fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
-    classDef securityLogs fill:#ffebee,stroke:#c62828,stroke-width:2px
-    classDef auditLogs fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
-    classDef processing fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
-    classDef visualization fill:#fce4ec,stroke:#ad1457,stroke-width:2px
-    
-    class VSL1,ACLL3,BUSINESS_DASH businessLogs
-    class VSL2,ACLL1,TECHNICAL_DASH technicalLogs
-    class VSL3,SECURITY_DASH securityLogs
-    class ACLL2,AUDIT_DASH auditLogs
-    class MDC,STRUCTURED,LOGSTASH,ELASTICSEARCH processing
-    class KIBANA,BUSINESS_DASH,TECHNICAL_DASH,SECURITY_DASH,AUDIT_DASH visualization
 ```
 
 ---
@@ -793,18 +766,6 @@ graph TB
     RESPONSE_TIME --> GRAFANA_LOAD
     THROUGHPUT --> KAFKA_MONITOR
     ERROR_RATE --> APP_MONITOR
-    
-    classDef testScenario fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
-    classDef testTool fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
-    classDef metrics fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
-    classDef phases fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
-    classDef monitoring fill:#fce4ec,stroke:#ad1457,stroke-width:2px
-    
-    class SCENARIO1,SCENARIO2,SCENARIO3,SCENARIO4 testScenario
-    class JMETER,K6,GATLING,CUSTOM testTool
-    class RESPONSE_TIME,THROUGHPUT,ERROR_RATE,RESOURCE_USAGE metrics
-    class RAMP_UP,STEADY_STATE,PEAK_LOAD,RAMP_DOWN phases
-    class GRAFANA_LOAD,KAFKA_MONITOR,APP_MONITOR monitoring
 ```
 
 ---
@@ -832,14 +793,6 @@ Este documento apresenta a **arquitetura completa do Sistema de Gerenciamento Vi
 - 🧪 **Testability**: Validação contínua de qualidade e performance
 
 **O sistema está preparado para ambientes enterprise com alta demanda, garantindo confiabilidade, performance e manutenibilidade.**
-    classDef appClass fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
-    classDef infraClass fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
-    classDef portClass fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,stroke-dasharray: 5 5
-    
-    class ENTITY,VO1,VO2,VO3,DS1,DS2,DS3 domainClass
-    class UC1,UC2,UC3,AS1,AS2 appClass
-    class REST,KAFKA_PROD,METRICS,CONFIG infraClass
-    class PORT1,PORT2,PORT3 portClass
 ```
 
 ## 4. Estratégia de Roteamento de Tópicos
@@ -878,16 +831,6 @@ flowchart TD
     FINANCIAL_CONSUMER --> EXTERNAL_FINANCE[Financial System<br/>Transaction Processing<br/>Risk Management]
     
     APP_CONSUMER --> EXTERNAL_ANALYTICS[Analytics Platform<br/>Business Intelligence<br/>Performance Metrics]
-    
-    classDef topicClass fill:#fff2cc,stroke:#d6b656,stroke-width:2px
-    classDef consumerClass fill:#d5e8d4,stroke:#82b366,stroke-width:2px
-    classDef externalClass fill:#f8cecc,stroke:#b85450,stroke-width:2px
-    classDef decisionClass fill:#e1d5e7,stroke:#9673a6,stroke-width:2px
-    
-    class ERROR_TOPIC,AUDIT_TOPIC,FINANCIAL_TOPIC,APP_TOPIC topicClass
-    class ERROR_CONSUMER,AUDIT_CONSUMER,FINANCIAL_CONSUMER,APP_CONSUMER consumerClass
-    class EXTERNAL_ALERTS,EXTERNAL_COMPLIANCE,EXTERNAL_FINANCE,EXTERNAL_ANALYTICS externalClass
-    class VALIDATE,ROUTE_DECISION,CHECK_SERVICE decisionClass
 ```
 
 ## 5. Monitoramento e Observabilidade
@@ -970,16 +913,6 @@ graph TB
         ALERTMANAGER -->|Notify| EMAIL[Email Notifications<br/>On-call Team]
         ALERTMANAGER -->|Notify| PAGERDUTY[PagerDuty<br/>Incident Management]
     end
-    
-    classDef metricsClass fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    classDef alertClass fill:#ffebee,stroke:#d32f2f,stroke-width:2px
-    classDef dashClass fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
-    classDef flowClass fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-    
-    class PM1,PM2,PM3,PM4,CM1,CM2,CM3,CM4,KM1,KM2,KM3,KM4,K8M1,K8M2,K8M3,K8M4 metricsClass
-    class A1,A2,A3,A4,A5,A6 alertClass
-    class D1,D2,D3,D4,D5,D6 dashClass
-    class APPS,PROMETHEUS_MAIN,GRAFANA_MAIN,ALERTMANAGER,SLACK,EMAIL,PAGERDUTY flowClass
 ```
 
 ---
