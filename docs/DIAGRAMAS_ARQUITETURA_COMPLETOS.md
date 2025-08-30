@@ -181,47 +181,47 @@ sequenceDiagram
 
 ```mermaid
 graph TB
-    subgraph "External Adapters (Infrastructure)"
-        REST[REST Controller<br/>@RestController<br/>Port: HTTP]
-        KAFKA_PROD[Kafka Producer<br/>@Service<br/>Port: Message]
-        METRICS[Metrics Collector<br/>@Component<br/>Port: Monitoring]
-        CONFIG[Configuration<br/>@ConfigurationProperties<br/>Port: Config]
+    subgraph "External Adapters Infrastructure"
+        REST[REST Controller<br/>RestController<br/>Port HTTP]
+        KAFKA_PROD[Kafka Producer<br/>Service<br/>Port Message]
+        METRICS[Metrics Collector<br/>Component<br/>Port Monitoring]
+        CONFIG[Configuration<br/>ConfigurationProperties<br/>Port Config]
     end
     
     subgraph "Application Layer"
         subgraph "Use Cases"
-            UC1[Process Log Use Case<br/>@UseCase<br/>Business Logic]
-            UC2[Route Log Use Case<br/>@UseCase<br/>Routing Logic]
-            UC3[Validate Log Use Case<br/>@UseCase<br/>Validation Logic]
+            UC1[Process Log Use Case<br/>UseCase<br/>Business Logic]
+            UC2[Route Log Use Case<br/>UseCase<br/>Routing Logic]
+            UC3[Validate Log Use Case<br/>UseCase<br/>Validation Logic]
         end
         
         subgraph "Application Services"
-            AS1[Log Processing Service<br/>@ApplicationService<br/>Orchestration]
-            AS2[Message Routing Service<br/>@ApplicationService<br/>Topic Selection]
+            AS1[Log Processing Service<br/>ApplicationService<br/>Orchestration]
+            AS2[Message Routing Service<br/>ApplicationService<br/>Topic Selection]
         end
     end
     
-    subgraph "Domain Layer (Core)"
+    subgraph "Domain Layer Core"
         subgraph "Domain Entities"
-            ENTITY[LogEntry<br/>- id: RequestId<br/>- level: LogLevel<br/>- message: String<br/>- timestamp: Instant<br/>- serviceName: ServiceName<br/>- metadata: Map]
+            ENTITY[LogEntry<br/>id RequestId<br/>level LogLevel<br/>message String<br/>timestamp Instant<br/>serviceName ServiceName<br/>metadata Map]
         end
         
         subgraph "Value Objects"
-            VO1[RequestId<br/>- value: UUID<br/>+ generate()]
-            VO2[LogLevel<br/>- INFO, WARN, ERROR, FATAL<br/>+ isError()]
-            VO3[ServiceName<br/>- value: String<br/>+ validate()]
+            VO1[RequestId<br/>value UUID<br/>generate method]
+            VO2[LogLevel<br/>INFO WARN ERROR FATAL<br/>isError method]
+            VO3[ServiceName<br/>value String<br/>validate method]
         end
         
         subgraph "Domain Services"
-            DS1[Log Validation Service<br/>+ validateLogEntry()<br/>+ validateLevel()]
-            DS2[Topic Routing Service<br/>+ determineTopicByLevel()<br/>+ applyRoutingRules()]
-            DS3[Log Enhancement Service<br/>+ addTimestamp()<br/>+ addMetadata()]
+            DS1[Log Validation Service<br/>validateLogEntry<br/>validateLevel]
+            DS2[Topic Routing Service<br/>determineTopicByLevel<br/>applyRoutingRules]
+            DS3[Log Enhancement Service<br/>addTimestamp<br/>addMetadata]
         end
         
-        subgraph "Domain Ports (Interfaces)"
-            PORT1[LogRepository<br/>+ save()<br/>+ findById()]
-            PORT2[MessagePublisher<br/>+ publish()<br/>+ publishBatch()]
-            PORT3[MetricsCollector<br/>+ increment()<br/>+ recordDuration()]
+        subgraph "Domain Ports Interfaces"
+            PORT1[LogRepository<br/>save method<br/>findById method]
+            PORT2[MessagePublisher<br/>publish method<br/>publishBatch method]
+            PORT3[MetricsCollector<br/>increment method<br/>recordDuration method]
         end
     end
     
