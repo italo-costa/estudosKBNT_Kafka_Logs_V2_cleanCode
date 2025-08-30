@@ -1,0 +1,47 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: audit-logs
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka-cluster
+    topic-type: audit
+    retention-policy: long-term
+    compliance: required
+spec:
+  partitions: 2
+  replicas: 2
+  config:
+    # Retention - 30 days
+    retention.ms: 2592000000
+    # Cleanup policy - compact to maintain latest state
+    cleanup.policy: compact
+    # Compression - best compression for audit data
+    compression.type: gzip
+    # Segment size - 200MB (larger for audit efficiency)
+    segment.ms: 1209600000
+    # Min in-sync replicas - maximum reliability
+    min.insync.replicas: 2
+    # Message format version
+    message.format.version: 3.4-IV0
+    # Maximum message size - 1MB
+    max.message.bytes: 1048576
+    # Flush settings - less aggressive for audit
+    flush.messages: 50000
+    flush.ms: 10000
+    # Compact settings
+    min.cleanable.dirty.ratio: 0.1
+    delete.retention.ms: 86400000
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: audit-logs-config
+  namespace: kafka
+data:
+  description: "Security and compliance audit logs"
+  usage: "Authentication, authorization, sensitive operations"
+  retention: "30 days"
+  expected-volume: "medium"
+  routing-key: "service.audit.auth,security,compliance"
+  compliance-required: "true"

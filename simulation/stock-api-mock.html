@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏪 KBNT Stock Simulator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .operation-card {
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .operation-card:hover {
+            border-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .btn-add {
+            background: #27ae60;
+        }
+
+        .btn-add:hover {
+            background: #229954;
+        }
+
+        .btn-remove {
+            background: #e74c3c;
+        }
+
+        .btn-remove:hover {
+            background: #c0392b;
+        }
+
+        .btn-transfer {
+            background: #f39c12;
+        }
+
+        .btn-transfer:hover {
+            background: #d68910;
+        }
+
+        .btn-set {
+            background: #9b59b6;
+        }
+
+        .btn-set:hover {
+            background: #8e44ad;
+        }
+
+        .form-group {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group label {
+            width: 150px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+
+        .response {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .success {
+            border-color: #28a745;
+            background-color: #d4edda;
+        }
+
+        .error {
+            border-color: #dc3545;
+            background-color: #f8d7da;
+        }
+
+        .info {
+            border-color: #17a2b8;
+            background-color: #d1ecf1;
+        }
+
+        .status-panel {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏪 KBNT Stock Update Simulator</h1>
+            <p>Simulação Local - Sistema de Atualização de Estoque</p>
+        </div>
+
+        <div class="content">
+            <!-- Status Panel -->
+            <div class="status-panel">
+                <h3>📊 Status da Simulação</h3>
+                <div class="status-item">
+                    <span><strong>Kafka Status:</strong></span>
+                    <span id="kafka-status">🔄 Verificando...</span>
+                </div>
+                <div class="status-item">
+                    <span><strong>Topics Criados:</strong></span>
+                    <span id="topics-status">0</span>
+                </div>
+                <div class="status-item">
+                    <span><strong>Operações Simuladas:</strong></span>
+                    <span id="operations-count">0</span>
+                </div>
+            </div>
+
+            <!-- Operação: Adicionar Estoque -->
+            <div class="operation-card">
+                <h3>📦 Adicionar Estoque (ADD)</h3>
+                <div class="form-group">
+                    <label>Product ID:</label>
+                    <input type="text" id="add-product" value="SMARTPHONE-XYZ" />
+                </div>
+                <div class="form-group">
+                    <label>Centro Distrib.:</label>
+                    <select id="add-dc">
+                        <option value="DC-SP01">DC-SP01 (São Paulo)</option>
+                        <option value="DC-RJ01">DC-RJ01 (Rio de Janeiro)</option>
+                        <option value="DC-MG01">DC-MG01 (Minas Gerais)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Filial:</label>
+                    <select id="add-branch">
+                        <option value="FIL-SP001">FIL-SP001</option>
+                        <option value="FIL-SP002">FIL-SP002</option>
+                        <option value="DC-SP01">DC-SP01 (Estoque no DC)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Quantidade:</label>
+                    <input type="number" id="add-quantity" value="100" min="1" />
+                </div>
+                <div class="form-group">
+                    <label>Motivo:</label>
+                    <select id="add-reason">
+                        <option value="PURCHASE">PURCHASE (Compra)</option>
+                        <option value="RETURN">RETURN (Devolução)</option>
+                        <option value="ADJUSTMENT">ADJUSTMENT (Ajuste)</option>
+                    </select>
+                </div>
+                <button class="btn btn-add" onclick="simulateAddStock()">➕ Simular Adição</button>
+            </div>
+
+            <!-- Operação: Remover Estoque -->
+            <div class="operation-card">
+                <h3>🛒 Remover Estoque (REMOVE)</h3>
+                <div class="form-group">
+                    <label>Product ID:</label>
+                    <input type="text" id="remove-product" value="SMARTPHONE-XYZ" />
+                </div>
+                <div class="form-group">
+                    <label>Centro Distrib.:</label>
+                    <select id="remove-dc">
+                        <option value="DC-SP01">DC-SP01 (São Paulo)</option>
+                        <option value="DC-RJ01">DC-RJ01 (Rio de Janeiro)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Filial:</label>
+                    <select id="remove-branch">
+                        <option value="FIL-SP001">FIL-SP001</option>
+                        <option value="FIL-SP002">FIL-SP002</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Quantidade:</label>
+                    <input type="number" id="remove-quantity" value="5" min="1" />
+                </div>
+                <div class="form-group">
+                    <label>Motivo:</label>
+                    <select id="remove-reason">
+                        <option value="SALE">SALE (Venda)</option>
+                        <option value="LOSS">LOSS (Perda)</option>
+                        <option value="DAMAGE">DAMAGE (Avaria)</option>
+                    </select>
+                </div>
+                <button class="btn btn-remove" onclick="simulateRemoveStock()">➖ Simular Remoção</button>
+            </div>
+
+            <!-- Operação: Transferir Estoque -->
+            <div class="operation-card">
+                <h3>🔄 Transferir Estoque (TRANSFER)</h3>
+                <div class="form-group">
+                    <label>Product ID:</label>
+                    <input type="text" id="transfer-product" value="TABLET-ABC" />
+                </div>
+                <div class="form-group">
+                    <label>Centro Distrib.:</label>
+                    <select id="transfer-dc">
+                        <option value="DC-SP01">DC-SP01 (São Paulo)</option>
+                        <option value="DC-RJ01">DC-RJ01 (Rio de Janeiro)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Origem:</label>
+                    <select id="transfer-source">
+                        <option value="DC-SP01">DC-SP01 (Centro)</option>
+                        <option value="FIL-SP001">FIL-SP001</option>
+                        <option value="FIL-SP002">FIL-SP002</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Destino:</label>
+                    <select id="transfer-target">
+                        <option value="FIL-SP001">FIL-SP001</option>
+                        <option value="FIL-SP002">FIL-SP002</option>
+                        <option value="FIL-SP003">FIL-SP003</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Quantidade:</label>
+                    <input type="number" id="transfer-quantity" value="25" min="1" />
+                </div>
+                <button class="btn btn-transfer" onclick="simulateTransferStock()">🔄 Simular Transferência</button>
+            </div>
+
+            <!-- Simulação em Lote -->
+            <div class="operation-card">
+                <h3>⚡ Simulação em Lote</h3>
+                <p>Simula múltiplas operações de estoque simultaneamente</p>
+                <button class="btn" onclick="simulateBatchOperations()">🚀 Executar Lote de Operações</button>
+                <button class="btn btn-set" onclick="simulateHighVolume()">📈 Simular Alto Volume (100 ops)</button>
+            </div>
+
+            <!-- Área de Resposta -->
+            <div id="response-area"></div>
+        </div>
+    </div>
+
+    <script>
+        let operationCount = 0;
+
+        // Simular conexão com Kafka
+        function updateKafkaStatus() {
+            // Simula verificação de conectividade
+            setTimeout(() => {
+                document.getElementById('kafka-status').innerHTML = '✅ Conectado (Local)';
+                document.getElementById('topics-status').innerHTML = '3 (kbnt-stock-updates, kbnt-stock-transfers, kbnt-stock-alerts)';
+            }, 2000);
+        }
+
+        // Função genérica para exibir resposta
+        function displayResponse(title, data, type = 'info') {
+            operationCount++;
+            document.getElementById('operations-count').textContent = operationCount;
+
+            const responseArea = document.getElementById('response-area');
+            const responseDiv = document.createElement('div');
+            responseDiv.className = `response ${type}`;
+            responseDiv.innerHTML = `
+                <strong>${title}</strong>
+                <br>
+                <small>Timestamp: ${new Date().toLocaleString()}</small>
+                <br><br>
+                ${JSON.stringify(data, null, 2)}
+            `;
+
+            responseArea.insertBefore(responseDiv, responseArea.firstChild);
+
+            // Limitar a 5 respostas visíveis
+            if (responseArea.children.length > 5) {
+                responseArea.removeChild(responseArea.lastChild);
+            }
+        }
+
+        // Simulação: Adicionar Estoque
+        function simulateAddStock() {
+            const request = {
+                productId: document.getElementById('add-product').value,
+                distributionCenter: document.getElementById('add-dc').value,
+                branch: document.getElementById('add-branch').value,
+                quantity: parseInt(document.getElementById('add-quantity').value),
+                operation: 'ADD',
+                reasonCode: document.getElementById('add-reason').value,
+                timestamp: new Date().toISOString(),
+                correlationId: 'sim-' + Date.now()
+            };
+
+            // Simular resposta do Kafka
+            setTimeout(() => {
+                const response = {
+                    status: 'accepted',
+                    correlationId: request.correlationId,
+                    operation: 'ADD',
+                    productId: request.productId,
+                    location: `${request.distributionCenter}-${request.branch}`,
+                    quantity: request.quantity,
+                    topic: 'kbnt-stock-updates',
+                    partition: Math.floor(Math.random() * 12),
+                    offset: Math.floor(Math.random() * 10000) + 1000
+                };
+
+                displayResponse('✅ Adição de Estoque - Sucesso', response, 'success');
+            }, 500 + Math.random() * 1000);
+
+            displayResponse('📤 Enviando Adição de Estoque', request, 'info');
+        }
+
+        // Simulação: Remover Estoque
+        function simulateRemoveStock() {
+            const request = {
+                productId: document.getElementById('remove-product').value,
+                distributionCenter: document.getElementById('remove-dc').value,
+                branch: document.getElementById('remove-branch').value,
+                quantity: parseInt(document.getElementById('remove-quantity').value),
+                operation: 'REMOVE',
+                reasonCode: document.getElementById('remove-reason').value,
+                timestamp: new Date().toISOString(),
+                correlationId: 'sim-' + Date.now()
+            };
+
+            setTimeout(() => {
+                const response = {
+                    status: 'accepted',
+                    correlationId: request.correlationId,
+                    operation: 'REMOVE',
+                    productId: request.productId,
+                    location: `${request.distributionCenter}-${request.branch}`,
+                    quantity: request.quantity,
+                    topic: 'kbnt-stock-updates',
+                    partition: Math.floor(Math.random() * 12),
+                    offset: Math.floor(Math.random() * 10000) + 1000
+                };
+
+                displayResponse('✅ Remoção de Estoque - Sucesso', response, 'success');
+
+                // Simular alerta de estoque baixo (30% de chance)
+                if (Math.random() < 0.3) {
+                    setTimeout(() => {
+                        const alertResponse = {
+                            status: 'alert',
+                            type: 'LOW_STOCK',
+                            productId: request.productId,
+                            location: `${request.distributionCenter}-${request.branch}`,
+                            currentStock: Math.floor(Math.random() * 10),
+                            topic: 'kbnt-stock-alerts'
+                        };
+                        displayResponse('⚠️ Alerta de Estoque Baixo', alertResponse, 'error');
+                    }, 200);
+                }
+            }, 500 + Math.random() * 1000);
+
+            displayResponse('📤 Enviando Remoção de Estoque', request, 'info');
+        }
+
+        // Simulação: Transferir Estoque
+        function simulateTransferStock() {
+            const request = {
+                productId: document.getElementById('transfer-product').value,
+                distributionCenter: document.getElementById('transfer-dc').value,
+                sourceBranch: document.getElementById('transfer-source').value,
+                branch: document.getElementById('transfer-target').value,
+                quantity: parseInt(document.getElementById('transfer-quantity').value),
+                operation: 'TRANSFER',
+                reasonCode: 'TRANSFER',
+                timestamp: new Date().toISOString(),
+                correlationId: 'sim-' + Date.now()
+            };
+
+            setTimeout(() => {
+                const response = {
+                    status: 'accepted',
+                    correlationId: request.correlationId,
+                    operation: 'TRANSFER',
+                    productId: request.productId,
+                    from: `${request.distributionCenter}-${request.sourceBranch}`,
+                    to: `${request.distributionCenter}-${request.branch}`,
+                    quantity: request.quantity,
+                    topic: 'kbnt-stock-transfers',
+                    partition: Math.floor(Math.random() * 6),
+                    offset: Math.floor(Math.random() * 5000) + 500
+                };
+
+                displayResponse('✅ Transferência de Estoque - Sucesso', response, 'success');
+            }, 800 + Math.random() * 1200);
+
+            displayResponse('📤 Enviando Transferência de Estoque', request, 'info');
+        }
+
+        // Simulação: Operações em Lote
+        function simulateBatchOperations() {
+            const operations = [
+                { op: 'ADD', product: 'SMARTPHONE-A', dc: 'DC-SP01', branch: 'DC-SP01', qty: 200, reason: 'PURCHASE' },
+                { op: 'REMOVE', product: 'SMARTPHONE-A', dc: 'DC-SP01', branch: 'FIL-SP001', qty: 3, reason: 'SALE' },
+                { op: 'TRANSFER', product: 'TABLET-B', dc: 'DC-SP01', source: 'DC-SP01', branch: 'FIL-SP001', qty: 15 },
+                { op: 'REMOVE', product: 'TABLET-B', dc: 'DC-SP01', branch: 'FIL-SP001', qty: 2, reason: 'SALE' },
+                { op: 'ADD', product: 'NOTEBOOK-C', dc: 'DC-RJ01', branch: 'DC-RJ01', qty: 50, reason: 'PURCHASE' }
+            ];
+
+            displayResponse('📦 Iniciando Lote de Operações', { batchSize: operations.length, operations: operations.length }, 'info');
+
+            operations.forEach((op, index) => {
+                setTimeout(() => {
+                    const request = {
+                        productId: op.product,
+                        distributionCenter: op.dc,
+                        branch: op.branch,
+                        sourceBranch: op.source,
+                        quantity: op.qty,
+                        operation: op.op,
+                        reasonCode: op.reason || op.op,
+                        timestamp: new Date().toISOString(),
+                        correlationId: `batch-${Date.now()}-${index}`
+                    };
+
+                    const response = {
+                        status: 'accepted',
+                        correlationId: request.correlationId,
+                        operation: op.op,
+                        productId: op.product,
+                        topic: op.op === 'TRANSFER' ? 'kbnt-stock-transfers' : 'kbnt-stock-updates',
+                        batchIndex: index + 1,
+                        batchTotal: operations.length
+                    };
+
+                    displayResponse(`✅ Lote ${index + 1}/${operations.length} - ${op.op}`, response, 'success');
+                }, (index + 1) * 300);
+            });
+        }
+
+        // Simulação: Alto Volume
+        function simulateHighVolume() {
+            displayResponse('🚀 Iniciando Simulação de Alto Volume', { operations: 100, estimated_duration: '30 segundos' }, 'info');
+
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const operations = ['ADD', 'REMOVE'];
+                    const products = ['PROD-A', 'PROD-B', 'PROD-C', 'PROD-D'];
+                    const dcs = ['DC-SP01', 'DC-RJ01', 'DC-MG01'];
+
+                    const op = operations[Math.floor(Math.random() * operations.length)];
+                    const product = products[Math.floor(Math.random() * products.length)];
+                    const dc = dcs[Math.floor(Math.random() * dcs.length)];
+
+                    if (i % 20 === 0) {  // Mostrar apenas algumas operações
+                        const response = {
+                            status: 'accepted',
+                            operation: op,
+                            productId: product,
+                            distributionCenter: dc,
+                            progress: `${i + 1}/100`,
+                            topic: 'kbnt-stock-updates'
+                        };
+                        displayResponse(`⚡ Alto Volume ${i + 1}/100`, response, 'success');
+                    }
+                }, i * 300);
+            }
+
+            setTimeout(() => {
+                displayResponse('🎉 Simulação de Alto Volume Concluída', {
+                    total_operations: 100,
+                    success_rate: '98%',
+                    avg_latency: '45ms',
+                    throughput: '200 ops/sec'
+                }, 'success');
+            }, 30000);
+        }
+
+        // Inicializar simulação
+        updateKafkaStatus();
+
+        // Simular algumas operações iniciais
+        setTimeout(() => {
+            displayResponse('🏁 Simulação Inicializada', {
+                status: 'ready',
+                kafka_topics: 3,
+                simulation_mode: 'local',
+                endpoints_available: [
+                    'POST /api/v1/stock/add',
+                    'POST /api/v1/stock/remove',
+                    'POST /api/v1/stock/transfer',
+                    'POST /api/v1/stock/batch'
+                ]
+            }, 'success');
+        }, 3000);
+    </script>
+</body>
+
+</html>

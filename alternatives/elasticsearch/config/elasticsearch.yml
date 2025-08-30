@@ -1,0 +1,81 @@
+# Elasticsearch Configuration for KBNT System
+cluster.name: kbnt-cluster
+node.name: kbnt-elasticsearch
+
+# Network settings
+network.host: 0.0.0.0
+http.port: 9200
+transport.port: 9300
+
+# Discovery settings
+discovery.type: single-node
+
+# Memory settings
+bootstrap.memory_lock: true
+
+# Index settings
+action.auto_create_index: "+kbnt-*,+.monitoring-*,+.watches,+.triggered_watches,+.watcher-history-*,+.ml-*,-*"
+
+# Security settings (disabled for development)
+xpack.security.enabled: false
+xpack.security.enrollment.enabled: false
+
+# Monitoring settings
+xpack.monitoring.collection.enabled: true
+
+# Index lifecycle management
+xpack.ilm.enabled: true
+
+# Machine learning settings
+xpack.ml.enabled: true
+
+# Watcher settings for alerting
+xpack.watcher.enabled: true
+
+# Thread pool settings optimized for logging workload
+thread_pool:
+  write:
+    size: 4
+    queue_size: 1000
+  search:
+    size: 8
+    queue_size: 1000
+  get:
+    size: 4
+    queue_size: 1000
+
+# Index settings for optimal logging performance
+index:
+  number_of_shards: 3
+  number_of_replicas: 1
+  refresh_interval: 5s
+  max_result_window: 50000
+  
+  # Optimizations for time-series data
+  mapping:
+    total_fields:
+      limit: 2000
+  max_ngram_diff: 50
+  max_shingle_diff: 4
+
+# Logging settings
+logger:
+  root: INFO
+  org.elasticsearch: INFO
+  org.elasticsearch.index: WARN
+  org.elasticsearch.discovery: INFO
+
+# Cluster settings
+cluster:
+  routing:
+    allocation:
+      disk:
+        threshold_enabled: true
+        low_watermark: 85%
+        high_watermark: 90%
+        flood_stage: 95%
+
+# Path settings
+path:
+  data: /usr/share/elasticsearch/data
+  logs: /usr/share/elasticsearch/logs

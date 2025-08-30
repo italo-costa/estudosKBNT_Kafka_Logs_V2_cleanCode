@@ -1,0 +1,166 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kbnt-log-service-config
+  namespace: kafka
+data:
+  application.yml: |
+    server:
+      port: 8080
+      shutdown: graceful
+      
+    management:
+      server:
+        port: 8081
+      endpoints:
+        web:
+          exposure:
+            include: "health,info,metrics,prometheus,loggers"
+          base-path: "/actuator"
+      endpoint:
+        health:
+          show-details: always
+          probes:
+            enabled: true
+        prometheus:
+          enabled: true
+      metrics:
+        export:
+          prometheus:
+            enabled: true
+        distribution:
+          percentiles-histogram:
+            "[http.server.requests]": true
+          slo:
+            "[http.server.requests]": "50ms,100ms,200ms,400ms"
+
+    spring:
+      application:
+        name: kbnt-log-service
+      profiles:
+        active: kubernetes,amq-streams
+      lifecycle:
+        timeout-per-shutdown-phase: 30s
+      kafka:
+        bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kbnt-kafka-cluster-kafka-bootstrap:9092}
+        security:
+          protocol: ${KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
+        producer:
+          acks: all
+          retries: 3
+          batch-size: 16384
+          linger-ms: 10
+          buffer-memory: 33554432
+          compression-type: snappy
+          key-serializer: org.apache.kafka.common.serialization.StringSerializer
+          value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+          properties:
+            enable.idempotence: true
+            max.in.flight.requests.per.connection: 1
+        consumer:
+          group-id: ${KAFKA_CONSUMER_GROUP_ID:kbnt-log-consumer-group}
+          auto-offset-reset: earliest
+          enable-auto-commit: false
+          max-poll-records: 500
+          session-timeout-ms: 30000
+          heartbeat-interval-ms: 3000
+          key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+          value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+          properties:
+            spring.json.trusted.packages: "com.estudoskbnt.*"
+            isolation.level: read_committed
+
+    # Application specific configuration
+    app:
+      processing:
+        modes: ${APP_PROCESSING_MODES:producer,consumer,processor}
+        batch-size: 100
+        concurrent-consumers: 3
+        retry-max-attempts: ${APP_RETRY_MAX_ATTEMPTS:3}
+      
+      kafka:
+        topics:
+          application-logs: ${KAFKA_TOPICS_APPLICATION_LOGS:kbnt-application-logs}
+          error-logs: ${KAFKA_TOPICS_ERROR_LOGS:kbnt-error-logs}
+          audit-logs: ${KAFKA_TOPICS_AUDIT_LOGS:kbnt-audit-logs}
+          financial-logs: ${KAFKA_TOPICS_FINANCIAL_LOGS:kbnt-financial-logs}
+          dead-letter-queue: ${KAFKA_TOPICS_DEAD_LETTER_QUEUE:kbnt-dead-letter-queue}
+        
+      circuit-breaker:
+        enabled: ${APP_CIRCUIT_BREAKER_ENABLED:true}
+        failure-rate-threshold: 60
+        wait-duration-in-open-state: 30s
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+      
+      metrics:
+        enabled: ${APP_METRICS_ENABLED:true}
+        custom-tags:
+          service: kbnt-log-service
+          environment: kubernetes
+          cluster: amq-streams
+
+    logging:
+      level:
+        root: ${LOGGING_LEVEL_ROOT:INFO}
+        com.estudoskbnt: ${LOGGING_LEVEL_COM_ESTUDOSKBNT:DEBUG}
+        org.apache.kafka: INFO
+        org.springframework.kafka: INFO
+      pattern:
+        console: "%d{HH:mm:ss.SSS} [%thread] %-5level [%X{correlationId:-}] %logger{36} - %msg%n"
+      config: classpath:logback-spring.xml
+
+  logback-spring.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <configuration>
+        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+        
+        <springProfile name="!kubernetes">
+            <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+            <root level="INFO">
+                <appender-ref ref="CONSOLE"/>
+            </root>
+        </springProfile>
+        
+        <springProfile name="kubernetes">
+            <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+                    <providers>
+                        <timestamp/>
+                        <logLevel/>
+                        <loggerName/>
+                        <mdc/>
+                        <arguments/>
+                        <message/>
+                        <stackTrace/>
+                    </providers>
+                </encoder>
+            </appender>
+            
+            <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>/app/logs/application.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                    <fileNamePattern>/app/logs/application.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                    <maxFileSize>100MB</maxFileSize>
+                    <maxHistory>30</maxHistory>
+                    <totalSizeCap>3GB</totalSizeCap>
+                </rollingPolicy>
+                <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+                    <providers>
+                        <timestamp/>
+                        <logLevel/>
+                        <loggerName/>
+                        <mdc/>
+                        <arguments/>
+                        <message/>
+                        <stackTrace/>
+                    </providers>
+                </encoder>
+            </appender>
+            
+            <root level="INFO">
+                <appender-ref ref="CONSOLE"/>
+                <appender-ref ref="FILE"/>
+            </root>
+        </springProfile>
+    </configuration>

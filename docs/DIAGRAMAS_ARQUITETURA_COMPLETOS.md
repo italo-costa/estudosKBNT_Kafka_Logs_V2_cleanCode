@@ -49,7 +49,7 @@ graph TB
             STOCK_AGG[📦 Stock<br/>Aggregate Root<br/>stockId, productId, quantity, price]
             STOCK_EVENT[📢 StockUpdatedEvent<br/>Domain Event<br/>CREATION, UPDATE, RESERVATION]
             VALUE_OBJ[💎 Value Objects<br/>StockId, ProductId<br/>Immutable identifiers]
-            BIZ_RULES[📋 Business Rules<br/>canReserve(), isLowStock()<br/>Domain logic]
+            BIZ_RULES[📋 Business Rules<br/>canReserve, isLowStock<br/>Domain logic]
         end
         
         subgraph "📤 Output Ports"
@@ -375,19 +375,19 @@ sequenceDiagram
     VS->>+DOM: createStock(CreateStockCommand)
     
     Note over DOM: 🎯 Domain Processing
-    DOM->>DOM: validateStockCreation()
-    DOM->>DOM: Stock.builder().build()
-    DOM->>DOM: StockUpdatedEvent.forCreation()
+    DOM->>DOM: validateStockCreation
+    DOM->>DOM: Stock.builder build
+    DOM->>DOM: StockUpdatedEvent forCreation
     
-    DOM-->>-VS: StockCreationResult.success()
+    DOM-->>-VS: StockCreationResult success
     
-    VS->>+KP: publishStockUpdatedAsync(event)
+    VS->>+KP: publishStockUpdatedAsync event
     
     Note over KP: 📤 Event Publishing Strategy
     alt High Priority Stock (Price > $100)
-        KP->>+K: send("high-priority-updates", event)
+        KP->>+K: send high-priority-updates event
     else Normal Priority Stock  
-        KP->>+K: send("virtual-stock-updates", event)
+        KP->>+K: send virtual-stock-updates event
     end
     K-->>-KP: Ack (at-least-once delivery)
     KP-->>-VS: Event published successfully
@@ -423,17 +423,17 @@ sequenceDiagram
     TC->>+LB: PUT /api/v1/virtual-stock/stocks/STK-001/quantity<br/>{newQuantity: 200, reason: "Replenishment"}
     LB->>+VS: Route to Virtual Stock Instance
 
-    VS->>+DOM: updateStockQuantity(UpdateStockQuantityCommand)
+    VS->>+DOM: updateStockQuantity UpdateStockQuantityCommand
     
     Note over DOM: 🎯 Business Rule Validation
-    DOM->>DOM: stock = repository.findById("STK-001")
-    DOM->>DOM: stock.updateQuantity(200, "system")
-    DOM->>DOM: StockUpdatedEvent.forQuantityUpdate()
+    DOM->>DOM: stock = repository.findById STK-001
+    DOM->>DOM: stock.updateQuantity 200 system
+    DOM->>DOM: StockUpdatedEvent forQuantityUpdate
     
-    DOM-->>-VS: StockUpdateResult.success()
+    DOM-->>-VS: StockUpdateResult success
     
-    VS->>+KP: publishStockUpdatedAsync(event)
-    KP->>+K: send("virtual-stock-updates", event)
+    VS->>+KP: publishStockUpdatedAsync event
+    KP->>+K: send virtual-stock-updates event
     K-->>-KP: Ack confirmed
     KP-->>-VS: Update event published
     
@@ -463,11 +463,11 @@ sequenceDiagram
     TC->>+LB: POST /api/v1/virtual-stock/stocks/STK-001/reserve<br/>{quantityToReserve: 50, reason: "Client order"}
     LB->>+VS: Route for reservation
 
-    VS->>+DOM: reserveStock(ReserveStockCommand)
+    VS->>+DOM: reserveStock ReserveStockCommand
     
     Note over DOM: 🎯 Reservation Business Logic
     DOM->>DOM: stock = repository.findById("STK-001")
-    DOM->>DOM: if (stock.canReserve(50)) reserve()
+    DOM->>DOM: if stock.canReserve then reserve
     DOM->>DOM: StockUpdatedEvent.forReservation()
     
     DOM-->>-VS: StockReservationResult.success()

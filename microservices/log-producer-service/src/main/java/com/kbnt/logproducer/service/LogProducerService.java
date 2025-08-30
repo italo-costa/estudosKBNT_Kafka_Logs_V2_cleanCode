@@ -1,6 +1,7 @@
 package com.kbnt.logproducer.service;
 
 import com.kbnt.logproducer.model.LogEntry;
+import com.kbnt.logproducer.config.EnhancedLoggingConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +9,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -39,27 +41,58 @@ public class LogProducerService {
     }
 
     public CompletableFuture<SendResult<String, LogEntry>> sendLog(String topic, LogEntry logEntry) {
-        // Usa o serviço como chave para particionamento
+        String messageId = UUID.randomUUID().toString();
         String key = logEntry.getService();
         
-        log.debug("Sending log to topic '{}' with key '{}': {}", 
-                  topic, key, logEntry.getMessage());
-        
-        CompletableFuture<SendResult<String, LogEntry>> future = 
-            kafkaTemplate.send(topic, key, logEntry);
+        try {
+            // Set enhanced logging context
+            EnhancedLoggingConfig.LoggingUtils.setServiceContext("MICROSERVICE-A", "LogProducerService");
+            EnhancedLoggingConfig.LoggingUtils.setMessageContext(messageId, topic);
             
-        future.whenComplete((result, ex) -> {
-            if (ex == null) {
-                log.debug("Log sent successfully to topic '{}' partition {} offset {}", 
-                         result.getRecordMetadata().topic(),
-                         result.getRecordMetadata().partition(),
-                         result.getRecordMetadata().offset());
-            } else {
-                log.error("Failed to send log to topic '{}': {}", topic, ex.getMessage(), ex);
-            }
-        });
-        
-        return future;
+            long startTime = System.currentTimeMillis();
+            
+            EnhancedLoggingConfig.LoggingUtils.logComponentInfo("LOG_PREPARATION", 
+                String.format("Preparing log message - Service: %s, Level: %s", 
+                    logEntry.getService(), logEntry.getLevel()));
+            
+            EnhancedLoggingConfig.LoggingUtils.logKafkaOperation("PUBLISH_START", topic, null, 
+                String.format("Starting to send log to topic with key '%s'", key));
+            
+            CompletableFuture<SendResult<String, LogEntry>> future = 
+                kafkaTemplate.send(topic, key, logEntry);
+                
+            future.whenComplete((result, ex) -> {
+                long duration = System.currentTimeMillis() - startTime;
+                
+                if (ex == null) {
+                    // Log success with performance metrics
+                    EnhancedLoggingConfig.LoggingUtils.logPerformanceMetrics("KAFKA_PUBLISH", duration);
+                    
+                    EnhancedLoggingConfig.LoggingUtils.logKafkaOperation("PUBLISH_SUCCESS", 
+                        result.getRecordMetadata().topic(), 
+                        result.getRecordMetadata().partition(),
+                        String.format("Message sent successfully - Offset: %d, Duration: %dms", 
+                            result.getRecordMetadata().offset(), duration));
+                    
+                    EnhancedLoggingConfig.LoggingUtils.logComponentInfo("KAFKA_PRODUCER", 
+                        String.format("Log published successfully - MessageId: %s", messageId));
+                } else {
+                    EnhancedLoggingConfig.LoggingUtils.logError("KAFKA_PUBLISH_ERROR", 
+                        "Failed to send log to Kafka", ex, topic);
+                }
+                
+                // Clear context after completion
+                EnhancedLoggingConfig.LoggingUtils.clearContext();
+            });
+            
+            return future;
+            
+        } catch (Exception e) {
+            EnhancedLoggingConfig.LoggingUtils.logError("KAFKA_SEND_ERROR", 
+                "Unexpected error during log sending", e, messageId);
+            EnhancedLoggingConfig.LoggingUtils.clearContext();
+            throw e;
+        }
     }
     
     public CompletableFuture<SendResult<String, LogEntry>> sendLogToTopic(String topic, LogEntry logEntry) {

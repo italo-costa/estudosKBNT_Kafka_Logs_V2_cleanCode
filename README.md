@@ -474,7 +474,7 @@ graph TB
         subgraph "🎯 Domain Core"
             STOCK_AGG[📦 Stock Aggregate<br/>Business Logic]
             STOCK_EVENT[📢 StockUpdatedEvent<br/>Domain Events]
-            BIZ_RULES[📋 Business Rules<br/>canReserve(), isLowStock()]
+            BIZ_RULES[📋 Business Rules<br/>canReserve, isLowStock]
         end
         
         subgraph "⚙️ Application Layer"

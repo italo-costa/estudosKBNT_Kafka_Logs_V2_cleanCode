@@ -1,0 +1,42 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: application-logs
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka-cluster
+    topic-type: application
+    retention-policy: short-term
+spec:
+  partitions: 3
+  replicas: 2
+  config:
+    # Retention - 3 days
+    retention.ms: 259200000
+    # Cleanup policy
+    cleanup.policy: delete
+    # Compression
+    compression.type: lz4
+    # Segment size - 100MB
+    segment.ms: 604800000
+    # Min in-sync replicas
+    min.insync.replicas: 1
+    # Message format version
+    message.format.version: 3.4-IV0
+    # Maximum message size - 1MB
+    max.message.bytes: 1048576
+    # Flush settings
+    flush.messages: 10000
+    flush.ms: 1000
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application-logs-config
+  namespace: kafka
+data:
+  description: "General application logs from microservices"
+  usage: "INFO, DEBUG, TRACE level logs from all services"
+  retention: "3 days"
+  expected-volume: "high"
+  routing-key: "service.level.INFO,DEBUG,TRACE"

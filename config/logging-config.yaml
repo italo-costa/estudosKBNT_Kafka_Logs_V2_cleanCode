@@ -1,0 +1,470 @@
+################################################################################
+# KBNT Enhanced Kafka Publication Logging System
+# Comprehensive Logging Configuration
+################################################################################
+
+version: "1.0.0"
+metadata:
+  name: "KBNT Logging Configuration"
+  description: "Centralized logging configuration for complete workflow"
+  created: "2025-08-30"
+  
+################################################################################
+# Environment-Specific Configurations
+################################################################################
+
+environments:
+  development:
+    log_level: DEBUG
+    console_output: true
+    file_output: false
+    kafka_detailed_logging: true
+    sql_logging: true
+    performance_metrics: true
+    
+  testing:
+    log_level: INFO
+    console_output: true
+    file_output: true
+    kafka_detailed_logging: false
+    sql_logging: false
+    performance_metrics: true
+    
+  production:
+    log_level: INFO
+    console_output: false
+    file_output: true
+    kafka_detailed_logging: false
+    sql_logging: false
+    performance_metrics: true
+
+################################################################################
+# Service-Specific Logging Configurations
+################################################################################
+
+services:
+  
+  # Producer Service (Microservice A) Logging
+  producer_service:
+    application_name: "kbnt-stock-producer-service"
+    base_package: "com.estudoskbnt.kafka"
+    
+    loggers:
+      root: WARN
+      com.estudoskbnt.kafka: INFO
+      com.estudoskbnt.kafka.service: INFO
+      com.estudoskbnt.kafka.controller: INFO
+      com.estudoskbnt.kafka.repository: DEBUG
+      com.estudoskbnt.kafka.config: INFO
+      
+      # Spring Framework
+      org.springframework: WARN
+      org.springframework.web: INFO
+      org.springframework.kafka: INFO
+      org.springframework.boot: INFO
+      org.springframework.security: WARN
+      
+      # Kafka Client Libraries
+      org.apache.kafka: WARN
+      org.apache.kafka.clients.producer: INFO
+      org.apache.kafka.clients.consumer: INFO
+      org.apache.kafka.common.metrics: WARN
+      
+      # Database/JPA
+      org.hibernate: WARN
+      org.hibernate.SQL: DEBUG  # Only in development
+      org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Only in development
+      org.springframework.orm.jpa: INFO
+      org.springframework.transaction: INFO
+      
+      # Micrometer/Actuator
+      io.micrometer: INFO
+      org.springframework.boot.actuate: INFO
+      
+    patterns:
+      console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr([%X{correlationId:-}]){yellow} %clr([%t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
+      file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{correlationId:-}] %logger{40} - %msg%n"
+      
+    custom_fields:
+      - correlationId
+      - userId
+      - sessionId
+      - transactionId
+      - messageHash
+      - kafkaTopic
+      - kafkaPartition
+      - kafkaOffset
+
+  # Consumer Service (Microservice B) Logging  
+  consumer_service:
+    application_name: "kbnt-stock-consumer-service"
+    base_package: "com.estudoskbnt.consumer"
+    
+    loggers:
+      root: WARN
+      com.estudoskbnt.consumer: INFO
+      com.estudoskbnt.consumer.service: INFO
+      com.estudoskbnt.consumer.controller: INFO
+      com.estudoskbnt.consumer.repository: DEBUG
+      com.estudoskbnt.consumer.config: INFO
+      com.estudoskbnt.consumer.listener: INFO
+      
+      # Spring Framework
+      org.springframework: WARN
+      org.springframework.web: INFO
+      org.springframework.kafka: INFO
+      org.springframework.boot: INFO
+      org.springframework.webflux: INFO
+      
+      # Kafka Client Libraries
+      org.apache.kafka: WARN
+      org.apache.kafka.clients.consumer: INFO
+      org.apache.kafka.clients.producer: INFO
+      org.apache.kafka.common.metrics: WARN
+      
+      # Database/JPA
+      org.hibernate: WARN
+      org.hibernate.SQL: DEBUG  # Only in development
+      org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Only in development
+      org.springframework.orm.jpa: INFO
+      org.springframework.transaction: INFO
+      
+      # WebClient for External API calls
+      org.springframework.web.reactive: INFO
+      reactor.netty: WARN
+      
+    patterns:
+      console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr([%X{correlationId:-}]){yellow} %clr([%t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
+      file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{correlationId:-}] %logger{40} - %msg%n"
+      
+    custom_fields:
+      - correlationId
+      - messageId
+      - messageHash
+      - kafkaTopic
+      - kafkaPartition  
+      - kafkaOffset
+      - processingTimeMs
+      - externalApiResponseTime
+      - retryAttempt
+
+################################################################################
+# Infrastructure Logging Configuration
+################################################################################
+
+infrastructure:
+  
+  # Kafka/AMQ Streams Logging
+  kafka:
+    cluster_name: "kbnt-kafka-cluster"
+    log_levels:
+      kafka.root.logger.level: INFO
+      kafka.controller: INFO
+      kafka.coordinator.group: INFO
+      kafka.log.cleaner: WARN
+      kafka.producer: INFO
+      kafka.consumer: INFO
+      kafka.network: WARN
+      kafka.server: INFO
+      kafka.zookeeper: WARN
+      
+  # PostgreSQL Database Logging
+  postgresql:
+    service_name: "kbnt-postgresql"
+    log_levels:
+      log_min_messages: INFO
+      log_statement: "mod"  # Log INSERT, UPDATE, DELETE
+      log_duration: "on"
+      log_connections: "on"
+      log_disconnections: "on"
+      log_lock_waits: "on"
+      
+  # Kubernetes/OpenShift Logging
+  kubernetes:
+    namespace: "kbnt-system"
+    log_collectors:
+      - fluentd
+      - promtail
+    log_retention_days: 30
+
+################################################################################
+# Monitoring and Metrics Configuration  
+################################################################################
+
+monitoring:
+  
+  # Application Metrics
+  application_metrics:
+    enabled: true
+    export_interval: 30s
+    include_percentiles: [0.5, 0.75, 0.95, 0.99]
+    
+    producer_metrics:
+      - kafka_messages_sent_total
+      - kafka_message_send_duration
+      - kafka_producer_batch_size_avg
+      - database_operations_total
+      - api_request_duration
+      - hash_generation_duration
+      
+    consumer_metrics:
+      - kafka_messages_consumed_total
+      - kafka_consumer_lag
+      - message_processing_duration
+      - external_api_call_duration
+      - database_save_duration
+      - retry_attempts_total
+      - dead_letter_messages_total
+      
+  # Infrastructure Metrics
+  infrastructure_metrics:
+    enabled: true
+    
+    kafka_metrics:
+      - kafka_cluster_size
+      - kafka_topic_partitions
+      - kafka_broker_cpu_usage
+      - kafka_broker_memory_usage
+      - kafka_disk_usage_bytes
+      
+    database_metrics:
+      - postgresql_connections_active
+      - postgresql_query_duration
+      - postgresql_table_size_bytes
+      - postgresql_cpu_usage
+      - postgresql_memory_usage
+
+################################################################################
+# Alert Thresholds and Notifications
+################################################################################
+
+alerts:
+  
+  # Application Level Alerts
+  application:
+    producer_service:
+      - name: "High Error Rate"
+        condition: "error_rate > 5%"
+        severity: "warning"
+        duration: "5m"
+        
+      - name: "Kafka Send Failure"
+        condition: "kafka_send_errors > 10"
+        severity: "critical"
+        duration: "1m"
+        
+      - name: "High Response Time"
+        condition: "api_response_time_p95 > 2000ms"
+        severity: "warning"
+        duration: "10m"
+        
+    consumer_service:
+      - name: "Consumer Lag Too High"
+        condition: "kafka_consumer_lag > 1000"
+        severity: "warning"
+        duration: "5m"
+        
+      - name: "External API Failures"
+        condition: "external_api_error_rate > 10%"
+        severity: "warning"
+        duration: "5m"
+        
+      - name: "Database Connection Issues"
+        condition: "database_connection_errors > 5"
+        severity: "critical"
+        duration: "1m"
+        
+  # Infrastructure Level Alerts
+  infrastructure:
+    kafka:
+      - name: "Kafka Broker Down"
+        condition: "kafka_broker_up == 0"
+        severity: "critical"
+        duration: "1m"
+        
+      - name: "High Disk Usage"
+        condition: "kafka_disk_usage > 85%"
+        severity: "warning"
+        duration: "10m"
+        
+    postgresql:
+      - name: "Database Down"
+        condition: "postgresql_up == 0"
+        severity: "critical"
+        duration: "1m"
+        
+      - name: "High Connection Usage"
+        condition: "postgresql_connections_usage > 80%"
+        severity: "warning"
+        duration: "5m"
+
+################################################################################
+# Log Aggregation and Storage
+################################################################################
+
+log_storage:
+  
+  # File-based logging
+  file_logging:
+    enabled: true
+    base_path: "/var/log/kbnt"
+    
+    producer_service:
+      log_file: "${base_path}/producer/kbnt-producer.log"
+      max_file_size: "100MB"
+      max_history: 30
+      total_size_cap: "1GB"
+      
+    consumer_service:
+      log_file: "${base_path}/consumer/kbnt-consumer.log"
+      max_file_size: "100MB"
+      max_history: 30
+      total_size_cap: "1GB"
+      
+  # Centralized logging (ELK Stack)
+  centralized_logging:
+    enabled: false  # Enable for production with ELK
+    elasticsearch_url: "http://elasticsearch:9200"
+    index_prefix: "kbnt-logs"
+    retention_days: 30
+    
+    fields_mapping:
+      "@timestamp": "ISO8601"
+      "level": "keyword"
+      "logger": "keyword"
+      "thread": "keyword"
+      "correlationId": "keyword"
+      "service": "keyword"
+      "environment": "keyword"
+      "message": "text"
+
+################################################################################
+# Performance and Debugging Configuration
+################################################################################
+
+performance:
+  
+  # Request Tracing
+  tracing:
+    enabled: true
+    sample_rate: 0.1  # 10% sampling in production
+    max_trace_length: 1000
+    
+    trace_headers:
+      - "X-Correlation-ID"
+      - "X-Request-ID"
+      - "X-Session-ID"
+      - "X-User-ID"
+      
+  # Profiling
+  profiling:
+    enabled: false  # Enable only for debugging
+    memory_profiling: false
+    cpu_profiling: false
+    heap_dump_on_oom: true
+    
+################################################################################
+# Security and Compliance Logging
+################################################################################
+
+security:
+  
+  # Audit Logging
+  audit_logging:
+    enabled: true
+    
+    events_to_log:
+      - authentication_attempts
+      - authorization_failures
+      - sensitive_data_access
+      - configuration_changes
+      - admin_operations
+      
+  # Data Privacy
+  data_privacy:
+    mask_sensitive_data: true
+    
+    sensitive_fields:
+      - password
+      - token
+      - apiKey
+      - socialSecurityNumber
+      - creditCardNumber
+      
+    masking_pattern: "****"
+
+################################################################################
+# Startup and Health Check Logging
+################################################################################
+
+startup:
+  
+  # Service Startup Logging
+  service_startup:
+    log_level: INFO
+    detailed_timing: true
+    
+    phases_to_log:
+      - "Environment validation"
+      - "Configuration loading"
+      - "Database connection"
+      - "Kafka connection"
+      - "Service registration"
+      - "Health check setup"
+      - "Ready for traffic"
+      
+  # Health Check Logging
+  health_checks:
+    log_successful_checks: false  # Only log failures
+    log_failed_checks: true
+    log_check_duration: true
+    
+    checks_to_monitor:
+      - database_connectivity
+      - kafka_connectivity
+      - external_api_connectivity
+      - disk_space
+      - memory_usage
+
+################################################################################
+# Log Format Examples
+################################################################################
+
+log_examples:
+  
+  producer_service:
+    info_log: "2025-08-30 10:15:30.123 [http-nio-8080-exec-1] INFO  [abc123] com.estudoskbnt.kafka.service.KafkaPublicationService - Publishing stock update for AAPL to topic stock-updates with hash SHA-256:def456"
+    error_log: "2025-08-30 10:15:35.456 [kafka-producer-network-thread-1] ERROR [abc123] org.apache.kafka.clients.producer.internals.Sender - Failed to send message to topic stock-updates, partition 1"
+    
+  consumer_service:
+    info_log: "2025-08-30 10:15:40.789 [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] INFO  [abc123] com.estudoskbnt.consumer.listener.StockUpdateListener - Processing stock update message with hash SHA-256:def456 from topic stock-updates, partition 1, offset 12345"
+    warn_log: "2025-08-30 10:15:45.012 [http-nio-8081-exec-2] WARN  [abc123] com.estudoskbnt.consumer.service.ExternalApiService - External API call took 5234ms, exceeding threshold of 3000ms"
+
+################################################################################
+# Configuration Validation Rules
+################################################################################
+
+validation:
+  required_fields:
+    - correlationId
+    - timestamp
+    - level
+    - logger
+    - message
+    
+  field_constraints:
+    correlationId:
+      pattern: "^[a-zA-Z0-9-]{8,36}$"
+      required: true
+      
+    level:
+      allowed_values: ["TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"]
+      required: true
+      
+    timestamp:
+      format: "ISO8601"
+      required: true
+
+################################################################################
+# End of Configuration
+################################################################################
