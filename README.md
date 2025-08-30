@@ -1,33 +1,321 @@
-# 🚀 Estudos KBNT - Kafka Logs Architecture
+# Sistema de Gerenciamento Virtual de Estoque
 
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-brightgreen.svg)](https://spring.io/projects/spring-boot)
-[![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-AMQ%20Streams-orange.svg)](https://kafka.apache.org/)
-[![Hexagonal Architecture](https://img.shields.io/badge/Architecture-Hexagonal-blue.svg)](https://alistair.cockburn.us/hexagonal-architecture/)
-[![Kubernetes](https://img.shields.io/badge/Platform-Kubernetes-326CE5.svg)](https://kubernetes.io/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Architecture](https://img.shields.io/badge/Architecture-Hexagonal-blue)](docs/HEXAGONAL_ARCHITECTURE.md)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7+-green)](https://spring.io/projects/spring-boot)
+[![Kafka](https://img.shields.io/badge/Kafka-Red%20Hat%20AMQ%20Streams-red)](https://www.redhat.com/en/technologies/cloud-computing/openshift/cloud-services/amq)
+[![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue)](https://www.postgresql.org/)
 
-> **Enterprise-grade microservices architecture** demonstrating message streaming with Apache Kafka (AMQ Streams) using **Clean Architecture** and **Hexagonal Architecture** patterns.
+Sistema distribuído de microserviços para gerenciamento de estoque virtual implementando arquitetura hexagonal e padrões DDD (Domain-Driven Design) com comunicação via Red Hat AMQ Streams (Kafka).
+
+## 📋 Visão Geral
+
+O sistema é composto por dois microserviços principais:
+
+1. **Virtual Stock Service** (Microservice A): Gerenciamento de estoque virtual com arquitetura hexagonal
+2. **ACL Virtual Stock Service** (Microservice B): Anti-Corruption Layer para integração com sistemas externos
+
+## 🏗️ Arquitetura
+
+```
+Virtual Stock Service  ──► Red Hat AMQ Streams (Kafka) ──► ACL Virtual Stock Service ──► External Systems
+  (Hexagonal Arch)                                            (Anti-Corruption Layer)
+```
+
+### Padrões Implementados
+
+- **Hexagonal Architecture (Ports & Adapters)**
+- **Domain-Driven Design (DDD)**
+- **Anti-Corruption Layer (ACL)**
+- **Event-Driven Architecture**
+- **CQRS (Command Query Responsibility Segregation)**
+
+## 🚀 Tecnologias
+
+### Core Technologies
+- **Java 17+**
+- **Spring Boot 2.7+**
+- **Spring Kafka**
+- **PostgreSQL**
+- **Red Hat AMQ Streams (Apache Kafka)**
+
+### Infrastructure
+- **Docker & Docker Compose**
+- **Strimzi Operator** (Kubernetes Kafka)
+- **Elasticsearch** (Logging alternativo)
+- **Kibana** (Dashboard e visualização)
+
+### Monitoring & Logging
+- **SLF4J + Logback**
+- **MDC (Mapped Diagnostic Context)**
+- **Enhanced Structured Logging**
+- **Performance Metrics**
+
+## 📁 Estrutura do Projeto
+
+```
+├── microservices/
+│   ├── virtual-stock-service/           # Microservice A - Hexagonal Architecture
+│   │   └── src/main/java/com/kbnt/virtualstock/
+│   │       ├── domain/                  # Domain Layer
+│   │       │   ├── model/              # Entities, Value Objects, Events
+│   │       │   └── port/               # Input/Output Ports
+│   │       ├── application/            # Application Layer
+│   │       │   └── service/            # Use Cases Implementation
+│   │       └── infrastructure/         # Infrastructure Layer
+│   │           └── adapter/            # Input/Output Adapters
+│   │
+│   └── kbnt-stock-consumer-service/    # Microservice B - ACL
+│       └── src/main/java/com/estudoskbnt/consumer/
+│           ├── service/                # Consumer Services
+│           ├── entity/                 # JPA Entities
+│           ├── repository/             # Data Repositories
+│           └── config/                 # Configuration
+│
+├── infrastructure/
+│   ├── kafka/                          # Kafka/Strimzi configurations
+│   ├── elasticsearch/                  # ELK Stack configurations
+│   └── docker/                         # Docker configurations
+│
+├── scripts/
+│   ├── start-complete-environment.ps1  # Environment startup
+│   ├── traffic-test/                   # Load testing scripts
+│   └── logging-demo/                   # Logging demonstrations
+│
+└── docs/
+    ├── HEXAGONAL_ARCHITECTURE.md      # Architecture documentation
+    ├── API_DOCUMENTATION.md           # API specifications
+    └── DEPLOYMENT_GUIDE.md            # Deployment instructions
+```
+
+## 🔧 Configuração e Execução
+
+### Pré-requisitos
+
+- Java 17+
+- Docker & Docker Compose
+- Maven 3.8+
+- PowerShell (Windows) ou Bash (Linux/Mac)
+
+### Execução Rápida
+
+1. **Clone o repositório**:
+   ```bash
+   git clone <repository-url>
+   cd estudosKBNT_Kafka_Logs
+   ```
+
+2. **Inicie o ambiente completo**:
+   ```powershell
+   # Windows PowerShell
+   .\scripts\start-complete-environment.ps1
+   
+   # Linux/Mac
+   ./scripts/start-complete-environment.sh
+   ```
+
+3. **Aguarde a inicialização**:
+   - Virtual Stock Service: `http://localhost:8080`
+   - ACL Virtual Stock Service: `http://localhost:8081`
+   - Kafka UI: `http://localhost:8082`
+   - Elasticsearch: `http://localhost:9200`
+   - Kibana: `http://localhost:5601`
+
+### Execução Individual
+
+#### Virtual Stock Service (Microservice A)
+
+```bash
+cd microservices/virtual-stock-service
+mvn spring-boot:run
+```
+
+#### ACL Virtual Stock Service (Microservice B)
+
+```bash
+cd microservices/kbnt-stock-consumer-service
+mvn spring-boot:run
+```
+
+## 📖 APIs
+
+### Virtual Stock Service APIs
+
+#### Criar Estoque
+```http
+POST /api/v1/virtual-stock/stocks
+Content-Type: application/json
+
+{
+  "productId": "PROD-001",
+  "symbol": "AAPL",
+  "productName": "Apple Stock",
+  "initialQuantity": 100,
+  "unitPrice": 150.00,
+  "createdBy": "system"
+}
+```
+
+#### Atualizar Quantidade
+```http
+PUT /api/v1/virtual-stock/stocks/{stockId}/quantity
+Content-Type: application/json
+
+{
+  "newQuantity": 150,
+  "updatedBy": "user123",
+  "reason": "Stock replenishment"
+}
+```
+
+#### Reservar Estoque
+```http
+POST /api/v1/virtual-stock/stocks/{stockId}/reserve
+Content-Type: application/json
+
+{
+  "quantityToReserve": 10,
+  "reservedBy": "order-service",
+  "reason": "Order #12345"
+}
+```
+
+#### Consultar Estoque
+```http
+GET /api/v1/virtual-stock/stocks/{stockId}
+GET /api/v1/virtual-stock/stocks
+```
+
+## � Logging Estruturado
+
+O sistema implementa logging estruturado com identificação de componentes:
+
+### Formato de Log
+
+```
+2025-08-30 15:30:45.123 [main] INFO [VIRTUAL-STOCK] [RestController] [msg-uuid] [virtual-stock-updates] com.kbnt.virtualstock.infrastructure.adapter.input.rest.VirtualStockController - Stock created successfully
+```
+
+### Componentes Identificados
+
+- **VIRTUAL-STOCK**: Virtual Stock Service
+- **ACL-VIRTUAL-STOCK**: ACL Virtual Stock Service  
+- **RED-HAT-AMQ-STREAMS**: Kafka Operations
+- **EXTERNAL-API**: External System Integrations
+- **DATABASE-OPERATION**: Database Operations
+
+### MDC Context
+
+- `component`: Identificador do componente
+- `owner`: Classe/serviço responsável
+- `messageId`: ID de correlação
+- `topic`: Tópico Kafka
+- `operation`: Tipo de operação
+- `duration`: Tempo de execução
+
+## 🧪 Testes
+
+### Testes Unitários
+```bash
+mvn test
+```
+
+### Testes de Integração
+```bash
+mvn verify
+```
+
+### Testes de Carga
+```powershell
+# Teste com 50 mensagens
+.\scripts\final-traffic-test.ps1 -TotalMessages 50
+
+# Teste com dashboard
+.\scripts\demo-traffic-test.ps1 -TotalMessages 30 -Verbose
+```
+
+## 📊 Monitoramento
+
+### Dashboard de Tráfego
+
+Execute o teste com dashboard interativo:
+```powershell
+.\scripts\final-traffic-test.ps1 -TotalMessages 30
+```
+
+O dashboard inclui:
+- Status dos serviços
+- Métricas de performance
+- Taxa de sucesso/erro
+- Logs de mensagens em tempo real
+- Gráficos de throughput
+
+### Métricas Disponíveis
+
+- **Throughput**: Mensagens por segundo
+- **Latência**: Tempo de processamento end-to-end
+- **Taxa de Sucesso**: Percentual de mensagens processadas com sucesso
+- **Utilização de Recursos**: CPU, Memória, Disk I/O
+- **Saúde dos Tópicos Kafka**: Partições, Offsets, Lag
+
+## 🏃‍♂️ Troubleshooting
+
+### Problemas Comuns
+
+1. **Kafka não inicializa**:
+   ```bash
+   docker-compose -f infrastructure/kafka/docker-compose.yml down
+   docker-compose -f infrastructure/kafka/docker-compose.yml up -d
+   ```
+
+2. **Microserviços não conectam ao Kafka**:
+   - Verifique se o Kafka está rodando: `docker ps`
+   - Verifique os logs: `docker-compose logs kafka`
+
+3. **Logs não aparecem**:
+   - Verifique se o diretório `logs/` existe
+   - Verifique as permissões de escrita
+
+### Health Checks
+
+```bash
+# Virtual Stock Service
+curl http://localhost:8080/actuator/health
+
+# ACL Virtual Stock Service  
+curl http://localhost:8081/actuator/health
+
+# Kafka Cluster
+curl http://localhost:8082/clusters
+```
+
+## 📚 Documentação Adicional
+
+- [Arquitetura Hexagonal](docs/HEXAGONAL_ARCHITECTURE.md)
+- [Guia de Deploy](docs/DEPLOYMENT_GUIDE.md)
+- [Documentação de APIs](docs/API_DOCUMENTATION.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.md)
+
+## 🤝 Contribuição
+
+1. Fork o projeto
+2. Crie uma feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## 📝 License
+
+Este projeto está licenciado sob a MIT License - veja o arquivo [LICENSE](LICENSE) para detalhes.
+
+## 👥 Team
+
+- **KBNT Development Team**
+- Versão: 2.0.0
+- Data: 2025-08-30
 
 ---
 
-## 🎯 **Project Overview**
-
-This project showcases a **production-ready microservices architecture** for log processing and external API integration using:
-
-- **🏗️ Hexagonal Architecture** (Ports & Adapters)
-- **📨 Message Streaming** with Apache Kafka / Red Hat AMQ Streams
-- **🔄 External API Integration** replacing database persistence
-- **☸️ Kubernetes-Ready** deployment configurations
-- **📊 Complete Observability** with Prometheus metrics
-
----
-
-## 📊 **Arquitetura Detalhada**
-
-### 🏛️ **Visão Geral da Arquitetura**
-
-Para diagramas completos e detalhados da arquitetura, incluindo:
-- **Deployment Kubernetes** com especificações de recursos
+**⭐ Se este projeto foi útil, considere dar uma estrela no GitHub!**
 - **Fluxos síncronos e assíncronos** de processamento
 - **Arquitetura Hexagonal interna** dos microserviços
 - **Estratégias de roteamento** de tópicos Kafka
@@ -83,13 +371,13 @@ graph TB
 
 For comprehensive architectural views, see our detailed diagrams:
 
-- 🏗️ [**Complete Architecture Diagrams**](docs/DIAGRAMAS_ARQUITETURA_COMPLETOS.md)
-  - Kubernetes deployment with resource specifications
-  - Kafka topics with partition and replication details
-  - Sequence diagrams showing sync/async flows
-  - Hexagonal architecture internal structure
-  - Topic routing strategy and data flow
-  - Complete monitoring and observability setup
+- 🏗️ [**Diagramas de Arquitetura Atualizados - Virtual Stock System**](docs/DIAGRAMAS_ARQUITETURA_COMPLETOS.md)
+  - Arquitetura hexagonal completa com Domain-Driven Design
+  - Deployment Kubernetes enterprise-ready com especificações de recursos
+  - Fluxo de mensagens Kafka com tópicos de prioridade e estratégias de retry
+  - Diagramas de sequência mostrando fluxos síncronos e assíncronos
+  - Monitoramento e observabilidade completos (Prometheus + Grafana + ELK)
+  - Cenários de teste de carga e simulação de performance
 
 ### 📋 **Architecture Highlights**
 
@@ -165,100 +453,164 @@ cd ../log-consumer-service
 
 ---
 
-## 🏗️ **Hexagonal Architecture**
+## �️ Arquitetura Hexagonal
 
-This project implements **Clean Architecture** principles with a **Hexagonal Architecture** pattern:
+### 🎯 Sistema de Gerenciamento Virtual de Estoque
 
-### 🎯 **Architecture Principles**
+```mermaid
+graph TB
+    subgraph "🌐 External Clients"
+        TRADER[👤 Stock Trader]
+        MOBILE[📱 Mobile App]
+        WEB[🌐 Web Portal]
+    end
+    
+    subgraph "🏛️ Virtual Stock Service (Hexagonal Architecture)"
+        subgraph "🔌 Input Adapters"
+            REST_CTRL[🌐 VirtualStockController<br/>@RestController]
+            HEALTH_CTRL[💚 HealthController<br/>@RestController]
+        end
+        
+        subgraph "🎯 Domain Core"
+            STOCK_AGG[📦 Stock Aggregate<br/>Business Logic]
+            STOCK_EVENT[📢 StockUpdatedEvent<br/>Domain Events]
+            BIZ_RULES[📋 Business Rules<br/>canReserve(), isLowStock()]
+        end
+        
+        subgraph "⚙️ Application Layer"
+            STOCK_UC[🎯 StockManagementUseCase<br/>Use Cases]
+            EVENT_PUB[📤 StockEventPublisher<br/>Event Orchestration]
+        end
+        
+        subgraph "� Output Adapters"
+            KAFKA_PUB[🔥 KafkaPublisherAdapter<br/>Event Publishing]
+            JPA_REPO[�️ JpaRepositoryAdapter<br/>Data Persistence]
+            PROMETHEUS[📊 PrometheusAdapter<br/>Metrics]
+        end
+    end
+    
+    subgraph "🔥 Red Hat AMQ Streams"
+        TOPIC_STOCK[📢 virtual-stock-updates<br/>Main Events]
+        TOPIC_HIGH[⚡ high-priority-updates<br/>Critical Events]
+    end
+    
+    subgraph "🛡️ ACL Virtual Stock Service"
+        KAFKA_CONS[🔥 KafkaConsumerAdapter<br/>Event Processing]
+        MSG_PROC[⚙️ MessageProcessingService<br/>Business Logic]
+        EXT_CLIENT[🌐 ExternalApiClient<br/>Third-party Integration]
+    end
+    
+    subgraph "💾 Data Layer"
+        POSTGRES_DB[(🐘 PostgreSQL<br/>ACID Transactions)]
+        EXT_API[🌐 External Trading API<br/>Stock Price Feeds]
+    end
 
-| Layer | Responsibility | Dependencies |
-|-------|---------------|--------------|
-| **🏛️ Domain** | Business Logic, Entities, Value Objects | None (Pure) |
-| **⚙️ Application** | Use Cases, Orchestration | Domain Only |
-| **🌐 Infrastructure** | External Systems, Adapters | Application + Domain |
-
-### 📂 **Project Structure**
-
+    %% Flow connections
+    TRADER --> REST_CTRL
+    MOBILE --> REST_CTRL
+    WEB --> REST_CTRL
+    
+    REST_CTRL --> STOCK_UC
+    STOCK_UC --> STOCK_AGG
+    STOCK_AGG --> STOCK_EVENT
+    STOCK_UC --> EVENT_PUB
+    
+    EVENT_PUB --> KAFKA_PUB
+    STOCK_UC --> JPA_REPO
+    
+    KAFKA_PUB --> TOPIC_STOCK
+    KAFKA_PUB --> TOPIC_HIGH
+    
+    TOPIC_STOCK --> KAFKA_CONS
+    TOPIC_HIGH --> KAFKA_CONS
+    
+    KAFKA_CONS --> MSG_PROC
+    MSG_PROC --> EXT_CLIENT
+    
+    JPA_REPO --> POSTGRES_DB
+    EXT_CLIENT --> EXT_API
+    
+    style STOCK_AGG fill:#e8f5e8,stroke:#2e7d32,stroke-width:3px
+    style STOCK_EVENT fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style KAFKA_PUB fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    style KAFKA_CONS fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
 ```
-microservices/
-├── log-producer-service/           # ✅ COMPLETE HEXAGONAL IMPLEMENTATION
-│   ├── domain/
-│   │   ├── model/                  # 🏛️ Entities & Value Objects
-│   │   │   ├── LogEntry.java       # Domain Entity
-│   │   │   ├── LogLevel.java       # Value Object
-│   │   │   └── ...
-│   │   ├── port/
-│   │   │   ├── input/              # 📥 Use Case Interfaces
-│   │   │   └── output/             # 📤 Repository Interfaces
-│   │   └── service/                # 🎯 Domain Services
-│   ├── application/
-│   │   └── usecase/                # ⚙️ Use Case Implementations
-│   └── infrastructure/
-│       ├── adapter/
-│       │   ├── input/rest/         # 🌐 REST Controllers
-│       │   └── output/             # 📊 Kafka, Metrics Adapters
-│       └── config/                 # ⚙️ Spring Configuration
-│
-└── log-consumer-service/           # 🚧 FOUNDATION READY
-    ├── domain/                     # ✅ Complete Domain Layer
-    ├── application/                # 🔄 Next: Use Cases
-    └── infrastructure/             # 🔄 Next: Adapters
-```
 
-### 🔄 **Data Flow Example**
+### 🔄 Fluxo de Negócio: Gerenciamento de Estoque
 
 ```mermaid
 sequenceDiagram
-    participant C as Client
-    participant REST as REST Controller
-    participant UC as Production UseCase  
-    participant VS as Validation Service
-    participant RS as Routing Service
-    participant KP as Kafka Publisher
-    participant K as Kafka
+    participant Trader as 👤 Stock Trader
+    participant VS as 🏛️ Virtual Stock Service
+    participant Kafka as 🔥 AMQ Streams
+    participant ACL as 🛡️ ACL Service
+    participant ExtAPI as 🌐 External Trading API
 
-    C->>REST: POST /api/v1/logs
-    REST->>UC: produceLog(logEntry)
-    UC->>VS: validateLogEntry()
-    VS-->>UC: validation result
-    UC->>RS: determineKafkaTopic()
-    RS-->>UC: topic name
-    UC->>KP: publishLog(log, topic)
-    KP->>K: send message
-    K-->>KP: ack
-    KP-->>UC: success
-    UC-->>REST: completed
-    REST-->>C: 200 OK
+    Note over Trader,ExtAPI: 📦 Stock Creation & Update Flow
+
+    Trader->>+VS: POST /api/v1/virtual-stock/stocks<br/>{symbol: "AAPL", quantity: 150, price: 150.00}
+    
+    VS->>VS: 🎯 Domain Validation<br/>Business Rules Check
+    VS->>VS: 📦 Create Stock Aggregate<br/>Generate StockUpdatedEvent
+    
+    VS->>+Kafka: 📢 Publish StockUpdatedEvent<br/>Topic: virtual-stock-updates
+    Kafka-->>-VS: ✅ Event Published
+    
+    VS-->>-Trader: 201 CREATED<br/>{stockId: "STK-001", totalValue: "$22,500"}
+
+    Note over Kafka,ExtAPI: 🔄 Asynchronous Processing
+
+    Kafka->>+ACL: 📥 Consume StockUpdatedEvent
+    ACL->>ACL: 🛡️ Anti-Corruption Translation<br/>Internal → External Format
+    ACL->>+ExtAPI: 🌐 POST /api/trading/stock-created<br/>Notify External Systems
+    ExtAPI-->>-ACL: 200 OK
+    ACL-->>-Kafka: ✅ Processing Complete
+
+    Note over Trader,ExtAPI: 🔄 Stock Update Flow
+
+    Trader->>+VS: PUT /api/v1/virtual-stock/stocks/STK-001/quantity<br/>{newQuantity: 200}
+    
+    VS->>VS: 🔄 Update Stock Aggregate<br/>Generate QuantityUpdateEvent
+    VS->>+Kafka: 📢 Publish UpdateEvent
+    Kafka-->>-VS: ✅ Event Published
+    
+    VS-->>-Trader: 200 OK<br/>{quantity: 200, totalValue: "$30,000"}
+
+    Kafka->>+ACL: 📥 Consume UpdateEvent  
+    ACL->>+ExtAPI: 🌐 PUT /api/trading/stock-updated
+    ExtAPI-->>-ACL: 200 OK
+    ACL-->>-Kafka: ✅ Update Complete
 ```
 
----
+### � **Business Domain: Virtual Stock Management**
 
-## 🔄 **Workflow Documentation**
+O sistema implementa um **domínio de negócio completo** para gerenciamento de estoque virtual:
 
-### 📊 **Message Flow Architecture**
+#### **🎯 Casos de Uso Implementados:**
+- **� Criação de Estoque**: Registrar novos produtos/ativos (AAPL, MSFT)
+- **� Atualização de Quantidade**: Modificar estoque disponível  
+- **� Reserva de Estoque**: Reservar unidades para trading
+- **💰 Atualização de Preço**: Modificar preço unitário
+- **� Consultas**: Buscar por ID, produto ou símbolo
 
-The system processes logs through the following workflow:
+#### **📈 Estados de Negócio:**
+```java
+public enum StockStatus {
+    AVAILABLE,      // Disponível para trading
+    RESERVED,       // Reservado para operações
+    OUT_OF_STOCK,   // Sem estoque
+    DISCONTINUED,   // Produto descontinuado  
+    PENDING_RESTOCK // Aguardando reabastecimento
+}
+```
 
-1. **📡 HTTP Request** → Log Producer Service REST endpoint
-2. **✅ Validation** → Business rules and data validation
-3. **🔄 Routing** → Smart topic routing based on log content
-4. **📤 Publishing** → Kafka message publication
-5. **📥 Consumption** → Log Consumer Service processes messages
-6. **🌐 External API** → Integration with external systems
-7. **📈 Metrics** → Complete observability and monitoring
-
-### 📋 **Detailed Workflow**
-
-| Step | Component | Action | Technology |
-|------|-----------|--------|------------|
-| 1 | **Log Producer** | Receive HTTP logs | Spring Boot REST |
-| 2 | **Validation** | Apply business rules | Domain Services |
-| 3 | **Routing** | Determine Kafka topic | Routing Logic |
-| 4 | **Publishing** | Send to Kafka | AMQ Streams |
-| 5 | **Consumption** | Process messages | Kafka Consumer |
-| 6 | **Integration** | Call external APIs | REST Client |
-| 7 | **Persistence** | Store processing status | Repository |
-| 8 | **Monitoring** | Collect metrics | Micrometer/Prometheus |
+#### **💼 Exemplo Real Executado:**
+```json
+// Criação: AAPL com 150 unidades a $150.00 = $22,500
+// Atualização: 150 → 200 unidades = $30,000
+// Evento: StockUpdatedEvent propagado via Kafka
+// ACL: Processa e integra com sistemas externos
+```
 
 ---
 
@@ -393,6 +745,19 @@ logs_level_error_total{level="ERROR"} 23
 5. **📊 Monitor metrics**
    - Access Prometheus: `http://localhost:9090`
    - Check application metrics: `http://localhost:8081/actuator/metrics`
+
+## 🔗 Links Úteis
+
+- [📋 Documentação Completa de Arquitetura](docs/DIAGRAMAS_ARQUITETURA_COMPLETOS.md)
+- [� Workflow de Tráfego de Mensagens](docs/WORKFLOW_TRAFEGO_MENSAGENS.md)
+- [📊 Diagramas do Workflow](docs/WORKFLOW_DIAGRAMAS_MERMAID.md)
+- [�🚀 Guia de Deploy Independente](docs/DEPLOYMENT_GUIDE.md)  
+- [🏗️ Architecture Guide](docs/ARQUITETURA_HEXAGONAL.md)
+- [📊 Implementation Status](docs/HEXAGONAL_IMPLEMENTATION_STATUS.md)
+- [Apache Kafka Documentation](https://kafka.apache.org/documentation/)
+- [Spring Kafka Reference](https://spring.io/projects/spring-kafka)
+- [Docker Compose Documentation](https://docs.docker.com/compose/)
+- [Kubernetes Documentation](https://kubernetes.io/docs/)
 
 ---
 
