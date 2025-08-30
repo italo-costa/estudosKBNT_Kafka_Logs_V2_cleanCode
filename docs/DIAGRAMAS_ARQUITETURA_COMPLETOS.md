@@ -66,10 +66,10 @@ graph TB
     end
     
     subgraph "🔥 Red Hat AMQ Streams (Event Backbone)"
-        TOPIC_STOCK[📢 virtual-stock-updates<br/>Partitions: 3<br/>Replication: 3<br/>Main events]
-        TOPIC_HIGH[⚡ high-priority-updates<br/>Partitions: 3<br/>Replication: 3<br/>Critical events]
-        TOPIC_RETRY[🔄 retry-topic<br/>Partitions: 3<br/>Replication: 3<br/>Failed messages]
-        TOPIC_DLT[💀 dead-letter-topic<br/>Partitions: 1<br/>Replication: 3<br/>Unprocessable]
+        TOPIC_STOCK[📢 virtual-stock-updates<br/>Partitions 3<br/>Replication 3<br/>Main events]
+        TOPIC_HIGH[⚡ high-priority-updates<br/>Partitions 3<br/>Replication 3<br/>Critical events]
+        TOPIC_RETRY[🔄 retry-topic<br/>Partitions 3<br/>Replication 3<br/>Failed messages]
+        TOPIC_DLT[💀 dead-letter-topic<br/>Partitions 1<br/>Replication 3<br/>Unprocessable]
     end
     
     subgraph "🛡️ ACL Virtual Stock Service (Anti-Corruption Layer)"
@@ -104,9 +104,9 @@ graph TB
     end
     
     subgraph "💾 Data & Monitoring"
-        POSTGRES_DB[(🐘 PostgreSQL<br/>Primary Database<br/>ACID transactions)]
-        ELASTIC_DB[(🔍 Elasticsearch<br/>Log Aggregation<br/>Search & Analytics)]
-        PROMETHEUS_DB[(📊 Prometheus<br/>Metrics Storage<br/>Time series data)]
+        POSTGRES_DB[🐘 PostgreSQL<br/>Primary Database<br/>ACID transactions]
+        ELASTIC_DB[🔍 Elasticsearch<br/>Log Aggregation<br/>Search & Analytics]
+        PROMETHEUS_DB[📊 Prometheus<br/>Metrics Storage<br/>Time series data]
         GRAFANA[📊 Grafana Dashboard<br/>Visualization<br/>Real-time monitoring]
     end
 
@@ -634,7 +634,7 @@ graph TB
     subgraph "🎯 Custom Dashboards"
         DASH1[📊 Business Operations Dashboard<br/>📈 Stock Creation Rate<br/>💰 Total Portfolio Value<br/>🔒 Reservation Success Rate<br/>📊 Top Traded Symbols]
         DASH2[⚡ System Performance Dashboard<br/>🔥 Request Throughput<br/>⏱️ Response Time P95/P99<br/>💾 Memory & CPU Usage<br/>🗄️ Database Connections]
-        DASH3[🚨 SLA & Alerting Dashboard<br/>🎯 SLA Compliance (99.9%)<br/>❌ Error Rate Monitoring<br/>🔄 Circuit Breaker Status<br/>📊 Availability Metrics]
+        DASH3[🚨 SLA & Alerting Dashboard<br/>🎯 SLA Compliance 99.9%<br/>❌ Error Rate Monitoring<br/>🔄 Circuit Breaker Status<br/>📊 Availability Metrics]
         DASH4[🔥 Kafka Operations Dashboard<br/>📢 Message Throughput<br/>⏳ Consumer Lag Monitoring<br/>🔄 Rebalancing Events<br/>💾 Topic Storage Usage]
     end
     
@@ -704,9 +704,9 @@ graph TB
     end
     
     subgraph "🎯 Log Enrichment & Context"
-        MDC[🏷️ MDC (Mapped Diagnostic Context)<br/>• correlationId: UUID<br/>• component: SERVICE_NAME<br/>• operation: OPERATION_TYPE<br/>• userId: USER_IDENTIFIER<br/>• stockId: STOCK_IDENTIFIER<br/>• requestId: HTTP_REQUEST_ID]
+        MDC[🏷️ MDC Mapped Diagnostic Context<br/>• correlationId UUID<br/>• component SERVICE_NAME<br/>• operation OPERATION_TYPE<br/>• userId USER_IDENTIFIER<br/>• stockId STOCK_IDENTIFIER<br/>• requestId HTTP_REQUEST_ID]
         
-        STRUCTURED[📋 Structured Format (JSON)<br/>{<br/>  "timestamp": "2025-08-30T14:30:00Z",<br/>  "level": "INFO",<br/>  "logger": "StockService",<br/>  "message": "Stock created successfully",<br/>  "correlationId": "corr-12345",<br/>  "component": "VIRTUAL-STOCK-SERVICE",<br/>  "stockId": "STK-001",<br/>  "productId": "AAPL",<br/>  "quantity": 150,<br/>  "totalValue": 22500.00<br/>}]
+        STRUCTURED[📋 Structured Format JSON<br/>timestamp 2025-08-30T14:30:00Z<br/>level INFO<br/>logger StockService<br/>message Stock created successfully<br/>correlationId corr-12345<br/>component VIRTUAL-STOCK-SERVICE<br/>stockId STK-001<br/>productId AAPL<br/>quantity 150<br/>totalValue 22500.00]
     end
     
     subgraph "🔍 Log Aggregation & Analysis"
@@ -772,7 +772,7 @@ graph TB
 graph TB
     subgraph "🧪 Load Testing Architecture"
         subgraph "📊 Test Scenarios"
-            SCENARIO1[📦 Stock Creation Load Test<br/>• 1000 concurrent users<br/>• 5000 stock items/hour<br/>• Various symbols (AAPL, MSFT, etc.)<br/>• Mixed price ranges]
+            SCENARIO1[📦 Stock Creation Load Test<br/>• 1000 concurrent users<br/>• 5000 stock items/hour<br/>• Various symbols AAPL MSFT etc<br/>• Mixed price ranges]
             
             SCENARIO2[🔄 Stock Update Stress Test<br/>• 500 concurrent updates<br/>• 10,000 updates/hour<br/>• Quantity & price changes<br/>• Real-time market simulation]
             
