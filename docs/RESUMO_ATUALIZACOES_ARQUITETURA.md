@@ -70,7 +70,7 @@ participant VS as Virtual_Stock_Service
 ```mermaid
 graph LR
     subgraph "Performance_Results"
-        OPS["580+ ops/s<br/>Sustained Load"]
+        OPS["580 ops/s and more<br/>Sustained Load"]
         MSG["107 msg/s<br/>AMQ Streams"]
         LAT["<0.001ms<br/>Latency"]
         REL["0% Loss<br/>Reliability"]

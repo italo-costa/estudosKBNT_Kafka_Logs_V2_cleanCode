@@ -21,7 +21,7 @@ sequenceDiagram
 
     rect rgb(245, 255, 245)
         Note over Client,Producer: 📥 REQUEST PHASE - Client Interaction
-        Client->>+Producer: [1] 🚀 POST /api/v1/virtualize<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📋 Request Body<br/>├── type CREATE_VIRTUAL_MACHINE<br/>├── resourceId vm-12345<br/>├── specifications<br/>│   ├── cpu 4 cores<br/>│   ├── memory 8GB RAM<br/>│   ├── disk 100GB SSD<br/>│   └── network bridged<br/>└── metadata<br/>    ├── requestId req-abc123<br/>    ├── userId user-789<br/>    └── priority HIGH
+        Client->>Plus_Producer: [1] 🚀 POST /api/v1/virtualize<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📋 Request Body<br/>├── type CREATE_VIRTUAL_MACHINE<br/>├── resourceId vm-12345<br/>├── specifications<br/>│   ├── cpu 4 cores<br/>│   ├── memory 8GB RAM<br/>│   ├── disk 100GB SSD<br/>│   └── network bridged<br/>└── metadata<br/>    ├── requestId req-abc123<br/>    ├── userId user-789<br/>    └── priority HIGH
     end
 
     rect rgb(255, 250, 240)
@@ -36,7 +36,7 @@ sequenceDiagram
 
     rect rgb(240, 255, 240)
         Note over Producer: 🟢 HEXAGONAL ARCHITECTURE - INFRASTRUCTURE LAYER
-        Producer->>+AMQ: [4] 📤 Message Publication<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>┌─ AMQ Streams Integration<br/>├── 📢 Topic virtualization-requests<br/>├── 🔑 Partition Key messageId<br/>├── 🔄 Serialization Avro Schema v2.1<br/>├── ⚡ Async publication mode<br/>├── 🛡️ Exactly-once semantics<br/>└── ✅ Acknowledgment confirmed<br/>    ├── Latency 2.3ms publish<br/>    ├── Size 1.2KB message<br/>    └── Offset partition-0 offset-12456
+        Producer->>Plus_AMQ: [4] 📤 Message Publication<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>┌─ AMQ Streams Integration<br/>├── 📢 Topic virtualization-requests<br/>├── 🔑 Partition Key messageId<br/>├── 🔄 Serialization Avro Schema v2.1<br/>├── ⚡ Async publication mode<br/>├── 🛡️ Exactly-once semantics<br/>└── ✅ Acknowledgment confirmed<br/>    ├── Latency 2.3ms publish<br/>    ├── Size 1.2KB message<br/>    └── Offset partition-0 offset-12456
         
         Producer->>Prometheus: [5] 📊 Business Metrics Collection<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>┌─ Custom Metrics Export<br/>├── 📈 kbnt_virtualization_requests_total<br/>│   └── labels service=producer type=CREATE_VM<br/>├── 📈 kbnt_messages_sent_total<br/>│   └── labels topic=virtualization-requests<br/>├── ⏱️ kbnt_request_processing_duration_ms<br/>│   └── histogram bucket 45ms<br/>└── 🎯 kbnt_business_operations_total<br/>    └── labels operation=virtualization status=success
         AMQ-->>-Producer: [6] ✅ Publication Confirmed<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📋 Response Details<br/>├── offset 12456<br/>├── partition 0<br/>├── timestamp 2025-08-30T10:30:00.123Z<br/>└── checksum crc32-abc123
@@ -46,7 +46,7 @@ sequenceDiagram
 
     rect rgb(255, 245, 245)
         Note over AMQ,Consumer: 🔄 MESSAGE BROKER PROCESSING - ASYNC FLOW
-        AMQ->>+Consumer: [8] 📥 Message Consumption<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>┌─ Consumer Group Processing<br/>├── 👥 Group virtualization-consumer-service-group<br/>├── 🔄 Auto-commit enabled interval 1s<br/>├── ⚖️ Partition assignment rebalancing<br/>├── 📊 Consumer lag monitoring 0ms<br/>└── 🎯 Processing mode parallel<br/>    ├── Batch size 1 message<br/>    ├── Poll timeout 5000ms<br/>    └── Session timeout 30000ms
+        AMQ->>Plus_Consumer: [8] 📥 Message Consumption<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>┌─ Consumer Group Processing<br/>├── 👥 Group virtualization-consumer-service-group<br/>├── 🔄 Auto-commit enabled interval 1s<br/>├── ⚖️ Partition assignment rebalancing<br/>├── 📊 Consumer lag monitoring 0ms<br/>└── 🎯 Processing mode parallel<br/>    ├── Batch size 1 message<br/>    ├── Poll timeout 5000ms<br/>    └── Session timeout 30000ms
     end
 
     rect rgb(245, 245, 255)
@@ -72,7 +72,7 @@ sequenceDiagram
 
     rect rgb(248, 255, 248)
         Note over Consumer: 🟢 EVENT PUBLICATION - INFRASTRUCTURE LAYER
-        Consumer->>+Events: [15] 📢 Success Event Publication<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>┌─ Event Sourcing Pattern<br/>├── 📊 Event Type VIRTUALIZATION_COMPLETED<br/>├── 🔗 Correlation ID corr-456<br/>├── 📋 Event Payload<br/>│   ├── vmId VM-KBNT-20250830-001<br/>│   ├── requestId req-abc123<br/>│   ├── userId user-789<br/>│   ├── status SUCCESS<br/>│   ├── resourceSpecs allocated-confirmed<br/>│   ├── endpoints network-details<br/>│   └── metrics performance-baselines<br/>├── 🕒 Timestamp 2025-08-30T10:30:45.789Z<br/>├── 🏷️ Version v1.2.3<br/>└── 🔒 Checksum sha256-def456<br/>    ├── Event size 2.8KB serialized<br/>    ├── Schema version events-v3.0<br/>    └── Partition routing by userId
+        Consumer->>Plus_Events: [15] 📢 Success Event Publication<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>┌─ Event Sourcing Pattern<br/>├── 📊 Event Type VIRTUALIZATION_COMPLETED<br/>├── 🔗 Correlation ID corr-456<br/>├── 📋 Event Payload<br/>│   ├── vmId VM-KBNT-20250830-001<br/>│   ├── requestId req-abc123<br/>│   ├── userId user-789<br/>│   ├── status SUCCESS<br/>│   ├── resourceSpecs allocated-confirmed<br/>│   ├── endpoints network-details<br/>│   └── metrics performance-baselines<br/>├── 🕒 Timestamp 2025-08-30T...
         
         Consumer->>Prometheus: [16] 📊 Final Processing Metrics<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>├── 📈 kbnt_messages_processed_total<br/>├── ✅ kbnt_processing_success_rate 99.97%<br/>├── ⏱️ kbnt_end_to_end_latency_seconds 45.8s<br/>└── 🎯 kbnt_business_sla_compliance 99.95%
         Events-->>-Consumer: [17] ✅ Event Published Successfully<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 Final Acknowledgment Complete
@@ -230,9 +230,9 @@ Event: {
 
 ### **Dashboard Prometheus Simulado:**
 ```
-kbnt_messages_sent_total = 8 (4 producer + 4 consumer events)
+kbnt_messages_sent_total = 8 (4 producer and 4 consumer events)
 kbnt_messages_processed_total = 4 (100% success rate)
-kbnt_virtual_resources_active = 9 (2 VMs + 1 Storage + 3 Networks ativas)
+kbnt_virtual_resources_active = 9 (2 VMs and 1 Storage and 3 Networks ativas)
 kbnt_processing_duration_seconds_avg = 0.164s
 ```
 

@@ -168,7 +168,7 @@ graph TB
 graph TB
     subgraph "🌐 Internet_and_External_Systems"
         INTERNET[🌍 Internet<br/>Global Traffic Distribution<br/>CDN: CloudFlare Enterprise<br/>DNS: Route 53]
-        EXT_TRADING_API[📈 External Trading APIs<br/>Domain: api.trading-partners.com<br/>Protocols: REST/GraphQL<br/>Auth: OAuth 2.0 + mTLS]
+        EXT_TRADING_API[📈 External Trading APIs<br/>Domain: api.trading-partners.com<br/>Protocols: REST/GraphQL<br/>Auth: OAuth 2.0 and mTLS]
         EXT_MARKET_DATA[📊 Market Data Providers<br/>Domain: feeds.market-data.com<br/>Protocols: WebSocket/FIX<br/>Real-time Price Feeds]
     end
 
@@ -182,7 +182,7 @@ graph TB
     
     subgraph "☸️ Kubernetes_Cluster_Production"
         subgraph "🏷️ Cluster_Information"
-            CLUSTER_INFO[🏢 KBNT Production Cluster<br/>━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Cluster Name: kbnt-prod-eks<br/>☸️ Platform: Amazon EKS v1.28<br/>🌍 Region: us-east-1<br/>🎯 Environment: production<br/>👥 Node Groups: 3 (on-demand + spot)<br/>💻 Instance Types: c5.xlarge, m5.large<br/>🔄 Auto Scaling: 5-50 nodes<br/>🌐 CNI: AWS VPC CNI<br/>🔒 RBAC: Enabled + Pod Security Standards]
+            CLUSTER_INFO[🏢 KBNT Production Cluster<br/>━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Cluster Name: kbnt-prod-eks<br/>☸️ Platform: Amazon EKS v1.28<br/>🌍 Region: us-east-1<br/>🎯 Environment: production<br/>👥 Node Groups: 3 on-demand and spot<br/>💻 Instance Types: c5.xlarge, m5.large<br/>🔄 Auto Scaling: 5-50 nodes<br/>🌐 CNI: AWS VPC CNI<br/>🔒 RBAC: Enabled with Pod Security Standards]
         end
         
         subgraph "🎯 Namespace_virtual_stock_system"
@@ -193,27 +193,27 @@ graph TB
                 
                 VS_POD2[🚀 virtual-stock-service-1<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📦 Image: kbnt/virtual-stock:v2.1.3<br/>☸️ Node: ip-10-0-2-67.ec2.internal<br/>💻 Resources: CPU 500m-1500m<br/>💾 Memory: 1Gi-3Gi<br/>🌐 Port: 8080 (HTTP)<br/>⚖️ Load Balanced<br/>🔄 Circuit Breaker: Enabled<br/>📊 Metrics: Prometheus/Micrometer<br/>🎯 Active Profile: prod<br/>🔍 Distributed Tracing: Jaeger]
                 
-                VS_POD3[🚀 virtual-stock-service-2<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📦 Image: kbnt/virtual-stock:v2.1.3<br/>☸️ Node: ip-10-0-3-89.ec2.internal<br/>💻 Resources: CPU 500m-1500m<br/>💾 Memory: 1Gi-3Gi<br/>🌐 Port: 8080 (HTTP)<br/>⚡ Performance: Sub-ms latency<br/>📈 Throughput: 580+ req/s<br/>🎯 Business Domain: Stock Trading<br/>🏛️ Layer: Hexagonal Architecture]
+                VS_POD3[🚀 virtual-stock-service-2<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📦 Image: kbnt/virtual-stock:v2.1.3<br/>☸️ Node: ip-10-0-3-89.ec2.internal<br/>💻 Resources: CPU 500m-1500m<br/>💾 Memory: 1Gi-3Gi<br/>🌐 Port: 8080 (HTTP)<br/>⚡ Performance: Sub-ms latency<br/>📈 Throughput: 580 req/s and more<br/>🎯 Business Domain: Stock Trading<br/>🏛️ Layer: Hexagonal Architecture]
                 
                 VS_SVC[🌐 virtual-stock-service Service<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Type: ClusterIP<br/>🌐 Cluster IP: 10.100.45.120<br/>🚪 Port: 8080 → Target 8080<br/>⚖️ Load Balancing: Round Robin<br/>🔄 Session Affinity: None<br/>🎯 Selector: app=virtual-stock-service<br/>📊 Endpoints: 3 ready pods<br/>🔍 Service Discovery: DNS]
                 
-                VS_HPA[📊 HorizontalPodAutoscaler<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🎯 Target: virtual-stock-service<br/>📊 Min Replicas: 2<br/>📈 Max Replicas: 15<br/>💻 CPU Target: 70%<br/>💾 Memory Target: 80%<br/>📈 Custom Metrics: requests/sec<br/>🔄 Scale Up: +2 pods/2min<br/>🔽 Scale Down: -1 pod/5min<br/>⏱️ Stabilization: 60s]
+                VS_HPA[📊 HorizontalPodAutoscaler<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🎯 Target: virtual-stock-service<br/>📊 Min Replicas: 2<br/>📈 Max Replicas: 15<br/>💻 CPU Target: 70%<br/>💾 Memory Target: 80%<br/>📈 Custom Metrics: requests/sec<br/>🔄 Scale Up: 2 pods per 2min<br/>🔽 Scale Down: 1 pod per 5min<br/>⏱️ Stabilization: 60s]
             end
             
             subgraph "🛡️ ACL_Anti_Corruption_Layer_Service"
                 ACL_DEPLOYMENT[🏗️ acl-virtual-stock-service Deployment<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ App: acl-virtual-stock-service<br/>📦 Image: kbnt/acl-stock:v2.1.3<br/>🌍 Registry: kbnt.azurecr.io<br/>🔄 Strategy: RollingUpdate<br/>📊 Replicas: 2 (HPA managed)<br/>🎯 Domain: Integration/Translation<br/>🛡️ Pattern: Anti-Corruption Layer]
                 
-                ACL_POD1[🚀 acl-virtual-stock-service-0<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📦 Image: kbnt/acl-stock:v2.1.3<br/>☸️ Node: ip-10-0-1-45.ec2.internal<br/>💻 Resources: CPU 300m-800m<br/>💾 Memory: 768Mi-2Gi<br/>🌐 Port: 8081 (HTTP)<br/>🔧 JVM: OpenJDK 17<br/>📊 Spring Boot: 3.2.0<br/>🎯 Profile: production<br/>📥 Kafka Consumer: Active<br/>📤 External API Client: Ready<br/>🔄 Processing Rate: 107+ msg/s<br/>🛡️ Translation Layer: Active]
+                ACL_POD1[🚀 acl-virtual-stock-service-0<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📦 Image: kbnt/acl-stock:v2.1.3<br/>☸️ Node: ip-10-0-1-45.ec2.internal<br/>💻 Resources: CPU 300m-800m<br/>💾 Memory: 768Mi-2Gi<br/>🌐 Port: 8081 (HTTP)<br/>🔧 JVM: OpenJDK 17<br/>📊 Spring Boot: 3.2.0<br/>🎯 Profile: production<br/>📥 Kafka Consumer: Active<br/>📤 External API Client: Ready<br/>🔄 Processing Rate: 107 msg/s and more<br/>🛡️ Translation Layer: Active]
                 
                 ACL_POD2[🚀 acl-virtual-stock-service-1<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📦 Image: kbnt/acl-stock:v2.1.3<br/>☸️ Node: ip-10-0-2-67.ec2.internal<br/>💻 Resources: CPU 300m-800m<br/>💾 Memory: 768Mi-2Gi<br/>🌐 Port: 8081 (HTTP)<br/>⚖️ Consumer Group: kbnt-acl-group<br/>🔄 Message Processing: Parallel<br/>🛡️ Error Handling: Dead Letter Queue<br/>📊 Success Rate: 99.97%]
                 
                 ACL_SVC[🌐 acl-virtual-stock-service Service<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Type: ClusterIP<br/>🌐 Cluster IP: 10.100.45.121<br/>🚪 Port: 8081 → Target 8081<br/>🔒 Access: Internal Only<br/>🎯 Selector: app=acl-virtual-stock-service<br/>📊 Endpoints: 2 ready pods<br/>🔍 Service Discovery: DNS]
                 
-                ACL_HPA[📊 HorizontalPodAutoscaler<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🎯 Target: acl-virtual-stock-service<br/>📊 Min Replicas: 2<br/>📈 Max Replicas: 10<br/>💻 CPU Target: 75%<br/>💾 Memory Target: 85%<br/>📊 Consumer Lag Target: <100ms<br/>🔄 Scale Up: +1 pod/3min<br/>🔽 Scale Down: -1 pod/5min]
+                ACL_HPA[📊 HorizontalPodAutoscaler<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🎯 Target: acl-virtual-stock-service<br/>📊 Min Replicas: 2<br/>📈 Max Replicas: 10<br/>💻 CPU Target: 75%<br/>💾 Memory Target: 85%<br/>📊 Consumer Lag Target: less than 100ms<br/>🔄 Scale Up: 1 pod per 3min<br/>🔽 Scale Down: 1 pod per 5min]
             end
             
             subgraph "🔥 Red_Hat_AMQ_Streams_Cluster"
-                KAFKA_CLUSTER[🏢 Kafka Cluster Infrastructure<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Cluster Name: kbnt-kafka-cluster<br/>🔥 Technology: Red Hat AMQ Streams 2.5<br/>📦 Apache Kafka Version: 3.5.0<br/>☸️ Operator: Strimzi 0.37.0<br/>🌍 Deployment: Multi-AZ Production<br/>🔄 Brokers: 3 (High Availability)<br/>📊 Replication Factor: 3<br/>⚖️ Load Distribution: Balanced<br/>🔒 Security: SASL/SCRAM + TLS<br/>📈 Throughput: 10k+ msg/s<br/>💾 Storage: 300Gi SSD per broker]
+                KAFKA_CLUSTER[🏢 Kafka Cluster Infrastructure<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Cluster Name: kbnt-kafka-cluster<br/>🔥 Technology: Red Hat AMQ Streams 2.5<br/>📦 Apache Kafka Version: 3.5.0<br/>☸️ Operator: Strimzi 0.37.0<br/>🌍 Deployment: Multi-AZ Production<br/>🔄 Brokers: 3 (High Availability)<br/>📊 Replication Factor: 3<br/>⚖️ Load Distribution: Balanced<br/>🔒 Security: SASL/SCRAM and TLS<br/>📈 Throughput: 10k msg/s and more<br/>💾 Storage: 300Gi SSD per broker]
                 
                 KAFKA_POD1[🔥 kafka-cluster-kafka-0<br/>━━━━━━━━━━━━━━━━━━━━━━━━<br/>☸️ Node: ip-10-0-1-45.ec2.internal<br/>💻 Resources: CPU 1000m-2500m<br/>💾 Memory: 4Gi-8Gi<br/>💿 Storage: 300Gi AWS EBS gp3<br/>🌐 Port: 9092 (Internal)<br/>🔒 Port: 9093 (TLS)<br/>📊 JMX Port: 9999<br/>🎯 Broker ID: 0<br/>⚖️ Leader Partitions: 15<br/>📈 Message Rate: 3.5k/s]
                 
@@ -227,18 +227,18 @@ graph TB
             end
             
             subgraph "📊 Observability_and_Monitoring_Stack"
-                PROMETHEUS[📈 Prometheus Server<br/>━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Instance: kbnt-prometheus<br/>📦 Version: prometheus/prometheus:v2.47.0<br/>☸️ Node: ip-10-0-1-45.ec2.internal<br/>💻 Resources: CPU 1000m-2000m<br/>💾 Memory: 4Gi-8Gi<br/>💿 Storage: 200Gi AWS EBS gp3<br/>🌐 Port: 9090<br/>⏱️ Scrape Interval: 15s<br/>📊 Retention: 30 days<br/>🎯 Targets: 25+ endpoints<br/>📈 Metrics Rate: 10k samples/s]
+                PROMETHEUS[📈 Prometheus Server<br/>━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Instance: kbnt-prometheus<br/>📦 Version: prometheus/prometheus:v2.47.0<br/>☸️ Node: ip-10-0-1-45.ec2.internal<br/>💻 Resources: CPU 1000m-2000m<br/>💾 Memory: 4Gi-8Gi<br/>💿 Storage: 200Gi AWS EBS gp3<br/>🌐 Port: 9090<br/>⏱️ Scrape Interval: 15s<br/>📊 Retention: 30 days<br/>🎯 Targets: 25 endpoints and more<br/>📈 Metrics Rate: 10k samples/s]
                 
-                GRAFANA[📊 Grafana Dashboard<br/>━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Instance: kbnt-grafana<br/>📦 Version: grafana/grafana:10.1.0<br/>☸️ Node: ip-10-0-2-67.ec2.internal<br/>💻 Resources: CPU 500m-1000m<br/>💾 Memory: 1Gi-2Gi<br/>🌐 Port: 3000<br/>🎨 Dashboards: 15 custom<br/>👥 Users: SSO via OIDC<br/>📊 Data Sources: Prometheus, Loki<br/>🔔 Alerts: Slack + Email]
+                GRAFANA[📊 Grafana Dashboard<br/>━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Instance: kbnt-grafana<br/>📦 Version: grafana/grafana:10.1.0<br/>☸️ Node: ip-10-0-2-67.ec2.internal<br/>💻 Resources: CPU 500m-1000m<br/>💾 Memory: 1Gi-2Gi<br/>🌐 Port: 3000<br/>🎨 Dashboards: 15 custom<br/>👥 Users: SSO via OIDC<br/>📊 Data Sources: Prometheus, Loki<br/>🔔 Alerts: Slack and Email]
                 
                 ALERTMANAGER[🚨 AlertManager<br/>━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Instance: kbnt-alertmanager<br/>📦 Version: prom/alertmanager:v0.26.0<br/>☸️ Node: ip-10-0-3-89.ec2.internal<br/>💻 Resources: CPU 200m-500m<br/>💾 Memory: 512Mi-1Gi<br/>🌐 Port: 9093<br/>🔔 Channels: Slack, PagerDuty<br/>📧 SMTP: smtp.kbnt.com<br/>⏱️ Group Wait: 30s<br/>🔄 Repeat Interval: 4h]
                 
-                JAEGER[🔍 Jaeger Tracing<br/>━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Instance: kbnt-jaeger<br/>📦 Version: jaegertracing/all-in-one:1.49<br/>☸️ Node: ip-10-0-1-45.ec2.internal<br/>💻 Resources: CPU 300m-600m<br/>💾 Memory: 1Gi-2Gi<br/>🌐 Port: 16686 (UI)<br/>🌐 Port: 14268 (HTTP)<br/>📊 Traces: 1000+ spans/min<br/>⏱️ Retention: 7 days]
+                JAEGER[🔍 Jaeger Tracing<br/>━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Instance: kbnt-jaeger<br/>📦 Version: jaegertracing/all-in-one:1.49<br/>☸️ Node: ip-10-0-1-45.ec2.internal<br/>💻 Resources: CPU 300m-600m<br/>💾 Memory: 1Gi-2Gi<br/>🌐 Port: 16686 (UI)<br/>🌐 Port: 14268 (HTTP)<br/>📊 Traces: 1000 spans/min and more<br/>⏱️ Retention: 7 days]
             end
         end
         
         subgraph "🗄️ Namespace_data_persistence"
-            POSTGRES_CLUSTER[🐘 PostgreSQL Production Cluster<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Cluster: kbnt-postgres-cluster<br/>🗄️ Database Engine: PostgreSQL 15.4<br/>☸️ Operator: CloudNativePG<br/>🔄 Topology: Primary + 2 Replicas<br/>💻 Resources: CPU 2000m-4000m<br/>💾 Memory: 4Gi-8Gi per instance<br/>💿 Storage: 500Gi AWS EBS gp3<br/>🔒 Authentication: SCRAM-SHA-256<br/>🔐 Encryption: TLS 1.3<br/>📊 Connection Pool: PgBouncer<br/>🔄 Streaming Replication: Async<br/>⏰ Backup: WAL-G daily]
+            POSTGRES_CLUSTER[🐘 PostgreSQL Production Cluster<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Cluster: kbnt-postgres-cluster<br/>🗄️ Database Engine: PostgreSQL 15.4<br/>☸️ Operator: CloudNativePG<br/>🔄 Topology: Primary and 2 Replicas<br/>💻 Resources: CPU 2000m-4000m<br/>💾 Memory: 4Gi-8Gi per instance<br/>💿 Storage: 500Gi AWS EBS gp3<br/>🔒 Authentication: SCRAM-SHA-256<br/>🔐 Encryption: TLS 1.3<br/>📊 Connection Pool: PgBouncer<br/>🔄 Streaming Replication: Async<br/>⏰ Backup: WAL-G daily]
             
             POSTGRES_PRIMARY[🗄️ postgresql-primary<br/>━━━━━━━━━━━━━━━━━━━━━━━<br/>☸️ Node: ip-10-0-1-45.ec2.internal<br/>💻 Resources: CPU 2000m-4000m<br/>💾 Memory: 4Gi-8Gi<br/>💿 Storage: 500Gi AWS EBS gp3<br/>🌐 Port: 5432<br/>📊 Role: Primary (Read/Write)<br/>🔄 Replication: Streaming<br/>📈 Connections: 200 max<br/>⚡ Performance: 5k TPS]
             
@@ -246,7 +246,7 @@ graph TB
             
             POSTGRES_REPLICA2[🗄️ postgresql-replica-2<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>☸️ Node: ip-10-0-3-89.ec2.internal<br/>💻 Resources: CPU 2000m-4000m<br/>💾 Memory: 4Gi-8Gi<br/>💿 Storage: 500Gi AWS EBS gp3<br/>🌐 Port: 5432<br/>📊 Role: Hot Standby (Read Only)<br/>🔄 Lag: <2s<br/>📈 Connections: 100 max]
             
-            ELASTIC_CLUSTER[🔍 Elasticsearch Production Cluster<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Cluster: kbnt-elastic-cluster<br/>🔍 Version: Elasticsearch 8.10.0<br/>☸️ Operator: Elastic Cloud on K8s (ECK)<br/>🏗️ Topology: 3 Master + 6 Data nodes<br/>💻 Master: CPU 1000m, Memory 2Gi<br/>💻 Data: CPU 2000m, Memory 8Gi<br/>💿 Storage: 1TB SSD per data node<br/>🔒 Security: TLS + RBAC<br/>📊 Indices: 50+ active<br/>📈 Ingestion: 50MB/s<br/>🔍 Search Performance: <100ms]
+            ELASTIC_CLUSTER[🔍 Elasticsearch Production Cluster<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Cluster: kbnt-elastic-cluster<br/>🔍 Version: Elasticsearch 8.10.0<br/>☸️ Operator: Elastic Cloud on K8s (ECK)<br/>🏗️ Topology: 3 Master and 6 Data nodes<br/>💻 Master: CPU 1000m, Memory 2Gi<br/>💻 Data: CPU 2000m, Memory 8Gi<br/>💿 Storage: 1TB SSD per data node<br/>🔒 Security: TLS and RBAC<br/>📊 Indices: 50 active and more<br/>📈 Ingestion: 50MB/s<br/>🔍 Search Performance: less than 100ms]
         end
         
         subgraph "🔐 Security_Configuration_and_Secrets"
@@ -254,16 +254,16 @@ graph TB
             
             CONFIG_MAPS[⚙️ ConfigMaps Configuration<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 kbnt-application-config<br/>🔥 kbnt-kafka-topic-config<br/>📝 kbnt-logging-config<br/>📈 kbnt-monitoring-config<br/>🌐 kbnt-ingress-config<br/>🗄️ kbnt-database-config<br/>🔄 Hot Reload: Supported<br/>📋 Validation: Schema enforced]
             
-            RBAC[🛡️ RBAC Security Policies<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>👤 ServiceAccounts: 8 dedicated<br/>🎭 Roles: namespace-scoped<br/>🌍 ClusterRoles: cluster-admin limited<br/>🔗 RoleBindings: principle of least privilege<br/>🛡️ Pod Security Standards: restricted<br/>🔒 Network Policies: ingress/egress rules<br/>🔑 Authentication: OIDC + mTLS<br/>📋 Audit Logging: enabled]
+            RBAC[🛡️ RBAC Security Policies<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>👤 ServiceAccounts: 8 dedicated<br/>🎭 Roles: namespace-scoped<br/>🌍 ClusterRoles: cluster-admin limited<br/>🔗 RoleBindings: principle of least privilege<br/>🛡️ Pod Security Standards: restricted<br/>🔒 Network Policies: ingress/egress rules<br/>🔑 Authentication: OIDC and mTLS<br/>📋 Audit Logging: enabled]
         end
     end
     
     subgraph "☁️ AWS_Cloud_Services_Integration"
-        RDS[🗄️ Amazon RDS Multi-AZ<br/>━━━━━━━━━━━━━━━━━━━━━━━<br/>🏢 Instance: kbnt-prod-postgres<br/>🗄️ Engine: PostgreSQL 15.4<br/>💻 Instance Class: db.r6g.2xlarge<br/>💾 Storage: 2TB gp3 (16k IOPS)<br/>🌍 Multi-AZ: us-east-1a/1b<br/>🔄 Read Replicas: 2 cross-region<br/>⏰ Backup Window: 03:00-04:00 UTC<br/>📊 Monitoring: Enhanced + CloudWatch<br/>🔒 Encryption: KMS encrypted<br/>🔐 Authentication: IAM + SCRAM]
+        RDS[🗄️ Amazon RDS Multi-AZ<br/>━━━━━━━━━━━━━━━━━━━━━━━<br/>🏢 Instance: kbnt-prod-postgres<br/>🗄️ Engine: PostgreSQL 15.4<br/>💻 Instance Class: db.r6g.2xlarge<br/>💾 Storage: 2TB gp3 (16k IOPS)<br/>🌍 Multi-AZ: us-east-1a/1b<br/>🔄 Read Replicas: 2 cross-region<br/>⏰ Backup Window: 03:00-04:00 UTC<br/>📊 Monitoring: Enhanced and CloudWatch<br/>🔒 Encryption: KMS encrypted<br/>🔐 Authentication: IAM and SCRAM]
         
-        MSK[🔥 Amazon MSK (Alternative)<br/>━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏢 Cluster: kbnt-msk-cluster<br/>📦 Kafka Version: 3.5.0<br/>💻 Instance Type: kafka.m5.xlarge<br/>🔄 Brokers: 6 across 3 AZs<br/>💿 Storage: 1TB per broker<br/>🔒 Encryption: TLS + KMS<br/>🔍 Monitoring: CloudWatch + JMX<br/>⚖️ Auto Scaling: enabled<br/>📊 Throughput: 100MB/s per broker]
+        MSK[🔥 Amazon MSK (Alternative)<br/>━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏢 Cluster: kbnt-msk-cluster<br/>📦 Kafka Version: 3.5.0<br/>💻 Instance Type: kafka.m5.xlarge<br/>🔄 Brokers: 6 across 3 AZs<br/>💿 Storage: 1TB per broker<br/>🔒 Encryption: TLS and KMS<br/>🔍 Monitoring: CloudWatch and JMX<br/>⚖️ Auto Scaling: enabled<br/>📊 Throughput: 100MB/s per broker]
         
-        CLOUDWATCH[📊 CloudWatch Integration<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📈 Metrics: Custom + AWS native<br/>📝 Log Groups: 15 configured<br/>⏱️ Log Retention: 30-90 days<br/>🚨 Alarms: 50+ critical alerts<br/>📊 Dashboards: Executive + Technical<br/>🔔 Notifications: SNS + SQS<br/>💰 Cost Optimization: automated<br/>🔍 X-Ray Tracing: integrated]
+        CLOUDWATCH[📊 CloudWatch Integration<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📈 Metrics: Custom and AWS native<br/>📝 Log Groups: 15 configured<br/>⏱️ Log Retention: 30-90 days<br/>🚨 Alarms: 50 critical alerts and more<br/>📊 Dashboards: Executive and Technical<br/>🔔 Notifications: SNS and SQS<br/>💰 Cost Optimization: automated<br/>🔍 X-Ray Tracing: integrated]
         
         ROUTE53[🌐 Route 53 DNS<br/>━━━━━━━━━━━━━━━━━━━━<br/>🏢 Hosted Zone: kbnt-virtualstock.com<br/>📍 Records: A, AAAA, CNAME<br/>🔄 Health Checks: multi-region<br/>⚖️ Weighted Routing: A/B testing<br/>🌍 Geolocation: latency-based<br/>🔒 DNSSEC: enabled<br/>📊 Query Logging: CloudWatch<br/>⚡ Latency: <20ms global]
     end
