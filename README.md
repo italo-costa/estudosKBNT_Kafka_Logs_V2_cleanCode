@@ -550,57 +550,57 @@ sequenceDiagram
 
     rect rgb(240, 248, 255)
         Note over Trader,VS: PHASE 1: High-Performance Stock Creation
-        Trader->>+VS: 📈 POST /api/v1/virtual-stock/stocks<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Symbol: AAPL | Quantity: 150 units<br/>💰 Unit Price: $150.00 | Created By: trader-007<br/>🔐 JWT Token: Bearer eyJ0eXAi...<br/>⚡ Response Time Target: <1ms<br/>📊 Request ID: req-12345-abcd
+        Trader->>+VS: [1] 📈 POST /api/v1/virtual-stock/stocks<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🏷️ Symbol: AAPL | Quantity: 150 units<br/>💰 Unit Price: $150.00 | Created By: trader-007<br/>🔐 JWT Token: Bearer eyJ0eXAi...<br/>⚡ Response Time Target: <1ms<br/>📊 Request ID: req-12345-abcd
         
-        VS->>VS: 🔍 Domain Validation Layer<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>✅ Symbol format validation (^[A-Z]{1,5}$)<br/>💵 Price range check ($0.01 - $10,000)<br/>📊 Quantity bounds (1 - 1,000,000)<br/>🔒 User authorization verification<br/>⏱️ Validation Time: <0.5ms
+        VS->>VS: [2] 🔍 Domain Validation Layer<br/>━━━━━━━━━━━━━━━━━━━━━━━━━<br/>✅ Symbol format validation (^[A-Z]{1,5}$)<br/>💵 Price range check ($0.01 - $10,000)<br/>📊 Quantity bounds (1 - 1,000,000)<br/>🔒 User authorization verification<br/>⏱️ Validation Time: <0.5ms
         
-        VS->>VS: 🏗️ Create Stock Aggregate Root<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📦 Aggregate: VirtualStock Entity<br/>🆔 Generated StockId: STK-AAPL-001<br/>🎯 Domain Event: StockCreatedEvent<br/>💾 In-Memory Repository Storage<br/>⚡ Processing Time: <0.2ms
+        VS->>VS: [3] 🏗️ Create Stock Aggregate Root<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📦 Aggregate: VirtualStock Entity<br/>🆔 Generated StockId: STK-AAPL-001<br/>🎯 Domain Event: StockCreatedEvent<br/>💾 In-Memory Repository Storage<br/>⚡ Processing Time: <0.2ms
         
-        VS->>+Kafka: 🚀 Publish StockCreatedEvent<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📢 Topic: virtual-stock-events<br/>🔑 Partition Key: AAPL<br/>📋 Event Schema: Avro v2.1<br/>💾 Message Size: 1.2KB<br/>🔄 Acknowledgment: all replicas<br/>⚡ Publish Latency: 2.3ms average
-        Kafka-->>-VS: 📨 Event Successfully Published<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>✅ Partition: 0 | Offset: 12847<br/>🕒 Timestamp: 2024-12-30T15:30:45.123Z<br/>🔄 Replication Status: 3/3 confirmed
+        VS->>+Kafka: [4] 🚀 Publish StockCreatedEvent<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📢 Topic: virtual-stock-events<br/>🔑 Partition Key: AAPL<br/>📋 Event Schema: Avro v2.1<br/>💾 Message Size: 1.2KB<br/>🔄 Acknowledgment: all replicas<br/>⚡ Publish Latency: 2.3ms average
+        Kafka-->>-VS: [5] 📨 Event Successfully Published<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>✅ Partition: 0 | Offset: 12847<br/>🕒 Timestamp: 2024-12-30T15:30:45.123Z<br/>🔄 Replication Status: 3/3 confirmed
         
-        VS-->>-Trader: 🎉 201 CREATED - Stock Successfully Created<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 Stock ID: STK-AAPL-001<br/>💰 Total Portfolio Value: $22,500.00<br/>📈 Available Quantity: 150 units<br/>🕒 Created At: 2024-12-30T15:30:45.125Z<br/>⚡ Total Response Time: 3.1ms<br/>🎯 Transaction ID: txn-abc-123
+        VS-->>-Trader: [6] 🎉 201 CREATED - Stock Successfully Created<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 Stock ID: STK-AAPL-001<br/>💰 Total Portfolio Value: $22,500.00<br/>📈 Available Quantity: 150 units<br/>🕒 Created At: 2024-12-30T15:30:45.125Z<br/>⚡ Total Response Time: 3.1ms<br/>🎯 Transaction ID: txn-abc-123
     end
 
     Note over Kafka,ExtAPI: 🔄 Asynchronous Integration Processing Pipeline
 
     rect rgb(255, 248, 240)
         Note over Kafka,ACL: PHASE 2: Event-Driven Integration Processing
-        Kafka->>+ACL: 📥 Consume StockCreatedEvent<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>👥 Consumer Group: stock-acl-consumers<br/>📨 Message Processing Rate: 107.73 msg/s<br/>🔄 Offset Management: Automatic commit<br/>⚡ Processing Latency: 8ms average<br/>📊 Consumer Lag: 0 messages
+        Kafka->>+ACL: [7] 📥 Consume StockCreatedEvent<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>👥 Consumer Group: stock-acl-consumers<br/>📨 Message Processing Rate: 107.73 msg/s<br/>🔄 Offset Management: Automatic commit<br/>⚡ Processing Latency: 8ms average<br/>📊 Consumer Lag: 0 messages
         
-        ACL->>ACL: 🔄 Anti-Corruption Translation Layer<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🔀 Internal Domain to External API Format<br/>📋 Schema Mapping: Internal → External DTOs<br/>🔒 Security Token Exchange<br/>💱 Currency Conversion (if required)<br/>📊 Data Enrichment and Validation<br/>⚡ Translation Time: 15ms average
+        ACL->>ACL: [8] 🔄 Anti-Corruption Translation Layer<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🔀 Internal Domain to External API Format<br/>📋 Schema Mapping: Internal → External DTOs<br/>🔒 Security Token Exchange<br/>💱 Currency Conversion (if required)<br/>📊 Data Enrichment and Validation<br/>⚡ Translation Time: 15ms average
         
-        ACL->>+ExtAPI: 🌐 POST /api/trading/stock-created<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📈 External System Notification<br/>🔐 API Key Authentication<br/>💼 Trading Platform Integration<br/>📊 Risk Management System Update<br/>💰 Portfolio Valuation Sync<br/>⚡ External API Call: 45ms average
-        ExtAPI-->>-ACL: ✅ 200 OK - External System Updated<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 External Reference: EXT-AAPL-789<br/>🕒 Processing Completed: 15:30:45.189Z<br/>✅ Downstream Systems Synchronized
+        ACL->>+ExtAPI: [9] 🌐 POST /api/trading/stock-created<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📈 External System Notification<br/>🔐 API Key Authentication<br/>💼 Trading Platform Integration<br/>📊 Risk Management System Update<br/>💰 Portfolio Valuation Sync<br/>⚡ External API Call: 45ms average
+        ExtAPI-->>-ACL: [10] ✅ 200 OK - External System Updated<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 External Reference: EXT-AAPL-789<br/>🕒 Processing Completed: 15:30:45.189Z<br/>✅ Downstream Systems Synchronized
         
-        ACL-->>-Kafka: 📝 Processing Complete Acknowledgment<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>✅ Message Successfully Processed<br/>📊 Total Processing Time: 68ms<br/>🔄 Offset Committed: 12847<br/>🎯 End-to-end Traceability: Maintained
+        ACL-->>-Kafka: [11] 📝 Processing Complete Acknowledgment<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>✅ Message Successfully Processed<br/>📊 Total Processing Time: 68ms<br/>🔄 Offset Committed: 12847<br/>🎯 End-to-end Traceability: Maintained
     end
 
     Note over Trader,ExtAPI: 📊 High-Volume Stock Update Operations
 
     rect rgb(248, 255, 248)
         Note over Trader,VS: PHASE 3: Real-time Stock Updates
-        Trader->>+VS: 📈 PUT /api/v1/virtual-stock/stocks/STK-AAPL-001/quantity<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🔄 Quantity Update: 150 → 200 units<br/>👤 Updated By: trader-007<br/>📝 Reason: "Market volatility adjustment"<br/>🕒 Update Timestamp: 15:31:15.456Z<br/>⚡ High-frequency Trading Context<br/>🎯 Target Response Time: <0.5ms
+        Trader->>+VS: [12] 📈 PUT /api/v1/virtual-stock/stocks/STK-AAPL-001/quantity<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>🔄 Quantity Update: 150 → 200 units<br/>👤 Updated By: trader-007<br/>📝 Reason: "Market volatility adjustment"<br/>🕒 Update Timestamp: 15:31:15.456Z<br/>⚡ High-frequency Trading Context<br/>🎯 Target Response Time: <0.5ms
         
-        VS->>VS: 🔧 Update Stock Aggregate Business Logic<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 Previous State: qty=150, value=$22,500<br/>🔄 New State: qty=200, value=$30,000<br/>📢 Domain Event: StockQuantityUpdatedEvent<br/>💾 Aggregate Version Increment: v2<br/>⚡ Business Logic Processing: <0.3ms
+        VS->>VS: [13] 🔧 Update Stock Aggregate Business Logic<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 Previous State: qty=150, value=$22,500<br/>🔄 New State: qty=200, value=$30,000<br/>📢 Domain Event: StockQuantityUpdatedEvent<br/>💾 Aggregate Version Increment: v2<br/>⚡ Business Logic Processing: <0.3ms
         
-        VS->>+Kafka: 🚀 Publish StockQuantityUpdatedEvent<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📢 Topic: virtual-stock-events<br/>🔑 Partition Key: AAPL<br/>📊 Delta: +50 units | +$7,500 value<br/>💾 Event Payload: 1.8KB<br/>🔄 Producer Acknowledgment: Required<br/>⚡ Message Publish Time: 1.9ms
-        Kafka-->>-VS: ✅ Update Event Successfully Published<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 Partition: 0 | Offset: 12848<br/>🕒 Event Timestamp: 15:31:15.458Z<br/>🔄 High-throughput Processing Confirmed
+        VS->>+Kafka: [14] 🚀 Publish StockQuantityUpdatedEvent<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📢 Topic: virtual-stock-events<br/>🔑 Partition Key: AAPL<br/>📊 Delta: +50 units | +$7,500 value<br/>💾 Event Payload: 1.8KB<br/>🔄 Producer Acknowledgment: Required<br/>⚡ Message Publish Time: 1.9ms
+        Kafka-->>-VS: [15] ✅ Update Event Successfully Published<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 Partition: 0 | Offset: 12848<br/>🕒 Event Timestamp: 15:31:15.458Z<br/>🔄 High-throughput Processing Confirmed
         
-        VS-->>-Trader: 🎯 200 OK - Stock Updated Successfully<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 Updated Quantity: 200 units<br/>💰 New Total Value: $30,000.00<br/>📈 Portfolio Growth: +$7,500 (+33.3%)<br/>🕒 Last Modified: 15:31:15.458Z<br/>⚡ Total Update Time: 2.4ms<br/>✅ High-performance Update Confirmed
+        VS-->>-Trader: [16] 🎯 200 OK - Stock Updated Successfully<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 Updated Quantity: 200 units<br/>💰 New Total Value: $30,000.00<br/>📈 Portfolio Growth: +$7,500 (+33.3%)<br/>🕒 Last Modified: 15:31:15.458Z<br/>⚡ Total Update Time: 2.4ms<br/>✅ High-performance Update Confirmed
     end
 
     rect rgb(255, 248, 255)
         Note over Kafka,ExtAPI: PHASE 4: Downstream System Synchronization
-        Kafka->>+ACL: 📥 Consume StockQuantityUpdatedEvent<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>⚡ High-frequency Event Processing<br/>📊 Consumer Performance: 107+ msg/s<br/>🔄 Real-time Delta Processing<br/>📈 Event Ordering Maintained<br/>⏱️ Processing Initiated: 15:31:15.466Z
+        Kafka->>+ACL: [17] 📥 Consume StockQuantityUpdatedEvent<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>⚡ High-frequency Event Processing<br/>📊 Consumer Performance: 107+ msg/s<br/>🔄 Real-time Delta Processing<br/>📈 Event Ordering Maintained<br/>⏱️ Processing Initiated: 15:31:15.466Z
         
-        ACL->>+ExtAPI: 🌐 PUT /api/trading/stock-updated<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 Stock Update Notification<br/>🔄 Quantity Delta: +50 units<br/>💰 Value Delta: +$7,500<br/>🎯 Real-time Portfolio Sync<br/>📈 Risk Management Update<br/>⚡ External API Processing: 42ms
-        ExtAPI-->>-ACL: ✅ 200 OK - External Systems Updated<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 Downstream Sync Complete<br/>💼 Trading Platform Updated<br/>📈 Portfolio Rebalanced<br/>🕒 Sync Completed: 15:31:15.508Z
+        ACL->>+ExtAPI: [18] 🌐 PUT /api/trading/stock-updated<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 Stock Update Notification<br/>🔄 Quantity Delta: +50 units<br/>💰 Value Delta: +$7,500<br/>🎯 Real-time Portfolio Sync<br/>📈 Risk Management Update<br/>⚡ External API Processing: 42ms
+        ExtAPI-->>-ACL: [19] ✅ 200 OK - External Systems Updated<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 Downstream Sync Complete<br/>💼 Trading Platform Updated<br/>📈 Portfolio Rebalanced<br/>🕒 Sync Completed: 15:31:15.508Z
         
-        ACL-->>-Kafka: 📝 Update Processing Complete<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>✅ End-to-end Update Successful<br/>📊 Total Processing Time: 42ms<br/>🔄 Message Offset: 12848 committed<br/>🎯 System Consistency Maintained
+        ACL-->>-Kafka: [20] 📝 Update Processing Complete<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>✅ End-to-end Update Successful<br/>📊 Total Processing Time: 42ms<br/>🔄 Message Offset: 12848 committed<br/>🎯 System Consistency Maintained
     end
 
-    Note over Trader,ExtAPI: 🎯 System Performance Summary
+    Note over Trader,ExtAPI: 🎯 System Performance Summary - 20 Steps Total
     Note over Trader,ExtAPI: ⚡ 580+ requests/second sustained<br/>📊 107.73 messages/second throughput<br/>🎯 Sub-millisecond response times<br/>✅ Zero message loss achieved<br/>🔄 18,600+ operations processed<br/>📈 3,449 events published successfully
 ```
 
