@@ -306,7 +306,22 @@ sequenceDiagram
     Note over C,API: Fluxo Síncrono - Produção de Logs
     
     C->>+LB: POST /api/logs Log Request
----
+    LB->>+P1: Route to Producer 1
+    P1->>P1: Validate Log Entry
+    P1->>+KT: Publish to Topic
+    KT-->>-P1: Ack
+    P1-->>-LB: 200 OK
+    LB-->>-C: Request Processed
+    
+    Note over C1,MON: Fluxo Assíncrono - Consumo
+    
+    KT->>+C1: Consume Log Event
+    C1->>+API: Forward to External System
+    API-->>-C1: Response
+    C1->>+MON: Record Metrics
+    MON-->>-C1: Metrics Saved
+    C1-->>-KT: Commit Offset
+```
 
 ## 🔄 Fluxo de Mensagens Kafka - Virtual Stock System
 
