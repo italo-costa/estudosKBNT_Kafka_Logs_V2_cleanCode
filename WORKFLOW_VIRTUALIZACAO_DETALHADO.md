@@ -8,46 +8,84 @@ O sistema **KBNT Virtual Stock Management** utiliza uma arquitetura onde **micro
 
 ```mermaid
 sequenceDiagram
-    participant Client as Cliente_API
-    participant Producer as Producer_Microservice<br/>virtualization-producer-service
-    participant AMQ as Red_Hat_AMQ_Streams<br/>virtualization-requests topic
-    participant Consumer as Consumer_Microservice<br/>virtualization-consumer-service
-    participant Events as Events_Topic<br/>virtualization-events
-    participant Prometheus as Prometheus_Metrics
+    participant Client as 💻 Cliente_API<br/>📱 Mobile/Web<br/>🔗 External Systems
+    participant Producer as 🏗️ Producer_Microservice<br/>📦 virtualization-producer-service<br/>🌐 Port 8080<br/>🐳 Container virtualization-producer
+    participant AMQ as 🔄 Red_Hat_AMQ_Streams<br/>📢 Topic virtualization-requests<br/>🔧 Partitions 3 Replicas 3<br/>⚖️ Load Balanced Consumer Groups
+    participant Consumer as 🏗️ Consumer_Microservice<br/>📦 virtualization-consumer-service<br/>🌐 Port 8081<br/>🐳 Container virtualization-consumer
+    participant Events as 📊 Events_Topic<br/>📢 Topic virtualization-events<br/>📈 Metrics and Audit Trail<br/>🔍 Event Sourcing Pattern
+    participant Prometheus as 📈 Prometheus_Metrics<br/>🗄️ Time Series Database<br/>📊 Real-time Dashboards<br/>🚨 Alerting Rules
 
-    Note over Client,Prometheus: KBNT Virtualization Request Flow
+    rect rgb(240, 248, 255)
+        Note over Client,Prometheus: 🎯 KBNT VIRTUALIZATION REQUEST FLOW - END-TO-END PROCESSING
+    end
 
-    Client->>Producer: POST /virtualize<br/>type CREATE_VIRTUAL_MACHINE spec
-    
-    Note over Producer: DOMAIN LAYER
-    Producer->>Producer: Validate request<br/>Apply business rules<br/>Create VirtualizationMessage
-    
-    Note over Producer: APPLICATION LAYER  
-    Producer->>Producer: Process domain logic<br/>Prepare for infrastructure
-    
-    Note over Producer: INFRASTRUCTURE LAYER
-    Producer->>AMQ: Publish message<br/>Topic virtualization-requests<br/>Key messageId
-    Producer->>Prometheus: Increment kbnt_virtualization_requests_total<br/>Increment kbnt_messages_sent_total
-    
-    AMQ-->>Consumer: Poll messages<br/>Consumer Group virtualization-consumer-service-group
-    
-    Note over Consumer: MESSAGE RECEIVED
-    Consumer->>Consumer: Deserialize message<br/>Extract payload
-    Consumer->>Prometheus: Increment kbnt_messages_received_total
-    
-    Note over Consumer: APPLICATION LAYER
-    Consumer->>Consumer: Process virtualization logic<br/>CREATE_VIRTUAL_MACHINE<br/>Allocate resources
-    Consumer->>Prometheus: Observe kbnt_processing_duration_seconds
-    
-    Note over Consumer: VIRTUAL RESOURCE CREATION
-    Consumer->>Consumer: Create VM-XXXXXXXX<br/>Status RUNNING<br/>Spec cpu:4 memory:8GB disk:100GB
-    Consumer->>Prometheus: Increment kbnt_virtual_resources_created_total<br/>Set kbnt_virtual_resources_active
-    
-    Note over Consumer: INFRASTRUCTURE LAYER
-    Consumer->>Events: Publish VIRTUALIZATION_COMPLETED event<br/>Topic virtualization-events
-    Consumer->>Prometheus: Increment kbnt_messages_processed_total
-    
-    Note over Client,Prometheus: Virtualization Complete - All metrics captured
+    rect rgb(245, 255, 245)
+        Note over Client,Producer: 📥 REQUEST PHASE - Client Interaction
+        Client->>+Producer: 🚀 POST /api/v1/virtualize<br/>📋 Request Body<br/>├── type CREATE_VIRTUAL_MACHINE<br/>├── resourceId vm-12345<br/>├── specifications<br/>│   ├── cpu 4 cores<br/>│   ├── memory 8GB RAM<br/>│   ├── disk 100GB SSD<br/>│   └── network bridged<br/>└── metadata<br/>    ├── requestId req-abc123<br/>    ├── userId user-789<br/>    └── priority HIGH
+    end
+
+    rect rgb(255, 250, 240)
+        Note over Producer: 🔵 HEXAGONAL ARCHITECTURE - DOMAIN LAYER
+        Producer->>Producer: 🔍 Domain Validation Process<br/>┌─ Business Rules Engine<br/>├── ✅ Validate resource specifications<br/>├── ✅ Check user permissions<br/>├── ✅ Verify quota limits<br/>├── ✅ Apply security policies<br/>└── ✅ Create VirtualizationMessage<br/>    ├── messageId msg-xyz789<br/>    ├── correlationId corr-456<br/>    ├── timestamp 2025-08-30T10:30:00Z<br/>    └── payload validated-specs
+    end
+
+    rect rgb(248, 248, 255)
+        Note over Producer: 🟡 HEXAGONAL ARCHITECTURE - APPLICATION LAYER
+        Producer->>Producer: ⚙️ Application Service Processing<br/>┌─ Use Case Orchestration<br/>├── 🔄 Process domain aggregates<br/>├── 📝 Generate integration events<br/>├── 🎯 Prepare infrastructure calls<br/>├── 📊 Collect business metrics<br/>└── 🚀 Ready for infrastructure layer<br/>    ├── Duration 45ms processing<br/>    ├── Memory usage 128MB allocated<br/>    └── CPU utilization 12% spike
+    end
+
+    rect rgb(240, 255, 240)
+        Note over Producer: 🟢 HEXAGONAL ARCHITECTURE - INFRASTRUCTURE LAYER
+        Producer->>+AMQ: 📤 Message Publication<br/>┌─ AMQ Streams Integration<br/>├── 📢 Topic virtualization-requests<br/>├── 🔑 Partition Key messageId<br/>├── 🔄 Serialization Avro Schema v2.1<br/>├── ⚡ Async publication mode<br/>├── 🛡️ Exactly-once semantics<br/>└── ✅ Acknowledgment confirmed<br/>    ├── Latency 2.3ms publish<br/>    ├── Size 1.2KB message<br/>    └── Offset partition-0 offset-12456
+        
+        Producer->>Prometheus: 📊 Business Metrics Collection<br/>┌─ Custom Metrics Export<br/>├── 📈 kbnt_virtualization_requests_total<br/>│   └── labels service=producer type=CREATE_VM<br/>├── 📈 kbnt_messages_sent_total<br/>│   └── labels topic=virtualization-requests<br/>├── ⏱️ kbnt_request_processing_duration_ms<br/>│   └── histogram bucket 45ms<br/>└── 🎯 kbnt_business_operations_total<br/>    └── labels operation=virtualization status=success
+        AMQ-->>-Producer: ✅ Publication Confirmed<br/>📋 Response Details<br/>├── offset 12456<br/>├── partition 0<br/>├── timestamp 2025-08-30T10:30:00.123Z<br/>└── checksum crc32-abc123
+    end
+
+    Producer-->>-Client: ✅ 202 ACCEPTED<br/>📋 Response Payload<br/>├── requestId req-abc123<br/>├── status PROCESSING<br/>├── estimatedTime 30 seconds<br/>├── trackingUrl /api/v1/requests/req-abc123<br/>└── correlationId corr-456<br/>    ├── responseTime 52ms total<br/>    └── queuePosition 3 in processing queue
+
+    rect rgb(255, 245, 245)
+        Note over AMQ,Consumer: 🔄 MESSAGE BROKER PROCESSING - ASYNC FLOW
+        AMQ->>+Consumer: 📥 Message Consumption<br/>┌─ Consumer Group Processing<br/>├── 👥 Group virtualization-consumer-service-group<br/>├── 🔄 Auto-commit enabled interval 1s<br/>├── ⚖️ Partition assignment rebalancing<br/>├── 📊 Consumer lag monitoring 0ms<br/>└── 🎯 Processing mode parallel<br/>    ├── Batch size 1 message<br/>    ├── Poll timeout 5000ms<br/>    └── Session timeout 30000ms
+    end
+
+    rect rgb(245, 245, 255)
+        Note over Consumer: 📥 MESSAGE PROCESSING LAYER
+        Consumer->>Consumer: 🔄 Message Deserialization<br/>┌─ Data Processing Pipeline<br/>├── 📋 Avro schema validation v2.1<br/>├── 🔍 Message integrity verification<br/>├── 📦 Payload extraction and mapping<br/>├── 🎯 Business context reconstruction<br/>└── ✅ Ready for application processing<br/>    ├── Processing time 8ms deserialize<br/>    ├── Memory allocated 64MB working set<br/>    └── Schema registry lookup cached
+        
+        Consumer->>Prometheus: 📊 Consumer Metrics Update<br/>├── 📈 kbnt_messages_received_total<br/>├── ⏱️ kbnt_message_processing_latency_ms<br/>└── 🎯 kbnt_consumer_lag_seconds current=0
+    end
+
+    rect rgb(255, 248, 240)
+        Note over Consumer: 🏗️ BUSINESS LOGIC EXECUTION - APPLICATION LAYER
+        Consumer->>Consumer: ⚙️ Virtualization Processing Engine<br/>┌─ Virtual Machine Creation Pipeline<br/>├── 🎯 Operation CREATE_VIRTUAL_MACHINE<br/>├── 🏗️ Resource allocation planning<br/>│   ├── CPU cores 4 reserved<br/>│   ├── Memory 8GB allocated<br/>│   ├── Disk 100GB SSD provisioned<br/>│   └── Network bridge configured<br/>├── 🔧 Infrastructure provisioning<br/>│   ├── Hypervisor KVM selected<br/>│   ├── Operating system Ubuntu 22.04<br/>│   ├── Security groups applied<br/>│   └── Monitoring agents installed<br/>└── ✅ Virtual resource ready<br/>    ├── Provisioning time 18.5 seconds<br/>    ├── Resource utilization optimal<br/>    └── Health checks passed all 5
+        
+        Consumer->>Prometheus: 📊 Processing Metrics Collection<br/>├── ⏱️ kbnt_processing_duration_seconds<br/>│   └── histogram bucket 18.5s<br/>├── 🎯 kbnt_resource_allocation_success_total<br/>└── 📈 kbnt_virtual_machines_active_gauge increment=1
+    end
+
+    rect rgb(240, 255, 250)
+        Note over Consumer: 🖥️ VIRTUAL RESOURCE MANAGEMENT - INFRASTRUCTURE RESULT
+        Consumer->>Consumer: 🎉 Virtual Machine Creation Success<br/>┌─ Resource Instance Details<br/>├── 🏷️ VM ID VM-KBNT-20250830-001<br/>├── 📊 Status RUNNING healthy<br/>├── 🔧 Specifications confirmed<br/>│   ├── vCPU 4 cores allocated<br/>│   ├── RAM 8192MB active<br/>│   ├── Storage 102400MB SSD<br/>│   └── Network 10.10.1.45/24<br/>├── 🌐 Connectivity endpoints<br/>│   ├── SSH 10.10.1.45:22<br/>│   ├── HTTP 10.10.1.45:80<br/>│   └── Management UI https://vm-001.kbnt.local<br/>├── 📈 Performance baselines<br/>│   ├── CPU usage 2% idle<br/>│   ├── Memory usage 1.2GB used<br/>│   └── Disk IO 150 IOPS<br/>└── ✅ Ready for user access<br/>    ├── Boot time 45 seconds<br/>    ├── Service startup 12 seconds<br/>    └── Health verification passed
+        
+        Consumer->>Prometheus: 📊 Resource Creation Metrics<br/>├── 📈 kbnt_virtual_resources_created_total<br/>│   └── labels type=vm status=success region=us-east-1<br/>├── 🎯 kbnt_virtual_resources_active gauge=157<br/>├── 💰 kbnt_resource_cost_usd_total increment=0.045<br/>└── ⏱️ kbnt_vm_boot_time_seconds histogram=45s
+    end
+
+    rect rgb(248, 255, 248)
+        Note over Consumer: 🟢 EVENT PUBLICATION - INFRASTRUCTURE LAYER
+        Consumer->>+Events: 📢 Success Event Publication<br/>┌─ Event Sourcing Pattern<br/>├── 📊 Event Type VIRTUALIZATION_COMPLETED<br/>├── 🔗 Correlation ID corr-456<br/>├── 📋 Event Payload<br/>│   ├── vmId VM-KBNT-20250830-001<br/>│   ├── requestId req-abc123<br/>│   ├── userId user-789<br/>│   ├── status SUCCESS<br/>│   ├── resourceSpecs allocated-confirmed<br/>│   ├── endpoints network-details<br/>│   └── metrics performance-baselines<br/>├── 🕒 Timestamp 2025-08-30T10:30:45.789Z<br/>├── 🏷️ Version v1.2.3<br/>└── 🔒 Checksum sha256-def456<br/>    ├── Event size 2.8KB serialized<br/>    ├── Schema version events-v3.0<br/>    └── Partition routing by userId
+        
+        Consumer->>Prometheus: 📊 Final Processing Metrics<br/>├── 📈 kbnt_messages_processed_total<br/>├── ✅ kbnt_processing_success_rate 99.97%<br/>├── ⏱️ kbnt_end_to_end_latency_seconds 45.8s<br/>└── 🎯 kbnt_business_sla_compliance 99.95%
+        Events-->>-Consumer: ✅ Event Published Successfully
+    end
+
+    rect rgb(240, 255, 240)
+        Note over Client,Prometheus: 🎉 VIRTUALIZATION WORKFLOW COMPLETED SUCCESSFULLY
+        Note over Client,Prometheus: 📊 END-TO-END METRICS CAPTURED AND MONITORED
+        Note over Client,Prometheus: ⏱️ Total Processing Time 45.8 seconds
+        Note over Client,Prometheus: 🎯 SLA Compliance 99.95% - Within Target
+        Note over Client,Prometheus: 💰 Resource Cost $0.045/hour - Budget Approved  
+        Note over Client,Prometheus: 🔄 System Ready for Next Request
+    end
 ```
 
 ## 🏗️ Camadas da Arquitetura Hexagonal Demonstradas
