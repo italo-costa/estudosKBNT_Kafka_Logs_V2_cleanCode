@@ -372,7 +372,7 @@ sequenceDiagram
     TC->>+LB: POST /api/v1/virtual-stock/stocks<br/>{productId: "AAPL", quantity: 150, price: 150.00}
     LB->>+VS: Route to Virtual Stock Instance
 
-    VS->>+DOM: createStock(CreateStockCommand)
+    VS->>+DOM: createStock CreateStockCommand
     
     Note over DOM: 🎯 Domain Processing
     DOM->>DOM: validateStockCreation
@@ -398,20 +398,20 @@ sequenceDiagram
     Note over K,MON: 🔄 Asynchronous Processing Flow
 
     par ACL Consumer Processing
-        K->>+KC: consume(StockUpdatedEvent) from high-priority-updates
-        KC->>+ACL: processStockUpdateEvent(event)
+        K->>+KC: consume StockUpdatedEvent from high-priority-updates
+        KC->>+ACL: processStockUpdateEvent event
         
         Note over ACL: 🛡️ Anti-Corruption Translation
-        ACL->>ACL: translateToExternalFormat(event)
-        ACL->>ACL: enrichWithBusinessContext()
+        ACL->>ACL: translateToExternalFormat event
+        ACL->>ACL: enrichWithBusinessContext
         
         ACL->>+EXT: POST /api/v1/trading/stock-created<br/>{symbol: "AAPL", quantity: 150, ...}
         EXT-->>-ACL: 200 OK {externalId: "EXT-AAPL-001"}
         
-        ACL->>+DB: INSERT consumption_log (PROCESSED, external_id)
+        ACL->>+DB: INSERT consumption_log PROCESSED external_id
         DB-->>-ACL: Audit log saved
         
-        ACL->>+MON: increment("stock.created", tags=["symbol:AAPL"])
+        ACL->>+MON: increment stock.created tags symbol AAPL
         MON-->>-ACL: Metrics recorded
         
         ACL-->>-KC: Processing completed successfully
@@ -441,17 +441,17 @@ sequenceDiagram
     LB-->>-TC: HTTP 200 Stock Updated
 
     par ACL Consumer Processing - Update
-        K->>+KC: consume(StockUpdatedEvent) from virtual-stock-updates
-        KC->>+ACL: processStockUpdateEvent(event)
+        K->>+KC: consume StockUpdatedEvent from virtual-stock-updates
+        KC->>+ACL: processStockUpdateEvent event
         
-        ACL->>ACL: translateQuantityUpdate(event)
-        ACL->>+EXT: PUT /api/v1/trading/stock-updated/EXT-AAPL-001<br/>{quantity: 200, operation: "QUANTITY_UPDATE"}
-        EXT-->>-ACL: 200 OK {updated: true}
+        ACL->>ACL: translateQuantityUpdate event
+        ACL->>+EXT: PUT api v1 trading stock-updated EXT-AAPL-001<br/>quantity 200 operation QUANTITY_UPDATE
+        EXT-->>-ACL: 200 OK updated true
         
-        ACL->>+DB: INSERT consumption_log (PROCESSED, "quantity_update")
+        ACL->>+DB: INSERT consumption_log PROCESSED quantity_update
         DB-->>-ACL: Update audit saved
         
-        ACL->>+MON: increment("stock.updated", tags=["operation:quantity", "symbol:AAPL"])
+        ACL->>+MON: increment stock.updated tags operation quantity symbol AAPL
         MON-->>-ACL: Metrics updated
         
         ACL-->>-KC: Update processing completed

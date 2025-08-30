@@ -5,14 +5,15 @@ Este documento valida que todos os diagramas estão com sintaxe correta para ren
 ## 🔧 Problemas Corrigidos
 
 ### Caracteres Problemáticos Removidos:
-- ❌ `:` (dois pontos) → ✅ espaço
-- ❌ `()` (parênteses) → ✅ texto limpo  
-- ❌ `@` (arroba) → ✅ removido
-- ❌ `+` `-` (símbolos UML) → ✅ texto descritivo
-- ❌ `https://` → ✅ domínio simples
-- ❌ `/` em URLs → ✅ espaços
+- ❌ Parentheses in node labels: `canReserve(), isLowStock()` → ✅ `canReserve, isLowStock`
+- ❌ Parentheses in sequence diagrams: `validateStockCreation()` → ✅ `validateStockCreation`
+- ❌ Special characters in strings: `send("topic-name", event)` → ✅ `send topic-name event`
+- ❌ Complex method calls with parameters → ✅ simplified text
 
-### Antes e Depois:
+### Status das Correções:
+- ✅ README.md - Hexagonal Architecture Diagram
+- ✅ DIAGRAMAS_ARQUITETURA_COMPLETOS.md - Main Architecture
+- 🔄 DIAGRAMAS_ARQUITETURA_COMPLETOS.md - Sequence Diagrams (in progress)
 
 **❌ ANTES (com erros):**
 ```mermaid
