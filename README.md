@@ -22,7 +22,20 @@ This project showcases a **production-ready microservices architecture** for log
 
 ---
 
-## 🏛️ **Architecture Diagram**
+## 📊 **Arquitetura Detalhada**
+
+### 🏛️ **Visão Geral da Arquitetura**
+
+Para diagramas completos e detalhados da arquitetura, incluindo:
+- **Deployment Kubernetes** com especificações de recursos
+- **Fluxos síncronos e assíncronos** de processamento
+- **Arquitetura Hexagonal interna** dos microserviços
+- **Estratégias de roteamento** de tópicos Kafka
+- **Monitoramento e observabilidade** completos
+
+**👉 [Visualizar Diagramas Completos](./docs/DIAGRAMAS_ARQUITETURA_COMPLETOS.md)**
+
+### 🏗️ **Diagrama Simplificado**
 
 ```mermaid
 graph TB
