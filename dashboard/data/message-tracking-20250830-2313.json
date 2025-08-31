@@ -1,0 +1,2973 @@
+﻿{
+    "Messages":  [
+                     {
+                         "URL":  "MOCK",
+                         "Id":  1,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606406769)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  63,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  2,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606407047)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  6,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  3,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606407291)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  4,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606407522)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  5,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606407753)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  33,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  6,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606407984)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  37,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  7,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606408216)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  8,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606408446)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  9,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606408677)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  10,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606408907)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  11,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606409139)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  67,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  12,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606409385)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  13,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606409618)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  0,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  14,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606409849)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  15,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606410082)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  16,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606410314)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  17,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606410543)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  18,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606410773)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  19,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606411005)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  20,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606411236)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  73,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  21,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606411482)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  22,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606411712)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  23,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606411947)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  0,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  24,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606412179)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  2,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  25,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606412409)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  0,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  26,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606412642)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  37,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  27,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606412874)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  28,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606413102)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  29,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606413338)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  47,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  30,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606413569)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  31,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606413798)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  32,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606414031)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  34,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  33,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606414277)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  34,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606414507)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  35,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606414738)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  36,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606414968)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  0,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  37,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606415199)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  0,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  38,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606415431)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  64,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  39,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606415661)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  40,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606415894)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  41,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606416126)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  65,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  42,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606416357)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  43,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606416591)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  44,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606416824)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  45,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606417055)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  46,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606417286)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  47,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606417515)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  48,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606417747)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  2,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  49,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606417976)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  50,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606418209)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  37,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  51,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606418438)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  66,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  52,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606418672)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  53,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606418907)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  54,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606419140)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  55,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606419375)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  0,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  56,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606419607)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  57,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606419838)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  0,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  58,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606420071)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  59,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606420303)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  60,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606420537)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  61,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606420769)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  5,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  62,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606421002)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  63,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606421232)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  0,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  64,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606421465)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  50,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  65,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606421696)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  66,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606421933)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  67,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606422167)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  69,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  68,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606422399)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  69,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606422629)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  35,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  70,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606422861)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  71,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606423095)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  72,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606423326)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  73,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606423573)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  74,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606423805)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  75,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606424033)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  76,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606424263)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  52,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  77,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606424495)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  49,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  78,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606424726)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  79,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606424959)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  80,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606425190)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  81,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606425420)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  67,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  82,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606425664)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  83,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606425895)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  0,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  84,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606426127)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  85,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606426359)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  63,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  86,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606426603)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  68,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  87,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606426836)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  88,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606427065)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  89,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606427298)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  65,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  90,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606427529)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  91,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606427761)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  63,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  92,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606428005)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  93,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606428235)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  94,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606428466)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "MOCK",
+                         "Id":  95,
+                         "Error":  null,
+                         "ResponseSize":  29,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606428697)\/",
+                         "Component":  "StocksAPI",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  51,
+                         "Endpoint":  "stocks",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  96,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606428931)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  97,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606429163)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/test",
+                         "Id":  98,
+                         "Error":  null,
+                         "ResponseSize":  122,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606429395)\/",
+                         "Component":  "TestEndpoint",
+                         "ProcessingNode":  "Node-1",
+                         "Latency":  1,
+                         "Endpoint":  "test",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/health",
+                         "Id":  99,
+                         "Error":  null,
+                         "ResponseSize":  67,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606429625)\/",
+                         "Component":  "ActuatorHealth",
+                         "ProcessingNode":  "Node-2",
+                         "Latency":  1,
+                         "Endpoint":  "health",
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "URL":  "http://localhost:8080/actuator/info",
+                         "Id":  100,
+                         "Error":  null,
+                         "ResponseSize":  141,
+                         "Success":  true,
+                         "Timestamp":  "\/Date(1756606429857)\/",
+                         "Component":  "ActuatorInfo",
+                         "ProcessingNode":  "Node-3",
+                         "Latency":  1,
+                         "Endpoint":  "info",
+                         "Hash":  {
+
+                                  }
+                     }
+                 ],
+    "Components":  {
+                       "TestEndpoint":  {
+                                            "SuccessfulMessages":  24,
+                                            "TotalMessages":  24,
+                                            "MessageHashes":  [
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  }
+                                                              ],
+                                            "AverageLatency":  0,
+                                            "IsMocked":  false,
+                                            "Status":  "AVAILABLE",
+                                            "SuccessRate":  100
+                                        },
+                       "ActuatorHealth":  {
+                                              "SuccessfulMessages":  33,
+                                              "TotalMessages":  33,
+                                              "MessageHashes":  [
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    },
+                                                                    {
+                                                                        "Hash":  null,
+                                                                        "Success":  null,
+                                                                        "Latency":  null
+                                                                    }
+                                                                ],
+                                              "AverageLatency":  0,
+                                              "IsMocked":  false,
+                                              "Status":  "AVAILABLE",
+                                              "SuccessRate":  100
+                                          },
+                       "ActuatorInfo":  {
+                                            "SuccessfulMessages":  20,
+                                            "TotalMessages":  20,
+                                            "MessageHashes":  [
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  },
+                                                                  {
+                                                                      "Hash":  null,
+                                                                      "Success":  null,
+                                                                      "Latency":  null
+                                                                  }
+                                                              ],
+                                            "AverageLatency":  0,
+                                            "IsMocked":  false,
+                                            "Status":  "AVAILABLE",
+                                            "SuccessRate":  100
+                                        },
+                       "StocksAPI":  {
+                                         "SuccessfulMessages":  23,
+                                         "TotalMessages":  23,
+                                         "MessageHashes":  [
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               },
+                                                               {
+                                                                   "Hash":  null,
+                                                                   "Success":  null,
+                                                                   "Latency":  null
+                                                               }
+                                                           ],
+                                         "AverageLatency":  0,
+                                         "IsMocked":  true,
+                                         "Status":  "UNAVAILABLE",
+                                         "SuccessRate":  100
+                                     }
+                   },
+    "ProcessingDistribution":  {
+                                   "":  {
+                                            "ComponentBreakdown":  {
+                                                                       "Count":  100,
+                                                                       "Component":  ""
+                                                                   },
+                                            "SuccessfulMessages":  100,
+                                            "TotalMessages":  100
+                                        }
+                               },
+    "Summary":  {
+                    "Success":  100,
+                    "Failed":  0,
+                    "Total":  100
+                },
+    "Timeline":  [
+                     {
+                         "Latency":  63,
+                         "Time":  "\/Date(1756606406769)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  6,
+                         "Time":  "\/Date(1756606407047)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606407291)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606407522)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  33,
+                         "Time":  "\/Date(1756606407753)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  37,
+                         "Time":  "\/Date(1756606407984)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606408216)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606408446)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606408677)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606408907)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  67,
+                         "Time":  "\/Date(1756606409139)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606409385)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  0,
+                         "Time":  "\/Date(1756606409618)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606409849)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606410082)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606410314)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606410543)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606410773)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606411005)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  73,
+                         "Time":  "\/Date(1756606411236)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606411482)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606411712)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  0,
+                         "Time":  "\/Date(1756606411947)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  2,
+                         "Time":  "\/Date(1756606412179)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  0,
+                         "Time":  "\/Date(1756606412409)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  37,
+                         "Time":  "\/Date(1756606412642)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606412874)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606413102)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  47,
+                         "Time":  "\/Date(1756606413338)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606413569)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606413798)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  34,
+                         "Time":  "\/Date(1756606414031)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606414277)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606414507)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606414738)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  0,
+                         "Time":  "\/Date(1756606414968)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  0,
+                         "Time":  "\/Date(1756606415199)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  64,
+                         "Time":  "\/Date(1756606415431)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606415661)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606415894)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  65,
+                         "Time":  "\/Date(1756606416126)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606416357)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606416591)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606416824)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606417055)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606417286)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606417515)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  2,
+                         "Time":  "\/Date(1756606417747)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606417976)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  37,
+                         "Time":  "\/Date(1756606418209)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  66,
+                         "Time":  "\/Date(1756606418438)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606418672)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606418907)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606419140)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  0,
+                         "Time":  "\/Date(1756606419375)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606419607)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  0,
+                         "Time":  "\/Date(1756606419838)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606420071)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606420303)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606420537)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  5,
+                         "Time":  "\/Date(1756606420769)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606421002)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  0,
+                         "Time":  "\/Date(1756606421232)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  50,
+                         "Time":  "\/Date(1756606421465)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606421696)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606421933)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  69,
+                         "Time":  "\/Date(1756606422167)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606422399)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  35,
+                         "Time":  "\/Date(1756606422629)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606422861)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606423095)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606423326)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606423573)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606423805)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606424033)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  52,
+                         "Time":  "\/Date(1756606424263)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  49,
+                         "Time":  "\/Date(1756606424495)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606424726)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606424959)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606425190)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  67,
+                         "Time":  "\/Date(1756606425420)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606425664)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  0,
+                         "Time":  "\/Date(1756606425895)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606426127)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  63,
+                         "Time":  "\/Date(1756606426359)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  68,
+                         "Time":  "\/Date(1756606426603)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606426836)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606427065)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  65,
+                         "Time":  "\/Date(1756606427298)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606427529)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  63,
+                         "Time":  "\/Date(1756606427761)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606428005)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606428235)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606428466)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  51,
+                         "Time":  "\/Date(1756606428697)\/",
+                         "Component":  "StocksAPI",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606428931)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606429163)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606429395)\/",
+                         "Component":  "TestEndpoint",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606429625)\/",
+                         "Component":  "ActuatorHealth",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     },
+                     {
+                         "Latency":  1,
+                         "Time":  "\/Date(1756606429857)\/",
+                         "Component":  "ActuatorInfo",
+                         "Success":  true,
+                         "Hash":  {
+
+                                  }
+                     }
+                 ],
+    "TestMetadata":  {
+                         "Timestamp":  "2025-08-30 23:13:50",
+                         "TotalRequests":  100,
+                         "SuccessRate":  100,
+                         "Type":  "MessageTracking",
+                         "Throughput":  4.33,
+                         "TimeWindow":  20,
+                         "Port":  8080,
+                         "ActualDuration":  23.1183211
+                     }
+}
