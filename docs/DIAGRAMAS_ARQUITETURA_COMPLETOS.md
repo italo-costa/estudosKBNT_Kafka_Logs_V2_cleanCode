@@ -326,42 +326,24 @@ graph TB
     ACL_POD1 --> POSTGRES_PRIMARY
     ACL_POD2 --> POSTGRES_REPLICA1
     
-    %% Monitoring
-    VS_POD1 -.-> PROMETHEUS
-    VS_POD2 -.-> PROMETHEUS  
-    VS_POD3 -.-> PROMETHEUS
-    ACL_POD1 -.-> PROMETHEUS
-    ACL_POD2 -.-> PROMETHEUS
-    KAFKA_POD1 -.-> PROMETHEUS
-    
-    PROMETHEUS --> GRAFANA
-    PROMETHEUS --> ALERTMANAGER
-    
-    %% HPA connections
-    VS_HPA -.-> VS_POD1
-    VS_HPA -.-> VS_POD2
-    VS_HPA -.-> VS_POD3
-    ACL_HPA -.-> ACL_POD1
-    ACL_HPA -.-> ACL_POD2
-    
-    %% Security
-    SECRETS -.-> VS_POD1
-    SECRETS -.-> ACL_POD1
-    CONFIG_MAPS -.-> VS_POD1
-    CONFIG_MAPS -.-> ACL_POD1
-    
-    %% Cloud alternatives
-    RDS -.->|Alternative| POSTGRES_PRIMARY
-    MSK -.->|Alternative| KAFKA_POD1
-    CLOUDWATCH -.->|Alternative| PROMETHEUS
-```
+    ```mermaid
+    graph TB
+        TEST_HEADER["Teste 1000 mensagens | Score: 96/100 | Throughput: 15.66 msg/s | Confiabilidade: 98.7%"]
+        POSTGRES["PostgreSQL 15 | RUNNING | 1000+ transações"]
+        KAFKA_CLUSTER["Kafka Cluster | RUNNING | 987 msgs"]
+        ZK["Zookeeper | RUNNING"]
+        VIRTUAL_STOCK["Virtual Stock Service | 8080 | 550 req"]
+        CONSUMER_SVC["Stock Consumer Service | 8081 | 950 msgs"]
+        LOG_SERVICE["Log Service | 8082 | 437 logs"]
 
-## 2. Fluxo de Processamento de Logs - Sequência Completa
-
-```mermaid
-sequenceDiagram
-    participant C as Client App
-    participant LB as Load Balancer
+        KAFKA_CLUSTER --> VIRTUAL_STOCK
+        KAFKA_CLUSTER --> CONSUMER_SVC
+        KAFKA_CLUSTER --> LOG_SERVICE
+        VIRTUAL_STOCK --> POSTGRES
+        CONSUMER_SVC --> POSTGRES
+        LOG_SERVICE --> POSTGRES
+        ZK --> KAFKA_CLUSTER
+    ```
     participant P1 as Producer-1
     participant P2 as Producer-2
     participant KT as Kafka Topics
