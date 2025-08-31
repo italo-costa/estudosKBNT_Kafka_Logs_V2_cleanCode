@@ -1005,22 +1005,22 @@ graph TB
 
 ```mermaid
 graph TB
-    subgraph "🎯 TESTE REAL - RESULTADOS VALIDADOS"
-        TEST_HEADER["🚀 TESTE DE 1000 MENSAGENS<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📊 Score Final: 96/100 (EXCELENTE)<br/>⚡ Throughput: 15.66 msg/s<br/>🛡️ Confiabilidade: 98.7%<br/>✅ Sistema validado para produção"]
+    subgraph "TESTE REAL - RESULTADOS VALIDADOS"
+        TEST_HEADER["TESTE DE 1000 MENSAGENS<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>Score Final: 96/100 (EXCELENTE)<br/>Throughput: 15.66 msg/s<br/>Confiabilidade: 98.7%<br/>Sistema validado para produção"]
         style TEST_HEADER fill:#e8f5e8,stroke:#4caf50,stroke-width:5px,color:#000
     end
 
-    subgraph "🏗️ INFRAESTRUTURA TESTADA - 100% OPERACIONAL"
+    subgraph "INFRAESTRUTURA TESTADA - 100% OPERACIONAL"
         subgraph "Database_Layer_Critical_Business"
-            POSTGRES["🗄️ PostgreSQL 15<br/>━━━━━━━━━━━━━━━━━━━━━<br/>📍 Status: RUNNING ✅<br/>🔗 localhost:5432<br/>💾 kbnt_consumption_db<br/>📊 1000+ transações executadas<br/>⚡ Latência: < 5ms<br/>🎯 INTERESSE CRÍTICO"]
+            POSTGRES["PostgreSQL 15<br/>━━━━━━━━━━━━━━━━━━━━━<br/>Status: RUNNING<br/>localhost:5432<br/>kbnt_consumption_db<br/>1000+ transações executadas<br/>Latência: < 5ms<br/>INTERESSE CRÍTICO"]
             style POSTGRES fill:#1a472a,stroke:#22c55e,stroke-width:6px,color:#ffffff
         end
         
         subgraph "Messaging_Layer_High_Volume"
-            KAFKA_CLUSTER["🔥 Kafka Cluster (AMQ Streams)<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>📍 Status: RUNNING ✅<br/>🔗 localhost:9092<br/>📊 987 mensagens processadas<br/>⚡ Zero perda de mensagens<br/>🎯 INTERESSE ALTO<br/>💼 Core Business Component"]
+            KAFKA_CLUSTER["Kafka Cluster (AMQ Streams)<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>Status: RUNNING<br/>localhost:9092<br/>987 mensagens processadas<br/>Zero perda de mensagens<br/>INTERESSE ALTO<br/>Core Business Component"]
             style KAFKA_CLUSTER fill:#1f2937,stroke:#f59e0b,stroke-width:5px,color:#ffffff
             
-            ZK["🔧 Zookeeper<br/>━━━━━━━━━━━━━━━━━━━━━<br/>📍 Status: RUNNING ✅<br/>🔗 localhost:2181<br/>📊 Coordenação de cluster<br/>⚡ Alta disponibilidade<br/>🎯 INTERESSE MÉDIO"]
+            ZK["Zookeeper<br/>━━━━━━━━━━━━━━━━━━━━━<br/>Status: RUNNING<br/>localhost:2181<br/>Coordenação de cluster<br/>Alta disponibilidade<br/>INTERESSE MÉDIO"]
             style ZK fill:#374151,stroke:#6b7280,stroke-width:3px,color:#ffffff
         end
     end
