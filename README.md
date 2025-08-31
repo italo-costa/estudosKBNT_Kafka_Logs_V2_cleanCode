@@ -3,7 +3,11 @@
 [![Architecture](https://img.shields.io/badge/Architecture-Hexagonal-blue)](docs/HEXAGONAL_ARCHITECTURE.md)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7+-green)](https://spring.io/projects/spring-boot)
 [![Kafka](https://img.shields.io/badge/Kafka-Red%20Hat%20AMQ%20Streams-red)](https://www.redhat.com/en/technologies/cloud-computing/openshift/cloud-services/amq)
-[![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue)](https://www.postgresql.org/)
+[![PostgreSQL](https://img.shields.io/badge/Databa        subgraph "🔌 Output Adapters"
+            KAFKA_PUB[🔥 KafkaPublisherAdapter<br/>**🚀 OutputAdapter: EventPublishingAdapter**<br/>Event Publishing - Spring Kafka 3.0<br/>🎯 Responsibility: Message Broker Integration]
+            JPA_REPO[🗄️ JpaRepositoryAdapter<br/>**💾 OutputAdapter: PersistenceAdapter**<br/>Data Persistence - Spring Data JPA<br/>🎯 Responsibility: Database Operations]
+            PROMETHEUS[📊 PrometheusAdapter<br/>**📈 OutputAdapter: MetricsAdapter**<br/>Metrics - Micrometer + Prometheus<br/>🎯 Responsibility: Observability Data Export]
+        endstgreSQL-blue)](https://www.postgresql.org/)
 
 Sistema distribuído de microserviços para gerenciamento de estoque virtual implementando arquitetura hexagonal e padrões DDD (Domain-Driven Design) com comunicação via Red Hat AMQ Streams (Kafka).
 
@@ -467,19 +471,19 @@ graph TB
     
     subgraph "🏛️ Virtual Stock Service (Hexagonal Architecture)"
         subgraph "🔌 Input Adapters"
-            REST_CTRL[🌐 VirtualStockController<br/>@RestController]
-            HEALTH_CTRL[💚 HealthController<br/>@RestController]
+            REST_CTRL[🌐 VirtualStockController<br/>**📋 InputPort: StockManagementInputPort**<br/>@RestController - Spring Boot 3.2<br/>🎯 Responsibility: HTTP Request Handling]
+            HEALTH_CTRL[💚 HealthController<br/>**📋 InputPort: HealthCheckInputPort**<br/>@RestController - Spring Actuator<br/>🎯 Responsibility: Health Monitoring]
         end
         
         subgraph "🎯 Domain Core"
-            STOCK_AGG[📦 Stock Aggregate<br/>Business Logic]
-            STOCK_EVENT[📢 StockUpdatedEvent<br/>Domain Events]
-            BIZ_RULES[📋 Business Rules<br/>canReserve, isLowStock]
+            STOCK_AGG[📦 Stock Aggregate<br/>**🏛️ AggregateRoot: StockAggregate**<br/>Business Logic - Pure Java 17<br/>🎯 Responsibility: Business Rules Enforcement]
+            STOCK_EVENT[📢 StockUpdatedEvent<br/>**📤 DomainEvent: StockDomainEvent**<br/>Domain Events - Event Sourcing<br/>🎯 Responsibility: Domain State Changes]
+            BIZ_RULES[📋 Business Rules<br/>**⚖️ DomainService: StockBusinessRules**<br/>canReserve, isLowStock - Pure Logic<br/>🎯 Responsibility: Business Validation]
         end
         
         subgraph "⚙️ Application Layer"
-            STOCK_UC[🎯 StockManagementUseCase<br/>Use Cases]
-            EVENT_PUB[📤 StockEventPublisher<br/>Event Orchestration]
+            STOCK_UC[🎯 StockManagementUseCase<br/>**🔄 ApplicationService: StockApplicationService**<br/>Use Cases - Spring @Service<br/>🎯 Responsibility: Business Workflow Orchestration]
+            EVENT_PUB[📤 StockEventPublisher<br/>**📡 OutputPort: EventPublisherOutputPort**<br/>Event Orchestration - Async Publishing<br/>🎯 Responsibility: Domain Event Distribution]
         end
         
         subgraph "� Output Adapters"
@@ -489,15 +493,15 @@ graph TB
         end
     end
     
-    subgraph "🔥 Red Hat AMQ Streams"
-        TOPIC_STOCK[📢 virtual-stock-updates<br/>Main Events]
-        TOPIC_HIGH[⚡ high-priority-updates<br/>Critical Events]
+    subgraph "🔥 Red Hat AMQ Streams - Event Backbone"
+        TOPIC_STOCK[📢 **TopicManager: StockEventsManager**<br/>virtual-stock-events Topic - Apache Kafka 3.5.0<br/>🔄 Partitions: 6, Replication: 3<br/>🎯 **Responsibility: Main Business Events Distribution**]
+        TOPIC_HIGH[⚡ **TopicManager: HighPriorityEventsManager**<br/>high-priority-events Topic - Apache Kafka 3.5.0<br/>🔄 Partitions: 3, Replication: 3<br/>🎯 **Responsibility: Critical Trading Events**]
     end
     
-    subgraph "🛡️ ACL Virtual Stock Service"
-        KAFKA_CONS[🔥 KafkaConsumerAdapter<br/>Event Processing]
-        MSG_PROC[⚙️ MessageProcessingService<br/>Business Logic]
-        EXT_CLIENT[🌐 ExternalApiClient<br/>Third-party Integration]
+    subgraph "🛡️ ACL Virtual Stock Service - Anti-Corruption Layer"
+        KAFKA_CONS[🔥 KafkaConsumerAdapter<br/>**📥 InputAdapter: EventConsumerAdapter**<br/>Event Processing - Spring @KafkaListener<br/>🎯 **Responsibility: External Event Consumption**]
+        MSG_PROC[⚙️ MessageProcessingService<br/>**🛡️ ApplicationService: AntiCorruptionService**<br/>Business Logic - Data Translation<br/>🎯 **Responsibility: Format Translation and Validation**]
+        EXT_CLIENT[🌐 ExternalApiClient<br/>**🔗 OutputAdapter: IntegrationAdapter**<br/>Third-party Integration - Spring WebClient<br/>🎯 **Responsibility: External System Communication**]
     end
     
     subgraph "💾 Data Layer"

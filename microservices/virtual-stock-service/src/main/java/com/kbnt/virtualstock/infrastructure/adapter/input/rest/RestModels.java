@@ -1,17 +1,22 @@
 package com.kbnt.virtualstock.infrastructure.adapter.input.rest;
 
-import com.kbnt.virtualstock.domain.model.Stock;
-import lombok.Builder;
-import lombok.Getter;
-
-import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import javax.validation.constraints.*;
+
+import com.kbnt.virtualstock.domain.model.Stock;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * REST API Request/Response DTOs
  */
 
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateStockRequest {
     @NotBlank(message = "Product ID is required")
     private String productId;
@@ -36,7 +41,10 @@ public class CreateStockRequest {
     private String createdBy;
 }
 
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UpdateQuantityRequest {
     @NotNull(message = "New quantity is required")
     @Min(value = 0, message = "New quantity must be non-negative")
@@ -48,7 +56,10 @@ public class UpdateQuantityRequest {
     private String reason;
 }
 
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UpdatePriceRequest {
     @NotNull(message = "New price is required")
     @DecimalMin(value = "0.0", inclusive = false, message = "New price must be positive")
@@ -60,7 +71,10 @@ public class UpdatePriceRequest {
     private String reason;
 }
 
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReserveStockRequest {
     @NotNull(message = "Quantity to reserve is required")
     @Min(value = 1, message = "Quantity to reserve must be positive")
@@ -72,8 +86,10 @@ public class ReserveStockRequest {
     private String reason;
 }
 
-@Getter
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class StockResponse {
     private final String stockId;
     private final String productId;
@@ -106,16 +122,20 @@ public class StockResponse {
     }
 }
 
-@Getter
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class StockReservationResponse {
     private final StockResponse stock;
     private final Integer reservedQuantity;
     private final String reservedAt;
 }
 
-@Getter
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ApiResponse<T> {
     private final boolean success;
     private final T data;

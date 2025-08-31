@@ -164,13 +164,20 @@
                 </configuration>
             </plugin>
 
-            <!-- Compiler Plugin -->
+            <!-- LOMBOK FIX: Maven Compiler Plugin with enhanced configuration -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <encoding>UTF-8</encoding>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                        <arg>-Xlint:unchecked</arg>
+                        <arg>-Xlint:deprecation</arg>
+                    </compilerArgs>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -178,6 +185,8 @@
                             <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
+                    <proc>full</proc>
+                    <generatedSourcesDirectory>${project.build.directory}/generated-sources/annotations</generatedSourcesDirectory>
                 </configuration>
             </plugin>
 

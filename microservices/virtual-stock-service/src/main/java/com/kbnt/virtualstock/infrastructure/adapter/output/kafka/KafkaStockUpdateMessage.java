@@ -1,12 +1,12 @@
 package com.kbnt.virtualstock.infrastructure.adapter.output.kafka;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * Kafka Stock Update Message

@@ -1,12 +1,14 @@
 package com.kbnt.virtualstock.domain.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * Stock Domain Entity - Core business domain model
@@ -15,19 +17,21 @@ import java.util.Objects;
  * This is the central aggregate root for stock operations.
  */
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Stock {
     
-    private final StockId stockId;
-    private final ProductId productId;
-    private final String symbol;
-    private final String productName;
-    private final Integer quantity;
-    private final BigDecimal unitPrice;
-    private final StockStatus status;
-    private final LocalDateTime lastUpdated;
-    private final String lastUpdatedBy;
+    private StockId stockId;
+    private ProductId productId;
+    private String symbol;
+    private String productName;
+    private Integer quantity;
+    private BigDecimal unitPrice;
+    private StockStatus status;
+    private LocalDateTime lastUpdated;
+    private String lastUpdatedBy;
     
     /**
      * Stock Value Object - Unique identifier
@@ -35,8 +39,11 @@ public class Stock {
     @Getter
     @Builder
     @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @EqualsAndHashCode
     public static class StockId {
-        private final String value;
+        private String value;
         
         public static StockId generate() {
             return StockId.builder()
@@ -64,8 +71,11 @@ public class Stock {
     @Getter
     @Builder
     @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @EqualsAndHashCode
     public static class ProductId {
-        private final String value;
+        private String value;
         
         public static ProductId of(String productId) {
             return ProductId.builder()

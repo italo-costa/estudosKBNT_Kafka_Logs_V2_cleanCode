@@ -1,11 +1,13 @@
 package com.kbnt.virtualstock.domain.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * Stock Updated Domain Event
@@ -16,6 +18,11 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @ToString
+@Getter
+@Builder
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class StockUpdatedEvent {
     
     private final String eventId;

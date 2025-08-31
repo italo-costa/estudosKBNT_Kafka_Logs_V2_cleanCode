@@ -35,65 +35,65 @@ graph TB
         end
         
         subgraph "Input_Ports"
-            STOCK_UC["StockManagementUseCase<br/>Interface<br/>Business operations"]
-            HEALTH_PORT["HealthCheckPort<br/>Interface<br/>System health"]
+            STOCK_UC["**📋 InputPort: StockManagementInputPort**<br/>Interface - Business operations<br/>🎯 Responsibility: Use Case Definition"]
+            HEALTH_PORT["**🏥 InputPort: HealthCheckInputPort**<br/>Interface - System health<br/>🎯 Responsibility: Health Monitoring"]
         end
         
         subgraph "Application_Layer"
-            STOCK_APP["StockApplicationService<br/>Service<br/>Orchestrates use cases"]
-            EVENT_PUB["StockEventPublisher<br/>Service<br/>Domain events"]
-            VALIDATION["ValidationService<br/>Service<br/>Business validation"]
+            STOCK_APP["**⚙️ ApplicationService: StockApplicationService**<br/>Service - Orchestrates use cases<br/>🎯 Responsibility: Business Workflow Coordination"]
+            EVENT_PUB["**📡 OutputPort: StockEventPublisher**<br/>Service - Domain events<br/>🎯 Responsibility: Event Broadcasting"]
+            VALIDATION["**✅ ApplicationService: ValidationService**<br/>Service - Business validation<br/>🎯 Responsibility: Data Integrity"]
         end
         
         subgraph "Domain_Core"
-            STOCK_AGG["Stock Aggregate<br/>Root Entity<br/>stockId productId quantity"]
-            STOCK_EVENT["StockUpdatedEvent<br/>Domain Event<br/>CREATE UPDATE RESERVE"]
-            VALUE_OBJ["Value Objects<br/>StockId ProductId<br/>Immutable"]
-            BIZ_RULES["Business Rules<br/>canReserve isLowStock<br/>Domain logic"]
+            STOCK_AGG["**🏛️ AggregateRoot: Stock Aggregate**<br/>Root Entity - stockId productId quantity<br/>🎯 Responsibility: Business Logic Core"]
+            STOCK_EVENT["**📤 DomainEvent: StockUpdatedEvent**<br/>Domain Event - CREATE UPDATE RESERVE<br/>🎯 Responsibility: Domain State Changes"]
+            VALUE_OBJ["**💎 ValueObject: StockId ProductId**<br/>Immutable Objects<br/>🎯 Responsibility: Data Encapsulation"]
+            BIZ_RULES["**⚖️ DomainService: Business Rules**<br/>canReserve isLowStock - Domain logic<br/>🎯 Responsibility: Business Validation"]
         end
         
         subgraph "Output_Ports"
-            REPO_PORT["StockRepository<br/>Interface<br/>Persistence"]
-            EVENT_PORT["EventPublisherPort<br/>Interface<br/>Event publishing"]
-            METRICS_PORT["MetricsPort<br/>Interface<br/>Metrics collection"]
+            REPO_PORT["**💾 OutputPort: StockRepositoryPort**<br/>Interface - Persistence<br/>🎯 Responsibility: Data Storage Contract"]
+            EVENT_PORT["**📡 OutputPort: EventPublisherPort**<br/>Interface - Event publishing<br/>🎯 Responsibility: Event Distribution Contract"]
+            METRICS_PORT["**📊 OutputPort: MetricsPort**<br/>Interface - Metrics collection<br/>🎯 Responsibility: Observability Contract"]
         end
         
         subgraph "Output_Adapters"
-            JPA_REPO["JpaRepositoryAdapter<br/>Repository<br/>PostgreSQL"]
-            KAFKA_PUB["KafkaPublisherAdapter<br/>Service<br/>Message publishing"]
-            PROMETHEUS["PrometheusAdapter<br/>Component<br/>Metrics export"]
+            JPA_REPO["**🗄️ OutputAdapter: JpaRepositoryAdapter**<br/>Repository - PostgreSQL<br/>🎯 Responsibility: Database Integration"]
+            KAFKA_PUB["**🚀 OutputAdapter: KafkaPublisherAdapter**<br/>Service - Message publishing<br/>🎯 Responsibility: Event Streaming"]
+            PROMETHEUS["**📈 OutputAdapter: PrometheusAdapter**<br/>Component - Metrics export<br/>🎯 Responsibility: Metrics Collection"]
         end
     end
     
     subgraph "AMQ_Streams"
-        TOPIC_STOCK["virtual-stock-updates<br/>Partitions 3<br/>Main events"]
-        TOPIC_HIGH["high-priority-updates<br/>Partitions 3<br/>Critical events"]
-        TOPIC_RETRY["retry-topic<br/>Partitions 3<br/>Failed messages"]
-        TOPIC_DLT["dead-letter-topic<br/>Partitions 1<br/>Unprocessable"]
+        TOPIC_STOCK["**📢 TopicManager: StockEventsManager**<br/>virtual-stock-updates - Partitions 3<br/>🎯 **Responsibility: Main Business Events**"]
+        TOPIC_HIGH["**⚡ TopicManager: HighPriorityEventsManager**<br/>high-priority-updates - Partitions 3<br/>🎯 **Responsibility: Critical Trading Events**"]
+        TOPIC_RETRY["**🔄 TopicManager: RetryTopicManager**<br/>retry-topic - Partitions 3<br/>🎯 **Responsibility: Failed Message Recovery**"]
+        TOPIC_DLT["**💀 TopicManager: DeadLetterTopicManager**<br/>dead-letter-topic - Partitions 1<br/>🎯 **Responsibility: Unprocessable Messages**"]
     end
     
     subgraph "ACL_Virtual_Stock_Service"
         subgraph "Input_Adapters_ACL"
-            KAFKA_CONS["KafkaConsumerAdapter<br/>KafkaListener<br/>Stock events"]
-            HEALTH_ACL["HealthController<br/>RestController<br/>Service health"]
+            KAFKA_CONS["**📥 InputAdapter: KafkaConsumerAdapter**<br/>KafkaListener - Stock events<br/>🎯 **Responsibility: Event Consumption**"]
+            HEALTH_ACL["**🏥 InputAdapter: HealthController**<br/>RestController - Service health<br/>🎯 **Responsibility: Health Monitoring**"]
         end
         
         subgraph "Application_Layer_ACL"
-            MSG_PROC["MessageProcessingService<br/>Service<br/>Process events"]
-            TRANS_SERVICE["TranslationService<br/>Service<br/>Format conversion"]
-            API_INT["ExternalApiIntegration<br/>Service<br/>Third-party"]
+            MSG_PROC["**🛡️ ApplicationService: MessageProcessingService**<br/>Service - Process events<br/>🎯 **Responsibility: Event Processing Orchestration**"]
+            TRANS_SERVICE["**🔄 ApplicationService: TranslationService**<br/>Service - Format conversion<br/>🎯 **Responsibility: Data Format Translation**"]
+            API_INT["**🔗 ApplicationService: ExternalApiIntegration**<br/>Service - Third-party<br/>🎯 **Responsibility: External System Coordination**"]
         end
         
         subgraph "Domain_Core_ACL"
-            EXT_STOCK["ExternalStockIntegration<br/>Domain Model<br/>External system"]
-            AUDIT_LOG["ConsumptionLog<br/>Entity<br/>Audit trail"]
-            TRANS_RULES["TranslationRules<br/>Logic<br/>Conversion rules"]
+            EXT_STOCK["**🏛️ AggregateRoot: ExternalStockIntegration**<br/>Domain Model - External system<br/>🎯 **Responsibility: External Data Management**"]
+            AUDIT_LOG["**📋 Entity: ConsumptionLog**<br/>Entity - Audit trail<br/>🎯 **Responsibility: Processing History**"]
+            TRANS_RULES["**⚖️ DomainService: TranslationRules**<br/>Logic - Conversion rules<br/>🎯 **Responsibility: Translation Validation**"]
         end
         
         subgraph "Output_Adapters_ACL"
-            POSTGRES_ACL["PostgreSQLAdapter<br/>Repository<br/>Audit data"]
-            EXT_CLIENT["ExternalApiClient<br/>Service<br/>HTTP client"]
-            ELASTIC_ACL["ElasticsearchAdapter<br/>Service<br/>Log aggregation"]
+            POSTGRES_ACL["**💾 OutputAdapter: PostgreSQLAdapter**<br/>Repository - Audit data<br/>🎯 **Responsibility: Audit Data Storage**"]
+            EXT_CLIENT["**🔗 OutputAdapter: ExternalApiClient**<br/>Service - HTTP client<br/>🎯 **Responsibility: External API Communication**"]
+            ELASTIC_ACL["**📊 OutputAdapter: ElasticsearchAdapter**<br/>Service - Log aggregation<br/>🎯 **Responsibility: Log Data Indexing**"]
         end
     end
     
