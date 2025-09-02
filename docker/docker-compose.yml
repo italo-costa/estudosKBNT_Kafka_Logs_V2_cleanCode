@@ -1,35 +1,139 @@
 version: '3.8'
 
 services:
+  kbnt-stock-consumer-service:
+    build: ../microservices/kbnt-stock-consumer-service
+    container_name: kbnt-stock-consumer-service
+    depends_on:
+      - kafka
+      - elasticsearch
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT=9200
+
+  kbnt-log-service:
+    build: ../microservices/kbnt-log-service
+    container_name: kbnt-log-service
+    depends_on:
+      - kafka
+      - elasticsearch
+    ports:
+      - "8082:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT=9200
+
+  log-analytics-service:
+    build: ../microservices/log-analytics-service
+    container_name: log-analytics-service
+    depends_on:
+      - kafka
+      - elasticsearch
+    ports:
+      - "8083:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT=9200
+
+  log-consumer-service:
+    build: ../microservices/log-consumer-service
+    container_name: log-consumer-service
+    depends_on:
+      - kafka
+      - elasticsearch
+    ports:
+      - "8084:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT=9200
+
+  log-producer-service:
+    build: ../microservices/log-producer-service
+    container_name: log-producer-service
+    depends_on:
+      - kafka
+      - elasticsearch
+    ports:
+      - "8085:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT=9200
+
+  virtual-stock-service:
+    build: ../microservices/virtual-stock-service
+    container_name: virtual-stock-service
+    depends_on:
+      - kafka
+      - elasticsearch
+      - postgres
+    ports:
+      - "8086:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT=9200
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=virtualstock
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+
+  api-gateway:
+    build: ../microservices/api-gateway
+    container_name: api-gateway
+    depends_on:
+      - kbnt-stock-consumer-service
+      - kbnt-log-service
+      - log-analytics-service
+      - log-consumer-service
+      - log-producer-service
+      - virtual-stock-service
+    ports:
+      - "8090:8080"  # Changed to avoid conflict with kafka-ui
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
   zookeeper:
-    image: registry.redhat.io/amq7/amq-streams-kafka-34-rhel8:2.4.0
-    hostname: zookeeper
+    image: confluentinc/cp-zookeeper:7.4.0
     container_name: zookeeper
-    command: ["/opt/kafka/bin/zookeeper-server-start.sh", "/opt/kafka/config/zookeeper.properties"]
     ports:
       - "2181:2181"
     environment:
-      KAFKA_OPTS: "-Djava.security.auth.login.config=/opt/kafka/config/zookeeper_jaas.conf"
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
     volumes:
       - zookeeper-data:/var/lib/zookeeper/data
       - zookeeper-logs:/var/lib/zookeeper/log
-      - ./config/zookeeper.properties:/opt/kafka/config/zookeeper.properties
 
   kafka:
-    image: registry.redhat.io/amq7/amq-streams-kafka-34-rhel8:2.4.0
-    hostname: kafka
+    image: confluentinc/cp-kafka:7.4.0
     container_name: kafka
     depends_on:
       - zookeeper
-    command: ["/opt/kafka/bin/kafka-server-start.sh", "/opt/kafka/config/server.properties"]
     ports:
       - "9092:9092"
-      - "9094:9094"
     environment:
-      KAFKA_OPTS: "-Djava.security.auth.login.config=/opt/kafka/config/kafka_server_jaas.conf"
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     volumes:
       - kafka-data:/var/lib/kafka/data
-      - ./config/server.properties:/opt/kafka/config/server.properties
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -66,19 +170,32 @@ services:
     ports:
       - "5601:5601"
 
-  logstash:
-    image: docker.elastic.co/logstash/logstash:8.8.0
-    container_name: logstash
-    depends_on:
-      - kafka
-      - elasticsearch
-    volumes:
-      - ./config/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+  # logstash:
+  #   image: docker.elastic.co/logstash/logstash:8.8.0
+  #   container_name: logstash
+  #   depends_on:
+  #     - kafka
+  #     - elasticsearch
+  #   volumes:
+  #     - ./config/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+  #   environment:
+  #     - "LS_JAVA_OPTS=-Xmx256m -Xms256m"
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
     environment:
-      - "LS_JAVA_OPTS=-Xmx256m -Xms256m"
+      POSTGRES_DB: virtualstock
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 
 volumes:
   zookeeper-data:
   zookeeper-logs:
   kafka-data:
   elasticsearch-data:
+  postgres-data:
