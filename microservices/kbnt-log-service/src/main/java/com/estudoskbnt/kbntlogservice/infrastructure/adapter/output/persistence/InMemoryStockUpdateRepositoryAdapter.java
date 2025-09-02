@@ -41,7 +41,7 @@ public class InMemoryStockUpdateRepositoryAdapter implements StockUpdateReposito
         return CompletableFuture.supplyAsync(() -> {
             try {
                 // Store by ID
-                stockUpdates.put(stockUpdate.getId(), stockUpdate);
+                stockUpdates.put(stockUpdate.getId().getValue(), stockUpdate);
                 
                 // Index by product ID for fast lookups
                 String productId = stockUpdate.getProductId().getValue();
@@ -62,40 +62,59 @@ public class InMemoryStockUpdateRepositoryAdapter implements StockUpdateReposito
     }
 
     @Override
-    public CompletableFuture<Optional<StockUpdate>> findById(String id) {
-        log.debug("🔍 Finding stock update by ID: {}", id);
+    public CompletableFuture<Optional<StockUpdate>> findById(StockUpdateId id) {
+        log.debug("🔍 Finding stock update by ID: {}", id.getValue());
         
         return CompletableFuture.supplyAsync(() -> {
             try {
-                Optional<StockUpdate> result = Optional.ofNullable(stockUpdates.get(id));
-                log.debug("🔍 Found stock update by ID {}: {}", id, result.isPresent());
+                Optional<StockUpdate> result = Optional.ofNullable(stockUpdates.get(id.getValue()));
+                log.debug("🔍 Found stock update by ID {}: {}", id.getValue(), result.isPresent());
                 return result;
                 
             } catch (Exception e) {
-                log.error("❌ Failed to find stock update by ID: {}", id, e);
+                log.error("❌ Failed to find stock update by ID: {}", id.getValue(), e);
                 throw new PersistenceException("Failed to find stock update: " + e.getMessage(), e);
             }
         });
     }
 
     @Override
-    public CompletableFuture<List<StockUpdate>> findByProductId(ProductId productId) {
-        log.debug("🔍 Finding stock updates by product ID: {}", productId.getValue());
+    public CompletableFuture<Optional<StockUpdate>> findLatestByProductId(ProductId productId) {
+        log.debug("🔍 Finding latest stock update by product ID: {}", productId.getValue());
         
         return CompletableFuture.supplyAsync(() -> {
             try {
-                List<StockUpdate> result = stockUpdatesByProduct.getOrDefault(productId.getValue(), new ArrayList<>());
-                log.debug("🔍 Found {} stock updates for product: {}", result.size(), productId.getValue());
-                return new ArrayList<>(result); // Return defensive copy
+                List<StockUpdate> updates = stockUpdatesByProduct.getOrDefault(productId.getValue(), new ArrayList<>());
+                Optional<StockUpdate> latest = updates.stream()
+                    .max((u1, u2) -> u1.getTimestamp().compareTo(u2.getTimestamp()));
+                log.debug("🔍 Found latest stock update for product {}: {}", productId.getValue(), latest.isPresent());
+                return latest;
                 
             } catch (Exception e) {
-                log.error("❌ Failed to find stock updates by product ID: {}", productId.getValue(), e);
-                throw new PersistenceException("Failed to find stock updates by product: " + e.getMessage(), e);
+                log.error("❌ Failed to find latest stock update by product ID: {}", productId.getValue(), e);
+                throw new PersistenceException("Failed to find latest stock update by product: " + e.getMessage(), e);
             }
         });
     }
 
     @Override
+    public CompletableFuture<Boolean> existsById(StockUpdateId id) {
+        log.debug("🔍 Checking if stock update exists by ID: {}", id.getValue());
+        
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                boolean exists = stockUpdates.containsKey(id.getValue());
+                log.debug("🔍 Stock update exists by ID {}: {}", id.getValue(), exists);
+                return exists;
+                
+            } catch (Exception e) {
+                log.error("❌ Failed to check stock update existence by ID: {}", id.getValue(), e);
+                throw new PersistenceException("Failed to check stock update existence: " + e.getMessage(), e);
+            }
+        });
+    }
+
+    // Additional convenience method (not part of interface)
     public CompletableFuture<List<StockUpdate>> findByLocation(DistributionCenter distributionCenter, Branch branch) {
         log.debug("🔍 Finding stock updates by location: {}-{}", 
                 distributionCenter.getCode(), branch.getCode());
@@ -116,7 +135,7 @@ public class InMemoryStockUpdateRepositoryAdapter implements StockUpdateReposito
         });
     }
 
-    @Override
+    // Additional convenience method (not part of interface)
     public CompletableFuture<List<StockUpdate>> findByCorrelationId(CorrelationId correlationId) {
         log.debug("🔍 Finding stock updates by correlation ID: {}", correlationId.getValue());
         
@@ -136,7 +155,7 @@ public class InMemoryStockUpdateRepositoryAdapter implements StockUpdateReposito
         });
     }
 
-    @Override
+    // Additional convenience method (not part of interface)
     public CompletableFuture<List<StockUpdate>> findByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         log.debug("🔍 Finding stock updates by date range: {} to {}", startDate, endDate);
         
@@ -144,10 +163,10 @@ public class InMemoryStockUpdateRepositoryAdapter implements StockUpdateReposito
             try {
                 List<StockUpdate> result = stockUpdates.values().stream()
                         .filter(update -> {
-                            LocalDateTime updateTime = update.getCreatedAt();
+                            LocalDateTime updateTime = update.getTimestamp();
                             return !updateTime.isBefore(startDate) && !updateTime.isAfter(endDate);
                         })
-                        .sorted(Comparator.comparing(StockUpdate::getCreatedAt).reversed())
+                        .sorted(Comparator.comparing(StockUpdate::getTimestamp).reversed())
                         .toList();
                         
                 log.debug("🔍 Found {} stock updates in date range: {} to {}", 
@@ -162,24 +181,7 @@ public class InMemoryStockUpdateRepositoryAdapter implements StockUpdateReposito
         });
     }
 
-    @Override
-    public CompletableFuture<Boolean> existsById(String id) {
-        log.debug("🔍 Checking if stock update exists by ID: {}", id);
-        
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                boolean exists = stockUpdates.containsKey(id);
-                log.debug("🔍 Stock update exists by ID {}: {}", id, exists);
-                return exists;
-                
-            } catch (Exception e) {
-                log.error("❌ Failed to check existence of stock update by ID: {}", id, e);
-                throw new PersistenceException("Failed to check stock update existence: " + e.getMessage(), e);
-            }
-        });
-    }
-
-    @Override
+    // Additional convenience method (not part of interface)
     public CompletableFuture<Long> countByProductId(ProductId productId) {
         log.debug("🔍 Counting stock updates by product ID: {}", productId.getValue());
         
@@ -197,18 +199,18 @@ public class InMemoryStockUpdateRepositoryAdapter implements StockUpdateReposito
     }
 
     @Override
-    public CompletableFuture<Void> deleteById(String id) {
-        log.debug("🗑️ Deleting stock update by ID: {}", id);
+    public CompletableFuture<Void> deleteById(StockUpdateId id) {
+        log.debug("🗑️ Deleting stock update by ID: {}", id.getValue());
         
         return CompletableFuture.runAsync(() -> {
             try {
-                StockUpdate removed = stockUpdates.remove(id);
+                StockUpdate removed = stockUpdates.remove(id.getValue());
                 if (removed != null) {
                     // Remove from product index
                     String productId = removed.getProductId().getValue();
                     List<StockUpdate> productUpdates = stockUpdatesByProduct.get(productId);
                     if (productUpdates != null) {
-                        productUpdates.removeIf(update -> update.getId().equals(id));
+                        productUpdates.removeIf(update -> update.getId().getValue().equals(id.getValue()));
                         if (productUpdates.isEmpty()) {
                             stockUpdatesByProduct.remove(productId);
                         }
@@ -218,25 +220,25 @@ public class InMemoryStockUpdateRepositoryAdapter implements StockUpdateReposito
                     String locationKey = createLocationKey(removed.getDistributionCenter(), removed.getBranch());
                     List<StockUpdate> locationUpdates = stockUpdatesByLocation.get(locationKey);
                     if (locationUpdates != null) {
-                        locationUpdates.removeIf(update -> update.getId().equals(id));
+                        locationUpdates.removeIf(update -> update.getId().getValue().equals(id.getValue()));
                         if (locationUpdates.isEmpty()) {
                             stockUpdatesByLocation.remove(locationKey);
                         }
                     }
                     
-                    log.debug("✅ Successfully deleted stock update: {}", id);
+                    log.debug("✅ Successfully deleted stock update: {}", id.getValue());
                 } else {
-                    log.debug("⚠️ Stock update not found for deletion: {}", id);
+                    log.debug("⚠️ Stock update not found for deletion: {}", id.getValue());
                 }
                 
             } catch (Exception e) {
-                log.error("❌ Failed to delete stock update by ID: {}", id, e);
+                log.error("❌ Failed to delete stock update by ID: {}", id.getValue(), e);
                 throw new PersistenceException("Failed to delete stock update: " + e.getMessage(), e);
             }
         });
     }
 
-    @Override
+    // Additional convenience method (not part of interface)
     public CompletableFuture<Void> deleteAll() {
         log.debug("🗑️ Deleting all stock updates");
         

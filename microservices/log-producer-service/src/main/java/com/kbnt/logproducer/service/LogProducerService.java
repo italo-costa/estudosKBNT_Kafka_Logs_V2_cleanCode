@@ -2,8 +2,8 @@ package com.kbnt.logproducer.service;
 
 import com.kbnt.logproducer.model.LogEntry;
 import com.kbnt.logproducer.config.EnhancedLoggingConfig;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -13,11 +13,14 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class LogProducerService {
 
     private final KafkaTemplate<String, LogEntry> kafkaTemplate;
+    
+    public LogProducerService(@Qualifier("logEntryKafkaTemplate") KafkaTemplate<String, LogEntry> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
     
     @Value("${app.kafka.topics.application-logs:application-logs}")
     private String applicationLogsTopic;

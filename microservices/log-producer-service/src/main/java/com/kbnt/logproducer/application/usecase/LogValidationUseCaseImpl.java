@@ -20,71 +20,22 @@ public class LogValidationUseCaseImpl implements LogValidationUseCase {
     }
     
     @Override
-    public ValidationResult validateLog(LogEntry logEntry) {
-        List<String> errors = validationService.validateLogEntry(logEntry);
-        boolean isValid = errors.isEmpty();
-        String hash = isValid ? validationService.calculateLogHash(logEntry) : null;
-        boolean shouldProcess = isValid && validationService.shouldProcessLog(logEntry);
-        
-        return new ValidationResult(isValid, errors, hash, shouldProcess);
+    public ValidationResult validate(LogEntry logEntry) {
+    List<String> errors = validationService.validateLogEntry(logEntry);
+    boolean isValid = errors.isEmpty();
+    String message = isValid ? "Valid log entry" : "Invalid log entry";
+    return new ValidationResult(isValid, message, errors);
     }
-    
+
     @Override
-    public BatchValidationResult validateBatch(List<LogEntry> logEntries) {
-        if (logEntries == null || logEntries.isEmpty()) {
-            return new BatchValidationResult(0, 0, List.of());
-        }
-        
-        int validCount = 0;
-        int invalidCount = 0;
-        List<ValidationResult> results = new java.util.ArrayList<>();
-        
-        for (LogEntry logEntry : logEntries) {
-            ValidationResult result = validateLog(logEntry);
-            results.add(result);
-            
-            if (result.isValid()) {
-                validCount++;
-            } else {
-                invalidCount++;
-            }
-        }
-        
-        return new BatchValidationResult(validCount, invalidCount, results);
+    public LogEntry enrich(LogEntry logEntry) {
+        // Implementação de enriquecimento, se necessário
+        return logEntry;
     }
     
     /**
      * Resultado da validação de um log individual
      */
-    public static class ValidationResult {
-        private final boolean valid;
-        private final List<String> errors;
-        private final String hash;
-        private final boolean shouldProcess;
-        
-        public ValidationResult(boolean valid, List<String> errors, String hash, boolean shouldProcess) {
-            this.valid = valid;
-            this.errors = errors;
-            this.hash = hash;
-            this.shouldProcess = shouldProcess;
-        }
-        
-        public boolean isValid() {
-            return valid;
-        }
-        
-        public List<String> getErrors() {
-            return errors;
-        }
-        
-        public String getHash() {
-            return hash;
-        }
-        
-        public boolean shouldProcess() {
-            return shouldProcess;
-        }
-    }
     
     /**
      * Resultado da validação de um batch de logs

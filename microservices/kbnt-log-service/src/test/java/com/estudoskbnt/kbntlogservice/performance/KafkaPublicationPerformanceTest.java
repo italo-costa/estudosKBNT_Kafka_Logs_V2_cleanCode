@@ -2,7 +2,7 @@ package com.estudoskbnt.kbntlogservice.performance;
 
 import com.estudoskbnt.kbntlogservice.model.KafkaPublicationLog;
 import com.estudoskbnt.kbntlogservice.model.StockUpdateMessage;
-import com.estudoskbnt.kbntlogservice.service.StockUpdateProducer;
+import com.estudoskbnt.kbntlogservice.producer.StockUpdateProducer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -81,7 +81,7 @@ class KafkaPublicationPerformanceTest {
                     StockUpdateMessage message = createVariedMessage(messageId);
                     
                     // Send message (this will generate hash internally)
-                    stockUpdateProducer.sendStockUpdate(message, "hash-test-" + messageId);
+                    stockUpdateProducer.processStockUpdate(message);
                     
                     long hashEndTime = System.nanoTime();
                     long hashDuration = hashEndTime - hashStartTime;
@@ -152,7 +152,7 @@ class KafkaPublicationPerformanceTest {
                     startLatch.await();
                     
                     StockUpdateMessage message = createMessageWithOperation(messageId);
-                    stockUpdateProducer.sendStockUpdate(message, "routing-test-" + messageId);
+                    stockUpdateProducer.processStockUpdate(message);
                     
                     totalPublications.incrementAndGet();
                     
@@ -216,7 +216,7 @@ class KafkaPublicationPerformanceTest {
                     StockUpdateMessage message = createComplexMessage(operationId);
                     
                     // This will trigger both publication attempt and success logging
-                    stockUpdateProducer.sendStockUpdate(message, "logging-test-" + operationId);
+                    stockUpdateProducer.processStockUpdate(message);
                     
                     long loggingEndTime = System.nanoTime();
                     long loggingDuration = loggingEndTime - loggingStartTime;
@@ -308,7 +308,7 @@ class KafkaPublicationPerformanceTest {
                             break;
                     }
                     
-                    stockUpdateProducer.sendStockUpdate(message, correlationId);
+                    stockUpdateProducer.processStockUpdate(message);
                     totalProcessed.incrementAndGet();
                     
                 } catch (Exception e) {
@@ -357,25 +357,26 @@ class KafkaPublicationPerformanceTest {
         StockUpdateMessage message = new StockUpdateMessage();
         message.setProductId("VARIED-PRODUCT-" + id + "-" + System.nanoTime());
         message.setQuantity((id % 500) + 1);
-        message.setLocation("VARIED-LOCATION-" + (id % 10));
+        message.setDistributionCenter("VARIED-DC-" + (id % 10));
         message.setOperation(getVariedOperation(id));
         message.setTimestamp(LocalDateTime.now().plusNanos(id * 100000L));
-        message.setUnitPrice(10.00 + (id * 0.33));
-        message.setBatchId("VARIED-BATCH-" + (id / 25));
-        message.setNotes("Varied test message with unique content: " + id + " at " + System.currentTimeMillis());
+        message.setBranch("VARIED-BRANCH-" + (id / 25));
+        message.setCorrelationId("CORR-" + id + "-" + System.currentTimeMillis());
+        message.setSourceBranch("SOURCE-BRANCH-" + (id % 5));
         return message;
     }
 
     private StockUpdateMessage createMessageWithOperation(int id) {
+    private StockUpdateMessage createMessageWithOperation(int id) {
         StockUpdateMessage message = new StockUpdateMessage();
         message.setProductId("ROUTING-PRODUCT-" + id);
         message.setQuantity((id % 100) + 1);
-        message.setLocation("ROUTING-WAREHOUSE-" + (id % 5));
+        message.setDistributionCenter("ROUTING-WAREHOUSE-" + (id % 5));
         message.setOperation(getRoutingOperation(id));
         message.setTimestamp(LocalDateTime.now().plusSeconds(id));
-        message.setUnitPrice(25.00 + id);
-        message.setBatchId("ROUTING-BATCH-" + (id / 10));
-        message.setNotes("Topic routing test message #" + id);
+        message.setBranch("ROUTING-BRANCH-" + (id / 10));
+        message.setCorrelationId("ROUTING-CORR-" + id);
+        message.setSourceBranch("ROUTING-SOURCE-" + (id % 3));
         return message;
     }
 
@@ -383,13 +384,12 @@ class KafkaPublicationPerformanceTest {
         StockUpdateMessage message = new StockUpdateMessage();
         message.setProductId("COMPLEX-PRODUCT-" + String.format("%05d", id) + "-" + System.nanoTime());
         message.setQuantity((id % 1000) + 1);
-        message.setLocation("COMPLEX-WAREHOUSE-" + (id % 20) + "-SECTION-" + (id % 5));
+        message.setDistributionCenter("COMPLEX-WAREHOUSE-" + (id % 20) + "-SECTION-" + (id % 5));
         message.setOperation("TRANSFER"); // Complex operation
         message.setTimestamp(LocalDateTime.now().plusMinutes(id).plusSeconds(id % 60));
-        message.setUnitPrice(100.00 + (id * 1.234567));
-        message.setBatchId("COMPLEX-BATCH-" + String.format("%04d", id / 50) + "-SUB-" + (id % 10));
-        message.setNotes("Complex logging test with extensive metadata and long content for message #" + id + 
-                        " processed at " + System.currentTimeMillis() + " with nano precision " + System.nanoTime());
+        message.setBranch("COMPLEX-BRANCH-" + String.format("%04d", id / 50) + "-SUB-" + (id % 10));
+        message.setCorrelationId("COMPLEX-CORR-" + id + "-" + System.currentTimeMillis());
+        message.setSourceBranch("COMPLEX-SOURCE-" + (id % 8));
         return message;
     }
 
@@ -397,12 +397,11 @@ class KafkaPublicationPerformanceTest {
         StockUpdateMessage message = new StockUpdateMessage();
         message.setProductId("SIMPLE-" + id);
         message.setQuantity(id + 1);
-        message.setLocation("SIMPLE-WH");
+        message.setDistributionCenter("SIMPLE-WH");
         message.setOperation("ADD");
         message.setTimestamp(LocalDateTime.now());
-        message.setUnitPrice(50.0);
-        message.setBatchId("SIMPLE-BATCH");
-        message.setNotes("Simple test #" + id);
+        message.setBranch("SIMPLE-BRANCH");
+        message.setCorrelationId("SIMPLE-CORR-" + id);
         return message;
     }
 
@@ -410,12 +409,12 @@ class KafkaPublicationPerformanceTest {
         StockUpdateMessage message = new StockUpdateMessage();
         message.setProductId("BATCH-PRODUCT-" + id);
         message.setQuantity((id % 200) + 100); // Larger quantities
-        message.setLocation("BATCH-WAREHOUSE-MAIN");
+        message.setDistributionCenter("BATCH-WAREHOUSE-MAIN");
         message.setOperation("BULK_UPDATE");
         message.setTimestamp(LocalDateTime.now().plusMinutes(id / 10));
-        message.setUnitPrice(75.00 + (id % 50));
-        message.setBatchId("LARGE-BATCH-" + String.format("%03d", id / 20));
-        message.setNotes("Batch operation test message #" + id + " for bulk processing");
+        message.setBranch("LARGE-BATCH-" + String.format("%03d", id / 20));
+        message.setCorrelationId("BATCH-CORR-" + id);
+        message.setSourceBranch("BATCH-SOURCE");
         return message;
     }
 

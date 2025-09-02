@@ -35,10 +35,12 @@ public class LogController {
     public ResponseEntity<?> produceLog(@Valid @RequestBody LogRequest request) {
         try {
             LogEntry logEntry = convertToLogEntry(request);
-            logProductionUseCase.produceLog(logEntry);
-            return ResponseEntity.ok(Map.of("message", "Log produzido com sucesso"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            var result = logProductionUseCase.produceLog(logEntry);
+            if (result.success()) {
+                return ResponseEntity.ok(Map.of("message", "Log produzido com sucesso"));
+            } else {
+                return ResponseEntity.badRequest().body(Map.of("error", result.message()));
+            }
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("error", "Erro interno do servidor"));
         }
@@ -58,7 +60,12 @@ public class LogController {
                     .map(this::convertToLogEntry)
                     .collect(Collectors.toList());
                     
-            logProductionUseCase.produceBatch(logEntries);
+            if (logProductionUseCase instanceof com.kbnt.logproducer.application.usecase.LogProductionUseCaseImpl impl) {
+                impl.produceBatch(logEntries);
+            } else {
+                // Se não for a implementação esperada, ignore ou lance exceção
+                throw new UnsupportedOperationException("produceBatch não implementado");
+            }
             return ResponseEntity.ok(Map.of(
                 "message", "Batch processado com sucesso",
                 "count", logEntries.size()
@@ -113,16 +120,15 @@ public class LogController {
         Instant timestamp = request.timestamp != null ? 
             Instant.parse(request.timestamp) : Instant.now();
         
-        return new LogEntry(
-            timestamp,
-            LogLevel.fromString(request.level),
-            request.message,
-            new ServiceName(request.service),
-            new RequestId(request.requestId),
-            request.exception,
-            request.amount,
-            request.metadata
-        );
+        return LogEntry.builder()
+            .timestamp(timestamp)
+            .level(LogLevel.of(request.level))
+            .message(request.message)
+            .service(new ServiceName(request.service))
+            .requestId(new RequestId(request.requestId))
+            .amount(request.amount)
+            .metadata(request.metadata)
+            .build();
     }
     
     /**

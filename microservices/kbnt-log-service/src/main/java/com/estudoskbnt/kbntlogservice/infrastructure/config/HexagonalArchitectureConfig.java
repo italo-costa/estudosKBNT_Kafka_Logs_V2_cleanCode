@@ -9,6 +9,7 @@ import com.estudoskbnt.kbntlogservice.infrastructure.adapter.output.persistence.
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 /**
  * Hexagonal Architecture Configuration
@@ -49,6 +50,7 @@ public class HexagonalArchitectureConfig {
      * persistence capabilities for stock updates.
      */
     @Bean
+    @Primary
     public StockUpdateRepositoryPort stockUpdateRepositoryPort() {
         log.info("🔧 Configuring Stock Update Repository (In-Memory Implementation)");
         return new InMemoryStockUpdateRepositoryAdapter();
@@ -61,6 +63,7 @@ public class HexagonalArchitectureConfig {
      * event publishing capabilities via Kafka.
      */
     @Bean
+    @Primary
     public EventPublisherPort eventPublisherPort(KafkaEventPublisherAdapter kafkaAdapter) {
         log.info("🔧 Configuring Event Publisher (Kafka Implementation)");
         return kafkaAdapter;

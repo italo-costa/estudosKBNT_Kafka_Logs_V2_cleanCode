@@ -1,11 +1,14 @@
 package com.estudoskbnt.kbntlogservice.application.service;
 
 import com.estudoskbnt.kbntlogservice.domain.model.*;
+import com.estudoskbnt.kbntlogservice.domain.event.StockUpdateEvent;
 import com.estudoskbnt.kbntlogservice.domain.port.input.*;
 import com.estudoskbnt.kbntlogservice.domain.port.output.EventPublisherPort;
 import com.estudoskbnt.kbntlogservice.domain.port.output.StockUpdateRepositoryPort;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,13 +25,12 @@ import java.util.concurrent.CompletableFuture;
 @Service
 @Transactional
 @RequiredArgsConstructor
-@Slf4j
 public class StockUpdateApplicationService implements StockUpdateUseCase {
     
-    private final StockUpdateRepositoryPort stockUpdateRepository;
-    private final EventPublisherPort eventPublisher;
+  private static final Logger log = LoggerFactory.getLogger(StockUpdateApplicationService.class);
     
-    @Override
+  private final StockUpdateRepositoryPort stockUpdateRepository;
+  private final EventPublisherPort eventPublisher;    @Override
     public CompletableFuture<StockUpdateResult> processStockUpdate(StockUpdateCommand command) {
         log.info("Processing stock update for product: {} at {}-{}", 
                 command.getProductId().getValue(),
@@ -130,18 +132,20 @@ public class StockUpdateApplicationService implements StockUpdateUseCase {
                 command.getBranch().getCode());
         
         // Create stock update with source branch information
-        StockUpdate stockUpdate = StockUpdate.builder()
-                .id(StockUpdateId.generate())
-                .productId(command.getProductId())
-                .distributionCenter(command.getDistributionCenter())
-                .branch(command.getBranch())
-                .quantity(command.getQuantity())
-                .operation(Operation.of("TRANSFER"))
-                .correlationId(command.getCorrelationId())
-                .sourceBranch(command.getSourceBranch())
-                .reasonCode(command.getReasonCode())
-                .referenceDocument(command.getReferenceDocument())
-                .build();
+        StockUpdate stockUpdate = new StockUpdate(
+                StockUpdateId.generate(),
+                command.getProductId(),
+                command.getDistributionCenter(),
+                command.getBranch(),
+                command.getQuantity(),
+                Operation.of("TRANSFER"),
+                LocalDateTime.now(),
+                command.getCorrelationId(),
+                SourceBranch.of(command.getBranch().getCode()), // source branch from command
+                command.getReasonCode(),
+                command.getReferenceDocument(),
+                StockUpdateStatus.PENDING
+        );
         
         return CompletableFuture.supplyAsync(() -> {
             try {

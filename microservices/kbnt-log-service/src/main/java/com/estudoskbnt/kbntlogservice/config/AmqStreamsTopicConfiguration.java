@@ -1,10 +1,11 @@
 package com.estudoskbnt.kbntlogservice.config;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.errors.TopicExistsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaAdmin;
@@ -20,10 +21,10 @@ import java.util.concurrent.TimeUnit;
  * AMQ Streams Topic Configuration for KBNT Log Service
  * Automatically creates required topics if they don't exist
  */
-@Slf4j
 @Configuration
 public class AmqStreamsTopicConfiguration {
 
+    private static final Logger log = LoggerFactory.getLogger(AmqStreamsTopicConfiguration.class);
     private final KafkaAdmin kafkaAdmin;
     
     @Value("${app.kafka.topics.application-logs:kbnt-application-logs}")

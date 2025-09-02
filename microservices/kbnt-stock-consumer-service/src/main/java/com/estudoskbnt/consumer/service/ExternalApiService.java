@@ -25,8 +25,8 @@ import java.util.Map;
  * @version 1.0.0
  */
 @Service
-@Slf4j
 public class ExternalApiService {
+        private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ExternalApiService.class);
     
     private final WebClient webClient;
     
@@ -281,67 +281,227 @@ public class ExternalApiService {
     
     // Inner classes for request/response objects
     
-    @lombok.Data
-    @lombok.Builder
-    @lombok.NoArgsConstructor
-    @lombok.AllArgsConstructor
-    public static class ApiResponse {
-        private String status;
-        private String message;
-        private boolean success;
-        private Object data;
-        private Integer httpStatus;
-        private LocalDateTime timestamp;
-    }
+        public static class ApiResponse {
+                private String status;
+                private String message;
+                private boolean success;
+                private Object data;
+                private Integer httpStatus;
+                private LocalDateTime timestamp;
+                public ApiResponse() {}
+                public ApiResponse(String status, String message, boolean success, Object data, Integer httpStatus, LocalDateTime timestamp) {
+                        this.status = status;
+                        this.message = message;
+                        this.success = success;
+                        this.data = data;
+                        this.httpStatus = httpStatus;
+                        this.timestamp = timestamp;
+                }
+                public static Builder builder() { return new Builder(); }
+                public static class Builder {
+                        private String status;
+                        private String message;
+                        private boolean success;
+                        private Object data;
+                        private Integer httpStatus;
+                        private LocalDateTime timestamp;
+                        public Builder status(String status) { this.status = status; return this; }
+                        public Builder message(String message) { this.message = message; return this; }
+                        public Builder success(boolean success) { this.success = success; return this; }
+                        public Builder data(Object data) { this.data = data; return this; }
+                        public Builder httpStatus(Integer httpStatus) { this.httpStatus = httpStatus; return this; }
+                        public Builder timestamp(LocalDateTime timestamp) { this.timestamp = timestamp; return this; }
+                        public ApiResponse build() { return new ApiResponse(status, message, success, data, httpStatus, timestamp); }
+                }
+                public String getStatus() { return status; }
+                public void setStatus(String status) { this.status = status; }
+                public String getMessage() { return message; }
+                public void setMessage(String message) { this.message = message; }
+                public boolean isSuccess() { return success; }
+                public void setSuccess(boolean success) { this.success = success; }
+                public Object getData() { return data; }
+                public void setData(Object data) { this.data = data; }
+                public Integer getHttpStatus() { return httpStatus; }
+                public void setHttpStatus(Integer httpStatus) { this.httpStatus = httpStatus; }
+                public LocalDateTime getTimestamp() { return timestamp; }
+                public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
+        }
     
-    @lombok.Data
-    @lombok.Builder
-    @lombok.NoArgsConstructor
-    @lombok.AllArgsConstructor
-    public static class ValidationResponse {
-        private boolean valid;
-        private String message;
-        private boolean productExists;
-    }
+        public static class ValidationResponse {
+                private boolean valid;
+                private String message;
+                private boolean productExists;
+                public ValidationResponse() {}
+                public ValidationResponse(boolean valid, String message, boolean productExists) {
+                        this.valid = valid;
+                        this.message = message;
+                        this.productExists = productExists;
+                }
+                public static Builder builder() { return new Builder(); }
+                public static class Builder {
+                        private boolean valid;
+                        private String message;
+                        private boolean productExists;
+                        public Builder valid(boolean valid) { this.valid = valid; return this; }
+                        public Builder message(String message) { this.message = message; return this; }
+                        public Builder productExists(boolean productExists) { this.productExists = productExists; return this; }
+                        public ValidationResponse build() { return new ValidationResponse(valid, message, productExists); }
+                }
+                public boolean isValid() { return valid; }
+                public void setValid(boolean valid) { this.valid = valid; }
+                public String getMessage() { return message; }
+                public void setMessage(String message) { this.message = message; }
+                public boolean isProductExists() { return productExists; }
+                public void setProductExists(boolean productExists) { this.productExists = productExists; }
+        }
     
-    @lombok.Data
-    @lombok.Builder
-    @lombok.NoArgsConstructor
-    @lombok.AllArgsConstructor
-    public static class StockInfo {
-        private String productId;
-        private String location;
-        private Integer currentQuantity;
-        private boolean available;
-        private LocalDateTime lastUpdated;
-    }
+        public static class StockInfo {
+                private String productId;
+                private String location;
+                private Integer currentQuantity;
+                private boolean available;
+                private LocalDateTime lastUpdated;
+                public StockInfo() {}
+                public StockInfo(String productId, String location, Integer currentQuantity, boolean available, LocalDateTime lastUpdated) {
+                        this.productId = productId;
+                        this.location = location;
+                        this.currentQuantity = currentQuantity;
+                        this.available = available;
+                        this.lastUpdated = lastUpdated;
+                }
+                public static Builder builder() { return new Builder(); }
+                public static class Builder {
+                        private String productId;
+                        private String location;
+                        private Integer currentQuantity;
+                        private boolean available;
+                        private LocalDateTime lastUpdated;
+                        public Builder productId(String productId) { this.productId = productId; return this; }
+                        public Builder location(String location) { this.location = location; return this; }
+                        public Builder currentQuantity(Integer currentQuantity) { this.currentQuantity = currentQuantity; return this; }
+                        public Builder available(boolean available) { this.available = available; return this; }
+                        public Builder lastUpdated(LocalDateTime lastUpdated) { this.lastUpdated = lastUpdated; return this; }
+                        public StockInfo build() { return new StockInfo(productId, location, currentQuantity, available, lastUpdated); }
+                }
+                public String getProductId() { return productId; }
+                public void setProductId(String productId) { this.productId = productId; }
+                public String getLocation() { return location; }
+                public void setLocation(String location) { this.location = location; }
+                public Integer getCurrentQuantity() { return currentQuantity; }
+                public void setCurrentQuantity(Integer currentQuantity) { this.currentQuantity = currentQuantity; }
+                public boolean isAvailable() { return available; }
+                public void setAvailable(boolean available) { this.available = available; }
+                public LocalDateTime getLastUpdated() { return lastUpdated; }
+                public void setLastUpdated(LocalDateTime lastUpdated) { this.lastUpdated = lastUpdated; }
+        }
     
-    @lombok.Data
-    @lombok.Builder
-    @lombok.NoArgsConstructor
-    @lombok.AllArgsConstructor
-    public static class StockProcessingRequest {
-        private String correlationId;
-        private String productId;
-        private Integer quantity;
-        private java.math.BigDecimal price;
-        private String operation;
-        private String category;
-        private String supplier;
-        private String location;
-        private String priority;
-        private LocalDateTime processedAt;
-    }
+        public static class StockProcessingRequest {
+                private String correlationId;
+                private String productId;
+                private Integer quantity;
+                private java.math.BigDecimal price;
+                private String operation;
+                private String category;
+                private String supplier;
+                private String location;
+                private String priority;
+                private LocalDateTime processedAt;
+                public StockProcessingRequest() {}
+                public StockProcessingRequest(String correlationId, String productId, Integer quantity, java.math.BigDecimal price, String operation, String category, String supplier, String location, String priority, LocalDateTime processedAt) {
+                        this.correlationId = correlationId;
+                        this.productId = productId;
+                        this.quantity = quantity;
+                        this.price = price;
+                        this.operation = operation;
+                        this.category = category;
+                        this.supplier = supplier;
+                        this.location = location;
+                        this.priority = priority;
+                        this.processedAt = processedAt;
+                }
+                public static Builder builder() { return new Builder(); }
+                public static class Builder {
+                        private String correlationId;
+                        private String productId;
+                        private Integer quantity;
+                        private java.math.BigDecimal price;
+                        private String operation;
+                        private String category;
+                        private String supplier;
+                        private String location;
+                        private String priority;
+                        private LocalDateTime processedAt;
+                        public Builder correlationId(String correlationId) { this.correlationId = correlationId; return this; }
+                        public Builder productId(String productId) { this.productId = productId; return this; }
+                        public Builder quantity(Integer quantity) { this.quantity = quantity; return this; }
+                        public Builder price(java.math.BigDecimal price) { this.price = price; return this; }
+                        public Builder operation(String operation) { this.operation = operation; return this; }
+                        public Builder category(String category) { this.category = category; return this; }
+                        public Builder supplier(String supplier) { this.supplier = supplier; return this; }
+                        public Builder location(String location) { this.location = location; return this; }
+                        public Builder priority(String priority) { this.priority = priority; return this; }
+                        public Builder processedAt(LocalDateTime processedAt) { this.processedAt = processedAt; return this; }
+                        public StockProcessingRequest build() { return new StockProcessingRequest(correlationId, productId, quantity, price, operation, category, supplier, location, priority, processedAt); }
+                }
+                public String getCorrelationId() { return correlationId; }
+                public void setCorrelationId(String correlationId) { this.correlationId = correlationId; }
+                public String getProductId() { return productId; }
+                public void setProductId(String productId) { this.productId = productId; }
+                public Integer getQuantity() { return quantity; }
+                public void setQuantity(Integer quantity) { this.quantity = quantity; }
+                public java.math.BigDecimal getPrice() { return price; }
+                public void setPrice(java.math.BigDecimal price) { this.price = price; }
+                public String getOperation() { return operation; }
+                public void setOperation(String operation) { this.operation = operation; }
+                public String getCategory() { return category; }
+                public void setCategory(String category) { this.category = category; }
+                public String getSupplier() { return supplier; }
+                public void setSupplier(String supplier) { this.supplier = supplier; }
+                public String getLocation() { return location; }
+                public void setLocation(String location) { this.location = location; }
+                public String getPriority() { return priority; }
+                public void setPriority(String priority) { this.priority = priority; }
+                public LocalDateTime getProcessedAt() { return processedAt; }
+                public void setProcessedAt(LocalDateTime processedAt) { this.processedAt = processedAt; }
+        }
     
-    @lombok.Data
-    @lombok.Builder
-    @lombok.NoArgsConstructor
-    @lombok.AllArgsConstructor
-    public static class NotificationRequest {
-        private String correlationId;
-        private String productId;
-        private boolean success;
-        private String message;
-        private LocalDateTime timestamp;
-    }
+        public static class NotificationRequest {
+                private String correlationId;
+                private String productId;
+                private boolean success;
+                private String message;
+                private LocalDateTime timestamp;
+                public NotificationRequest() {}
+                public NotificationRequest(String correlationId, String productId, boolean success, String message, LocalDateTime timestamp) {
+                        this.correlationId = correlationId;
+                        this.productId = productId;
+                        this.success = success;
+                        this.message = message;
+                        this.timestamp = timestamp;
+                }
+                public static Builder builder() { return new Builder(); }
+                public static class Builder {
+                        private String correlationId;
+                        private String productId;
+                        private boolean success;
+                        private String message;
+                        private LocalDateTime timestamp;
+                        public Builder correlationId(String correlationId) { this.correlationId = correlationId; return this; }
+                        public Builder productId(String productId) { this.productId = productId; return this; }
+                        public Builder success(boolean success) { this.success = success; return this; }
+                        public Builder message(String message) { this.message = message; return this; }
+                        public Builder timestamp(LocalDateTime timestamp) { this.timestamp = timestamp; return this; }
+                        public NotificationRequest build() { return new NotificationRequest(correlationId, productId, success, message, timestamp); }
+                }
+                public String getCorrelationId() { return correlationId; }
+                public void setCorrelationId(String correlationId) { this.correlationId = correlationId; }
+                public String getProductId() { return productId; }
+                public void setProductId(String productId) { this.productId = productId; }
+                public boolean isSuccess() { return success; }
+                public void setSuccess(boolean success) { this.success = success; }
+                public String getMessage() { return message; }
+                public void setMessage(String message) { this.message = message; }
+                public LocalDateTime getTimestamp() { return timestamp; }
+                public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
+        }
 }

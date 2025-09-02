@@ -4,8 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.DescribeTopicsResult;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuator.health.Health;
-import org.springframework.boot.actuator.health.HealthIndicator;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import java.util.Set;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.stereotype.Component;
 
@@ -56,20 +57,12 @@ public class KafkaIndependentHealthIndicator implements HealthIndicator {
         } catch (Exception e) {
             log.warn("Kafka health check failed", e);
             
-            if (degradedModeEnabled) {
-                return Health.degraded()
-                    .withDetail("status", "degraded")
-                    .withDetail("reason", "Kafka connectivity issues")
-                    .withDetail("error", e.getMessage())
-                    .withDetail("degraded-mode", "enabled")
-                    .build();
-            } else {
-                return Health.down()
-                    .withDetail("status", "down")
-                    .withDetail("reason", "Kafka unavailable")
-                    .withDetail("error", e.getMessage())
-                    .build();
-            }
+            return Health.down()
+                .withDetail("status", degradedModeEnabled ? "degraded" : "down")
+                .withDetail("reason", degradedModeEnabled ? "Kafka connectivity issues" : "Kafka unavailable")
+                .withDetail("error", e.getMessage())
+                .withDetail("degraded-mode", degradedModeEnabled ? "enabled" : "disabled")
+                .build();
         }
     }
 
@@ -102,7 +95,7 @@ public class KafkaIndependentHealthIndicator implements HealthIndicator {
                     .withDetail("topics", topicDescriptions.keySet())
                     .build();
             } else if (availableTopics > 0 && degradedModeEnabled) {
-                return Health.degraded()
+                return Health.down()
                     .withDetail("status", "degraded")
                     .withDetail("kafka-nodes", nodeCount)
                     .withDetail("topics-available", availableTopics)

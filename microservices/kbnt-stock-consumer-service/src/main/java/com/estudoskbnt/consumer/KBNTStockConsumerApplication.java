@@ -36,10 +36,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableKafka
 @EnableAsync
-@EnableTransactionManagement 
-public class ACLVirtualStockApplication {
-    
-    public static void main(String[] args) {
-        SpringApplication.run(ACLVirtualStockApplication.class, args);
-    }
+@EnableTransactionManagement
+public class KBNTStockConsumerApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(KBNTStockConsumerApplication.class, args);
+	}
 }

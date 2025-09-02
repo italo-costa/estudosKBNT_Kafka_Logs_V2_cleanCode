@@ -2,7 +2,7 @@ package com.estudoskbnt.kbntlogservice.performance;
 
 import com.estudoskbnt.kbntlogservice.controller.StockUpdateController;
 import com.estudoskbnt.kbntlogservice.model.StockUpdateMessage;
-import com.estudoskbnt.kbntlogservice.service.StockUpdateProducer;
+import com.estudoskbnt.kbntlogservice.producer.StockUpdateProducer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -64,7 +64,7 @@ class StockUpdateControllerPerformanceTest {
         final List<String> errors = new CopyOnWriteArrayList<>();
 
         // Mock the producer to simulate successful publication
-        doNothing().when(stockUpdateProducer).sendStockUpdate(any(StockUpdateMessage.class), anyString());
+        doNothing().when(stockUpdateProducer).processStockUpdate(any(StockUpdateMessage.class));
 
         // Create a CountDownLatch to ensure all threads start simultaneously
         final CountDownLatch startLatch = new CountDownLatch(1);
@@ -173,7 +173,7 @@ class StockUpdateControllerPerformanceTest {
         
         // Verify producer was called for successful requests
         verify(stockUpdateProducer, times(successCount.get()))
-            .sendStockUpdate(any(StockUpdateMessage.class), anyString());
+            .processStockUpdate(any(StockUpdateMessage.class));
         
         // Print performance summary
         System.out.println("\n=== PERFORMANCE TEST RESULTS ===");
@@ -211,7 +211,7 @@ class StockUpdateControllerPerformanceTest {
             "KEYBOARD", "MOUSE", "SPEAKER", "CAMERA", "PRINTER"
         };
         
-        doNothing().when(stockUpdateProducer).sendStockUpdate(any(StockUpdateMessage.class), anyString());
+        doNothing().when(stockUpdateProducer).processStockUpdate(any(StockUpdateMessage.class));
         
         final CountDownLatch startLatch = new CountDownLatch(1);
         final CountDownLatch completionLatch = new CountDownLatch(REQUEST_COUNT);
@@ -228,12 +228,12 @@ class StockUpdateControllerPerformanceTest {
                     StockUpdateMessage message = new StockUpdateMessage();
                     message.setProductId(productType + "-" + String.format("%03d", requestId));
                     message.setQuantity((requestId % 50) + 1); // 1-50 quantity
-                    message.setLocation("WAREHOUSE-" + (requestId % 5 + 1));
+                    message.setDistributionCenter("WAREHOUSE-" + (requestId % 5 + 1));
                     message.setOperation((requestId % 2 == 0) ? "ADD" : "SET");
                     message.setTimestamp(LocalDateTime.now().plusSeconds(requestId));
-                    message.setUnitPrice(99.99 + (requestId % 100));
-                    message.setBatchId("BATCH-LOAD-TEST-" + (requestId / 10));
-                    message.setNotes("Load test request #" + requestId);
+                    message.setBranch("BRANCH-LOAD-TEST-" + (requestId / 10));
+                    message.setCorrelationId("variety-test-" + requestId);
+                    message.setSourceBranch("SOURCE-BRANCH-" + (requestId % 3));
                     
                     String jsonContent = objectMapper.writeValueAsString(message);
                     
@@ -270,7 +270,7 @@ class StockUpdateControllerPerformanceTest {
         
         // Verify producer was called for all processed requests
         verify(stockUpdateProducer, times(processedRequests.get()))
-            .sendStockUpdate(any(StockUpdateMessage.class), anyString());
+            .processStockUpdate(any(StockUpdateMessage.class));
         
         // Print variety test results
         System.out.println("\n=== VARIETY TEST RESULTS ===");
@@ -289,7 +289,7 @@ class StockUpdateControllerPerformanceTest {
         final ConcurrentHashMap<String, Integer> correlationIds = new ConcurrentHashMap<>();
         final AtomicInteger duplicateCount = new AtomicInteger(0);
         
-        doNothing().when(stockUpdateProducer).sendStockUpdate(any(StockUpdateMessage.class), anyString());
+        doNothing().when(stockUpdateProducer).processStockUpdate(any(StockUpdateMessage.class));
         
         final CountDownLatch startLatch = new CountDownLatch(1);
         final CountDownLatch completionLatch = new CountDownLatch(REQUEST_COUNT);
@@ -348,12 +348,12 @@ class StockUpdateControllerPerformanceTest {
         StockUpdateMessage message = new StockUpdateMessage();
         message.setProductId("LOAD-TEST-PRODUCT-" + String.format("%03d", id));
         message.setQuantity((id % 100) + 1); // 1-100 quantity
-        message.setLocation("WAREHOUSE-" + (id % 3 + 1)); // WAREHOUSE-1,2,3
+        message.setDistributionCenter("WAREHOUSE-" + (id % 3 + 1)); // WAREHOUSE-1,2,3
         message.setOperation((id % 3 == 0) ? "ADD" : (id % 3 == 1) ? "SET" : "SUBTRACT");
         message.setTimestamp(LocalDateTime.now().plusMinutes(id));
-        message.setUnitPrice(50.00 + (id % 200)); // 50.00 - 250.00
-        message.setBatchId("LOAD-TEST-BATCH-" + (id / 20)); // Group into batches of 20
-        message.setNotes("Performance test message #" + id);
+        message.setBranch("LOAD-TEST-BRANCH-" + (id / 20)); // Group into batches of 20
+        message.setCorrelationId("load-test-" + id);
+        message.setSourceBranch("SOURCE-BRANCH-" + (id % 5));
         return message;
     }
 
@@ -361,12 +361,12 @@ class StockUpdateControllerPerformanceTest {
         StockUpdateMessage message = new StockUpdateMessage();
         message.setProductId("UNIQUE-" + id + "-" + System.nanoTime());
         message.setQuantity(id + 1);
-        message.setLocation("UNIQUE-WAREHOUSE-" + id);
+        message.setDistributionCenter("UNIQUE-WAREHOUSE-" + id);
         message.setOperation("ADD");
         message.setTimestamp(LocalDateTime.now().plusNanos(id * 1000000L)); // Unique timestamps
-        message.setUnitPrice(100.00 + id);
-        message.setBatchId("UNIQUE-BATCH-" + id);
-        message.setNotes("Uniqueness test message with nano precision: " + System.nanoTime());
+        message.setBranch("UNIQUE-BRANCH-" + id);
+        message.setCorrelationId("unique-test-" + id + "-" + System.nanoTime());
+        message.setSourceBranch("UNIQUE-SOURCE-" + (id % 10));
         return message;
     }
 

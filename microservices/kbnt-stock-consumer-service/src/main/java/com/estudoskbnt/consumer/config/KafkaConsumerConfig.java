@@ -1,4 +1,5 @@
 package com.estudoskbnt.consumer.config;
+import org.springframework.util.backoff.FixedBackOff;
 
 import com.estudoskbnt.consumer.model.StockUpdateMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +32,7 @@ import java.util.Map;
 @EnableKafka
 @Slf4j
 public class KafkaConsumerConfig {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(KafkaConsumerConfig.class);
     
     @Value("${app.kafka.bootstrap-servers}")
     private String bootstrapServers;
@@ -130,6 +132,7 @@ public class KafkaConsumerConfig {
     
     /**
      * Kafka Listener Container Factory
+    import org.springframework.util.backoff.FixedBackOff;
      */
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
@@ -144,13 +147,12 @@ public class KafkaConsumerConfig {
         
         // Error handling
         factory.setCommonErrorHandler(new org.springframework.kafka.listener.DefaultErrorHandler(
-                (record, exception) -> {
-                    log.error("Error processing record: {} - Exception: {}", 
-                            record, exception.getMessage());
-                },
-                org.springframework.util.backoff.FixedBackOff.DEFAULT_INTERVAL,
-                3L // max attempts
-        ));
+        (record, exception) -> {
+            log.error("Error processing record: {} - Exception: {}", 
+                record, exception.getMessage());
+        },
+        new org.springframework.util.backoff.FixedBackOff(1000L, 3) // max attempts
+    ));
         
         // Consumer rebalance listener
         factory.getContainerProperties().setConsumerRebalanceListener(

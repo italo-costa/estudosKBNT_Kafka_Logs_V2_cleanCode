@@ -59,12 +59,26 @@ public class EnhancedKafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate() {
-        KafkaTemplate<String, Object> template = new KafkaTemplate<>(producerFactory());
+    public KafkaTemplate<String, String> kafkaTemplate() {
+        // Criar um producer factory específico para String, String
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.ACKS_CONFIG, "all");
+        configProps.put(ProducerConfig.RETRIES_CONFIG, 3);
+        configProps.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
         
-        // Enable observation for metrics and tracing
+        ProducerFactory<String, String> stringProducerFactory = new DefaultKafkaProducerFactory<>(configProps);
+        KafkaTemplate<String, String> template = new KafkaTemplate<>(stringProducerFactory);
         template.setObservationEnabled(true);
-        
+        return template;
+    }
+    
+    @Bean
+    public KafkaTemplate<String, Object> kafkaObjectTemplate() {
+        KafkaTemplate<String, Object> template = new KafkaTemplate<>(producerFactory());
+        template.setObservationEnabled(true);
         return template;
     }
 }

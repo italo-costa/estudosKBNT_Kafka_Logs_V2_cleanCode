@@ -1,6 +1,8 @@
 package com.estudoskbnt.kbntlogservice.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
@@ -14,13 +16,12 @@ import java.util.List;
  * Processing Mode Configuration
  * Controls which components are active based on APP_PROCESSING_MODES environment variable
  */
-@Slf4j
 @Configuration
 public class ProcessingModeConfiguration {
 
-    private final Environment environment;
-    
-    @Value("${app.processing.modes:producer,consumer,processor}")
+  private static final Logger log = LoggerFactory.getLogger(ProcessingModeConfiguration.class);
+
+  private final Environment environment;    @Value("${app.processing.modes:producer,consumer,processor}")
     private String processingModes;
 
     public ProcessingModeConfiguration(Environment environment) {

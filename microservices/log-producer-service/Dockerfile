@@ -1,21 +1,21 @@
 # Dockerfile para Log Producer Service
-FROM eclipse-temurin:17-jdk-alpine AS builder
+FROM eclipse-temurin:17-jdk AS builder
 
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
 # Build da aplicação
-RUN ./mvnw clean package -DskipTests
+RUN apt-get update && apt-get install -y maven
+RUN mvn clean package -DskipTests
 
 # Imagem final
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
 # Criar usuário não-root
-RUN addgroup -g 1001 -S appgroup && \
-    adduser -u 1001 -S appuser -G appgroup
+RUN groupadd -g 1001 appgroup && useradd -u 1001 -g appgroup appuser
 
 # Copiar JAR
 COPY --from=builder /app/target/*.jar app.jar

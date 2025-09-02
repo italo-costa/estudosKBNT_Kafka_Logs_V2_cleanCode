@@ -62,9 +62,8 @@ public class KafkaStockEventPublisherAdapter implements StockEventPublisherPort 
                 "Event serialized to Kafka message format");
             
             // Publish synchronously
-            CompletableFuture<SendResult<String, String>> future = 
+            org.springframework.util.concurrent.ListenableFuture<SendResult<String, String>> future = 
                 kafkaTemplate.send(topic, event.getCorrelationId(), messageJson);
-            
             SendResult<String, String> result = future.get(); // Wait for completion
             
             long duration = System.currentTimeMillis() - startTime;
@@ -111,20 +110,23 @@ public class KafkaStockEventPublisherAdapter implements StockEventPublisherPort 
                 "Event serialized to Kafka message format");
             
             // Publish asynchronously with callbacks
-            CompletableFuture<SendResult<String, String>> future = 
+            org.springframework.util.concurrent.ListenableFuture<SendResult<String, String>> future = 
                 kafkaTemplate.send(topic, event.getCorrelationId(), messageJson);
-            
-            future.whenComplete((result, throwable) -> {
-                if (throwable != null) {
-                    EnhancedLoggingConfig.LoggingUtils.logError("KAFKA_PUBLISH_ASYNC", 
-                        "Async publication failed", throwable, event.getCorrelationId());
-                } else {
-                    EnhancedLoggingConfig.LoggingUtils.logKafkaOperation("PUBLISH_ASYNC", topic, 
-                        result.getRecordMetadata().partition(), 
-                        String.format("Offset: %d, MessageId: %s", 
+            future.addCallback(new org.springframework.util.concurrent.ListenableFutureCallback<SendResult<String, String>>() {
+                @Override
+                public void onSuccess(SendResult<String, String> result) {
+                    EnhancedLoggingConfig.LoggingUtils.logKafkaOperation("PUBLISH_ASYNC", topic,
+                        result.getRecordMetadata().partition(),
+                        String.format("Offset: %d, MessageId: %s",
                             result.getRecordMetadata().offset(), event.getCorrelationId()));
+                    EnhancedLoggingConfig.LoggingUtils.clearContext();
                 }
-                EnhancedLoggingConfig.LoggingUtils.clearContext();
+                @Override
+                public void onFailure(Throwable throwable) {
+                    EnhancedLoggingConfig.LoggingUtils.logError("KAFKA_PUBLISH_ASYNC",
+                        "Async publication failed", throwable, event.getCorrelationId());
+                    EnhancedLoggingConfig.LoggingUtils.clearContext();
+                }
             });
             
         } catch (Exception e) {

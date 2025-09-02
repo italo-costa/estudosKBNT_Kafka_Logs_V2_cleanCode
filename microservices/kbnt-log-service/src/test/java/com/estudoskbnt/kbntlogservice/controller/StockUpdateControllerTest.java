@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.kafka.core.ProducerRecord;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.containsString;
 
 /**
  * Unit Tests for StockUpdateController
@@ -67,7 +68,7 @@ class StockUpdateControllerTest {
                 .content(jsonPayload)
                 .header("X-Correlation-ID", "test-correlation-123"))
                 .andExpect(status().isOk())
-                .andExpected(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.correlationId").value("test-correlation-123"));
     }
@@ -129,7 +130,7 @@ class StockUpdateControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.operation").value("ADD"))
-                .andExpected(jsonPath("$.kafka.topic").value("kbnt-stock-updates"));
+                .andExpect(jsonPath("$.kafka.topic").value("kbnt-stock-updates"));
     }
 
     @Test

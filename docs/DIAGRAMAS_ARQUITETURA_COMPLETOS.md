@@ -328,21 +328,13 @@ graph TB
     
     ```mermaid
     graph TB
-        TEST_HEADER["Teste 1000 mensagens | Score: 96/100 | Throughput: 15.66 msg/s | Confiabilidade: 98.7%"]
-        POSTGRES["PostgreSQL 15 | RUNNING | 1000+ transações"]
-        KAFKA_CLUSTER["Kafka Cluster | RUNNING | 987 msgs"]
-        ZK["Zookeeper | RUNNING"]
-        VIRTUAL_STOCK["Virtual Stock Service | 8080 | 550 req"]
-        CONSUMER_SVC["Stock Consumer Service | 8081 | 950 msgs"]
-        LOG_SERVICE["Log Service | 8082 | 437 logs"]
-
-        KAFKA_CLUSTER --> VIRTUAL_STOCK
-        KAFKA_CLUSTER --> CONSUMER_SVC
-        KAFKA_CLUSTER --> LOG_SERVICE
-        VIRTUAL_STOCK --> POSTGRES
-        CONSUMER_SVC --> POSTGRES
-        LOG_SERVICE --> POSTGRES
-        ZK --> KAFKA_CLUSTER
+        Kafka --> VirtualStockService
+        Kafka --> StockConsumerService
+        Kafka --> LogService
+        VirtualStockService --> PostgreSQL
+        StockConsumerService --> PostgreSQL
+        LogService --> PostgreSQL
+        Zookeeper --> Kafka
     ```
     participant P1 as Producer-1
     participant P2 as Producer-2

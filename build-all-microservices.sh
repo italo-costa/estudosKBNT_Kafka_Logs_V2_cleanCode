@@ -19,5 +19,8 @@ mvn clean package -DskipTests
 cd ../kbnt-stock-consumer-service
 mvn clean package -DskipTests
 
+cd ../kbnt-log-service
+mvn clean package -DskipTests
+
 cd ../../..
 echo "Build de todos os microserviços finalizado!"

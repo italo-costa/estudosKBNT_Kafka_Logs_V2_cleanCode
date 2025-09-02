@@ -14,7 +14,7 @@ import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
+// import removed: javax.annotation.PostConstruct
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -58,7 +58,7 @@ public class EnhancedLoggingConfig {
         this.environment = environment;
     }
 
-    @PostConstruct
+    // @PostConstruct removed; use InitializingBean or constructor if needed
     public void initializeLogging() {
         try {
             // Set up global MDC properties that will be included in all logs
@@ -170,6 +170,28 @@ public class EnhancedLoggingConfig {
      * Utility class for enhanced logging operations
      */
     public static class LoggingUtils {
+        public static void setServiceContext(String service, String component) {
+            MDC.put("service", service);
+            MDC.put("component", component);
+        }
+        public static void setMessageContext(String messageId, String topic) {
+            MDC.put("correlation_id", messageId);
+            MDC.put("kafka_topic", topic);
+        }
+        public static void logComponentInfo(String component, String info) {
+            Logger logger = (Logger) LoggerFactory.getLogger(component);
+            logger.info(info);
+        }
+        public static void logError(String component, String error, Throwable e, String messageId) {
+            Logger logger = (Logger) LoggerFactory.getLogger(component);
+            logger.error(error + " | messageId: " + messageId, e);
+        }
+        public static void logPerformanceMetrics(String operation, long durationMs) {
+            logPerformanceMetric(operation, durationMs, MDC.get("correlation_id"));
+        }
+        public static void clearContext() {
+            MDC.clear();
+        }
         
         /**
          * Set up MDC context for Kafka message processing

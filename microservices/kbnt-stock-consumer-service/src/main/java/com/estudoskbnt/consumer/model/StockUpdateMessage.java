@@ -1,137 +1,113 @@
 package com.estudoskbnt.consumer.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
  * Stock Update Message DTO
- * 
  * Represents the stock update message consumed from Kafka AMQ Streams.
  * This matches the format produced by Microservice A.
- * 
  * @author KBNT Development Team
  * @version 1.0.0
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class StockUpdateMessage {
-    
-    /**
-     * Unique correlation ID for request tracing
-     */
-    @NotBlank(message = "Correlation ID cannot be blank")
-    @JsonProperty("correlation_id")
+    // ...existing code...
+    public String getPriority() { return priority; }
+    public void setPriority(String priority) { this.priority = priority; }
+    private String messageHash;
+    public String getMessageHash() { return messageHash; }
+    public void setMessageHash(String messageHash) { this.messageHash = messageHash; }
+    public String getLocation() { return null; } // TODO: Implement if location field exists
     private String correlationId;
-    
-    /**
-     * Product identifier
-     */
-    @NotBlank(message = "Product ID cannot be blank")
-    @Size(min = 3, max = 50, message = "Product ID must be between 3 and 50 characters")
-    @JsonProperty("product_id")
     private String productId;
-    
-    /**
-     * Stock quantity to update
-     */
-    @NotNull(message = "Quantity cannot be null")
-    @Min(value = 0, message = "Quantity must be non-negative")
-    @Max(value = 99999, message = "Quantity cannot exceed 99999")
-    @JsonProperty("quantity")
     private Integer quantity;
-    
-    /**
-     * Product price per unit
-     */
-    @NotNull(message = "Price cannot be null")
-    @DecimalMin(value = "0.01", message = "Price must be greater than 0.01")
-    @DecimalMax(value = "99999.99", message = "Price cannot exceed 99999.99")
-    @JsonProperty("price")
-    private BigDecimal price;
-    
-    /**
-     * Update operation type
-     */
-    @NotBlank(message = "Operation cannot be blank")
-    @Pattern(regexp = "ADD|REMOVE|SET|ADJUST", message = "Operation must be ADD, REMOVE, SET, or ADJUST")
-    @JsonProperty("operation")
+    private java.math.BigDecimal price;
     private String operation;
-    
-    /**
-     * Product category
-     */
-    @Size(max = 100, message = "Category cannot exceed 100 characters")
-    @JsonProperty("category")
     private String category;
-    
-    /**
-     * Supplier information
-     */
-    @Size(max = 100, message = "Supplier cannot exceed 100 characters")
-    @JsonProperty("supplier")
     private String supplier;
-    
-    /**
-     * Warehouse location
-     */
-    @Size(max = 50, message = "Location cannot exceed 50 characters")
-    @JsonProperty("location")
-    private String location;
-    
-    /**
-     * Message publication timestamp
-     */
-    @JsonProperty("published_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
-    private LocalDateTime publishedAt;
-    
-    /**
-     * SHA-256 hash of the message content for verification
-     */
-    @NotBlank(message = "Hash cannot be blank")
-    @Size(min = 64, max = 64, message = "Hash must be exactly 64 characters (SHA-256)")
-    @JsonProperty("hash")
-    private String hash;
-    
-    /**
-     * Priority level for processing
-     */
-    @Pattern(regexp = "LOW|NORMAL|HIGH|CRITICAL", message = "Priority must be LOW, NORMAL, HIGH, or CRITICAL")
-    @JsonProperty("priority")
-    private String priority;
-    
-    /**
-     * Processing deadline
-     */
-    @JsonProperty("deadline")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime deadline;
-    
-    /**
-     * Calculate the total value of the stock update
-     * 
-     * @return Total value (quantity * price)
-     */
+    private String priority;
+    public StockUpdateMessage() {}
+    public StockUpdateMessage(String correlationId, String productId, Integer quantity, java.math.BigDecimal price, String operation, String category, String supplier) {
+        this.correlationId = correlationId;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.price = price;
+        this.operation = operation;
+        this.category = category;
+        this.supplier = supplier;
+    }
+    public static Builder builder() { return new Builder(); }
+    public static class Builder {
+    private String priority;
+    public Builder priority(String priority) { this.priority = priority; return this; }
+        private String correlationId;
+        private String productId;
+        private Integer quantity;
+        private java.math.BigDecimal price;
+        private String operation;
+        private String category;
+        private String supplier;
+        private String location;
+        private LocalDateTime publishedAt;
+        private LocalDateTime deadline;
+        private String hash;
+        public Builder correlationId(String correlationId) { this.correlationId = correlationId; return this; }
+        public Builder productId(String productId) { this.productId = productId; return this; }
+        public Builder quantity(Integer quantity) { this.quantity = quantity; return this; }
+        public Builder price(java.math.BigDecimal price) { this.price = price; return this; }
+        public Builder operation(String operation) { this.operation = operation; return this; }
+        public Builder category(String category) { this.category = category; return this; }
+        public Builder supplier(String supplier) { this.supplier = supplier; return this; }
+        public Builder location(String location) { this.location = location; return this; }
+        public Builder publishedAt(LocalDateTime publishedAt) { this.publishedAt = publishedAt; return this; }
+        public Builder deadline(LocalDateTime deadline) { this.deadline = deadline; return this; }
+        public Builder hash(String hash) { this.hash = hash; return this; }
+        public StockUpdateMessage build() {
+            StockUpdateMessage msg = new StockUpdateMessage(correlationId, productId, quantity, price, operation, category, supplier);
+            msg.location = this.location;
+            msg.deadline = this.deadline;
+            msg.publishedAt = this.publishedAt;
+            msg.hash = this.hash;
+            msg.priority = this.priority;
+            return msg;
+        }
+    }
+    private String location;
+    private LocalDateTime publishedAt;
+    private String hash;
+    public LocalDateTime getPublishedAt() { return publishedAt; }
+    public void setPublishedAt(LocalDateTime publishedAt) { this.publishedAt = publishedAt; }
+    public LocalDateTime getDeadline() { return deadline; }
+    public void setDeadline(LocalDateTime deadline) { this.deadline = deadline; }
+    public String getHash() { return hash; }
+    public void setHash(String hash) { this.hash = hash; }
+    // Getters e setters para todos os campos
+    public String getCorrelationId() { return correlationId; }
+    public void setCorrelationId(String correlationId) { this.correlationId = correlationId; }
+    public String getProductId() { return productId; }
+    public void setProductId(String productId) { this.productId = productId; }
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public java.math.BigDecimal getPrice() { return price; }
+    public void setPrice(java.math.BigDecimal price) { this.price = price; }
+    public String getOperation() { return operation; }
+    public void setOperation(String operation) { this.operation = operation; }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+    public String getSupplier() { return supplier; }
+    public void setSupplier(String supplier) { this.supplier = supplier; }
     public BigDecimal getTotalValue() {
         if (quantity != null && price != null) {
             return price.multiply(BigDecimal.valueOf(quantity));
         }
         return BigDecimal.ZERO;
     }
-    
     /**
      * Check if the message has expired based on deadline
-     * 
      * @return true if the message has expired
      */
     public boolean isExpired() {

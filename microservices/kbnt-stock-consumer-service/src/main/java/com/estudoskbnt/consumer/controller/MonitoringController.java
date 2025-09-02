@@ -27,8 +27,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/monitoring")
 @RequiredArgsConstructor
-@Slf4j
 public class MonitoringController {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(MonitoringController.class);
     
     private final ConsumptionLogRepository consumptionLogRepository;
     

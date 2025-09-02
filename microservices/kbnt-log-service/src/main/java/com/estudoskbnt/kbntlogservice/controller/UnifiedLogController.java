@@ -3,7 +3,8 @@ package com.estudoskbnt.kbntlogservice.controller;
 import com.estudoskbnt.kbntlogservice.model.LogMessage;
 import com.estudoskbnt.kbntlogservice.producer.UnifiedLogProducer;
 import io.micrometer.core.annotation.Timed;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.support.SendResult;
@@ -18,13 +19,13 @@ import java.util.concurrent.CompletableFuture;
  * Unified Log API Controller for AMQ Streams
  * Handles REST API requests when producer mode is enabled
  */
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/logs")
 @ConditionalOnExpression("'${app.processing.modes}'.contains('producer')")
 @Validated
 public class UnifiedLogController {
 
+    private static final Logger log = LoggerFactory.getLogger(UnifiedLogController.class);
     private final UnifiedLogProducer logProducer;
 
     public UnifiedLogController(UnifiedLogProducer logProducer) {
@@ -50,22 +51,22 @@ public class UnifiedLogController {
 
         return logProducer.produceLogMessage(logMessage)
             .thenApply(result -> {
-                var response = Map.of(
+                var response = Map.<String, Object>of(
                     "status", "accepted",
-                    "correlationId", logMessage.getCorrelationId(),
-                    "topic", result.getRecordMetadata().topic(),
-                    "partition", result.getRecordMetadata().partition(),
-                    "offset", result.getRecordMetadata().offset()
+                    "correlationId", (Object) logMessage.getCorrelationId(),
+                    "topic", (Object) result.getRecordMetadata().topic(),
+                    "partition", (Object) result.getRecordMetadata().partition(),
+                    "offset", (Object) result.getRecordMetadata().offset()
                 );
                 return ResponseEntity.accepted().body(response);
             })
             .exceptionally(throwable -> {
                 log.error("Failed to produce log message", throwable);
-                var errorResponse = Map.of(
-                    "status", "error",
-                    "message", throwable.getMessage(),
-                    "correlationId", logMessage.getCorrelationId()
-                );
+                    var errorResponse = Map.<String, Object>of(
+                        "status", "error",
+                        "message", throwable.getMessage(),
+                        "correlationId", logMessage.getCorrelationId()
+                    );
                 return ResponseEntity.internalServerError().body(errorResponse);
             });
     }
@@ -164,38 +165,38 @@ public class UnifiedLogController {
         
         return CompletableFuture.allOf(futures)
             .thenApply(v -> {
-                var response = Map.of(
+                var response = Map.<String, Object>of(
                     "status", "accepted",
-                    "batchSize", logMessages.length,
-                    "correlationId", correlationId != null ? correlationId : "batch-" + System.currentTimeMillis()
+                    "batchSize", (Object) logMessages.length,
+                    "correlationId", (Object) (correlationId != null ? correlationId : "batch-" + System.currentTimeMillis())
                 );
                 return ResponseEntity.accepted().body(response);
             })
             .exceptionally(throwable -> {
                 log.error("Failed to produce batch logs", throwable);
-                var errorResponse = Map.of(
+                var errorResponse = Map.<String, Object>of(
                     "status", "error", 
                     "message", throwable.getMessage(),
-                    "batchSize", logMessages.length
+                    "batchSize", (Object) logMessages.length
                 );
                 return ResponseEntity.internalServerError().body(errorResponse);
             });
     }
 
     private ResponseEntity<Map<String, Object>> createSuccessResponse(SendResult<String, LogMessage> result) {
-        var response = Map.of(
+        var response = Map.<String, Object>of(
             "status", "accepted",
-            "correlationId", result.getProducerRecord().value().getCorrelationId(),
-            "topic", result.getRecordMetadata().topic(),
-            "partition", result.getRecordMetadata().partition(),
-            "offset", result.getRecordMetadata().offset()
+            "correlationId", (Object) result.getProducerRecord().value().getCorrelationId(),
+            "topic", (Object) result.getRecordMetadata().topic(),
+            "partition", (Object) result.getRecordMetadata().partition(),
+            "offset", (Object) result.getRecordMetadata().offset()
         );
         return ResponseEntity.accepted().body(response);
     }
 
     private ResponseEntity<Map<String, Object>> createErrorResponse(Throwable throwable) {
         log.error("Failed to produce log message", throwable);
-        var errorResponse = Map.of(
+        var errorResponse = Map.<String, Object>of(
             "status", "error",
             "message", throwable.getMessage()
         );

@@ -1,9 +1,8 @@
 package com.estudoskbnt.kbntlogservice.domain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.estudoskbnt.kbntlogservice.domain.event.StockUpdateEvent;
+import com.estudoskbnt.kbntlogservice.domain.event.EventType;
+import com.estudoskbnt.kbntlogservice.domain.event.Priority;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -19,10 +18,6 @@ import java.util.UUID;
  * - Immutable value objects
  * - Domain validation rules
  */
-@Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class StockUpdate {
     
     private StockUpdateId id;
@@ -38,6 +33,42 @@ public class StockUpdate {
     private ReferenceDocument referenceDocument;
     private StockUpdateStatus status;
     
+    // Default constructor
+    public StockUpdate() {}
+    
+    // Constructor with all fields
+    public StockUpdate(StockUpdateId id, ProductId productId, DistributionCenter distributionCenter,
+                      Branch branch, Quantity quantity, Operation operation, LocalDateTime timestamp,
+                      CorrelationId correlationId, SourceBranch sourceBranch, ReasonCode reasonCode,
+                      ReferenceDocument referenceDocument, StockUpdateStatus status) {
+        this.id = id;
+        this.productId = productId;
+        this.distributionCenter = distributionCenter;
+        this.branch = branch;
+        this.quantity = quantity;
+        this.operation = operation;
+        this.timestamp = timestamp;
+        this.correlationId = correlationId;
+        this.sourceBranch = sourceBranch;
+        this.reasonCode = reasonCode;
+        this.referenceDocument = referenceDocument;
+        this.status = status;
+    }
+    
+    // Getters
+    public StockUpdateId getId() { return id; }
+    public ProductId getProductId() { return productId; }
+    public DistributionCenter getDistributionCenter() { return distributionCenter; }
+    public Branch getBranch() { return branch; }
+    public Quantity getQuantity() { return quantity; }
+    public Operation getOperation() { return operation; }
+    public LocalDateTime getTimestamp() { return timestamp; }
+    public CorrelationId getCorrelationId() { return correlationId; }
+    public SourceBranch getSourceBranch() { return sourceBranch; }
+    public ReasonCode getReasonCode() { return reasonCode; }
+    public ReferenceDocument getReferenceDocument() { return referenceDocument; }
+    public StockUpdateStatus getStatus() { return status; }
+    
     /**
      * Factory method to create a new StockUpdate
      */
@@ -47,17 +78,20 @@ public class StockUpdate {
                                    Quantity quantity,
                                    Operation operation,
                                    CorrelationId correlationId) {
-        return StockUpdate.builder()
-                .id(StockUpdateId.generate())
-                .productId(productId)
-                .distributionCenter(distributionCenter)
-                .branch(branch)
-                .quantity(quantity)
-                .operation(operation)
-                .timestamp(LocalDateTime.now())
-                .correlationId(correlationId)
-                .status(StockUpdateStatus.PENDING)
-                .build();
+        return new StockUpdate(
+                StockUpdateId.generate(),
+                productId,
+                distributionCenter,
+                branch,
+                quantity,
+                operation,
+                LocalDateTime.now(),
+                correlationId,
+                null, // sourceBranch
+                null, // reasonCode
+                null, // referenceDocument
+                StockUpdateStatus.PENDING
+        );
     }
     
     /**
@@ -106,18 +140,19 @@ public class StockUpdate {
         this.timestamp = LocalDateTime.now();
         
         // Create domain event
-        return StockUpdateEvent.builder()
-                .eventId(UUID.randomUUID().toString())
-                .stockUpdateId(this.id)
-                .productId(this.productId)
-                .distributionCenter(this.distributionCenter)
-                .branch(this.branch)
-                .quantity(this.quantity)
-                .operation(this.operation)
-                .timestamp(this.timestamp)
-                .correlationId(this.correlationId)
-                .eventType(determineEventType())
-                .build();
+        return new StockUpdateEvent(
+                UUID.randomUUID().toString(),
+                this.id,
+                this.productId,
+                this.distributionCenter,
+                this.branch,
+                this.quantity,
+                this.operation,
+                this.timestamp,
+                this.correlationId,
+                determineEventType(),
+                getPriority()
+        );
     }
     
     /**

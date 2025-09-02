@@ -130,19 +130,85 @@ services:
       retries: 5
     restart: unless-stopped
 
+  virtual-stock-service:
+    build:
+      context: ./virtual-stock-service
+      dockerfile: Dockerfile
+    container_name: virtual-stock-service
+    ports:
+      - "8084:8080"
+      - "9084:9080"  # Management port
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+    depends_on:
+      - kafka
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  kbnt-stock-consumer-service:
+    build:
+      context: ./kbnt-stock-consumer-service
+      dockerfile: Dockerfile
+    container_name: kbnt-stock-consumer-service
+    ports:
+      - "8085:8081"
+      - "9085:9081"  # Management port
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - DATABASE_URL=jdbc:postgresql://postgres:5432/loganalytics
+      - DATABASE_USERNAME=loguser
+      - DATABASE_PASSWORD=logpass123
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
   # Inherit Kafka from parent docker-compose
   kafka:
-    extends:
-      file: ../docker/docker-compose.yml
-      service: kafka
+    image: bitnami/kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+    volumes:
+      - kafka-data:/bitnami/kafka
+    depends_on:
+      - zookeeper
 
   zookeeper:
-    extends:
-      file: ../docker/docker-compose.yml
-      service: zookeeper
+    image: bitnami/zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    volumes:
+      - zookeeper-data:/bitnami/zookeeper
+      - zookeeper-logs:/logs
 
 volumes:
   postgres-data:
+  kafka-data:
+  zookeeper-data:
+  zookeeper-logs:
 
 networks:
   default:

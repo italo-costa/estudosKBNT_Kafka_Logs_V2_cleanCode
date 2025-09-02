@@ -29,12 +29,10 @@ public interface LogValidationUseCase {
         String message,
         java.util.List<String> errors
     ) {
-        
-        public static ValidationResult valid() {
+        public static ValidationResult validResult() {
             return new ValidationResult(true, "Valid log entry", java.util.List.of());
         }
-        
-        public static ValidationResult invalid(String message, java.util.List<String> errors) {
+        public static ValidationResult invalidResult(String message, java.util.List<String> errors) {
             return new ValidationResult(false, message, errors);
         }
     }

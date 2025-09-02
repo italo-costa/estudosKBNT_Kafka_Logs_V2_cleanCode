@@ -41,6 +41,15 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 @Slf4j
 public class KafkaConsumerService {
+    // Declare consumptionLog variable
+    private ConsumptionLog consumptionLog;
+    // Logger instance
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(KafkaConsumerService.class);
+    // Utility to generate a unique message ID from Kafka record
+    private String generateMessageId(org.apache.kafka.clients.consumer.ConsumerRecord<String, String> record) {
+        return record.topic() + "-" + record.partition() + "-" + record.offset();
+    }
+    // ...existing code...
     
     private final ExternalApiService externalApiService;
     private final ConsumptionLogRepository consumptionLogRepository;
@@ -53,10 +62,10 @@ public class KafkaConsumerService {
      * Consumes messages from multiple topics with retry logic and error handling.
      */
     @KafkaListener(
-        topics = {"${app.kafka.topics.stock-updates}", 
-                  "${app.kafka.topics.high-priority-stock-updates}"},
-        groupId = "${app.kafka.consumer.group-id}",
-        containerFactory = "kafkaListenerContainerFactory"
+    topics = {"${app.kafka.topics.stock-updates}", 
+          "${app.kafka.topics.high-priority-stock-updates}"},
+    groupId = "${app.kafka.consumer.group}",
+    containerFactory = "kafkaListenerContainerFactory"
     )
     @RetryableTopic(
         attempts = "${app.kafka.consumer.retry.max-attempts:3}",
@@ -79,45 +88,48 @@ public class KafkaConsumerService {
         String messageId = generateMessageId(record);
         
         try {
+            long startTime = System.currentTimeMillis();
+            final long startTimeFinal = startTime;
+            final Acknowledgment acknowledgmentFinal = acknowledgment;
+            final String messageIdFinal = messageId;
+            final String topicFinal = topic;
             // Set enhanced logging context
             EnhancedLoggingConfig.LoggingUtils.setServiceContext("ACL-VIRTUAL-STOCK", "KafkaConsumerService");
             EnhancedLoggingConfig.LoggingUtils.setMessageContext(messageId, topic);
-            
-            long startTime = System.currentTimeMillis();
-            
             EnhancedLoggingConfig.LoggingUtils.logComponentInfo("KAFKA_CONSUMER", 
                 String.format("Message received - Topic: %s, Partition: %d, Offset: %d", 
                     topic, partition, offset));
-            
             ConsumptionLog consumptionLog = null;
             StockUpdateMessage message = null;
-        
-        try {
+            final StockUpdateMessage messageFinal;
             // Parse message
-            message = objectMapper.readValue(messagePayload, StockUpdateMessage.class);
-            
+            try {
+                message = objectMapper.readValue(messagePayload, StockUpdateMessage.class);
+                messageFinal = message;
+            } catch (JsonProcessingException e) {
+                EnhancedLoggingConfig.LoggingUtils.logError("JSON_PARSING", 
+                    "Failed to parse message payload", e, messageId);
+                handleParsingError(messagePayload, topic, partition, offset, consumedAt, e);
+                acknowledgment.acknowledge();
+                return;
+            }
             EnhancedLoggingConfig.LoggingUtils.logComponentInfo("JSON_DESERIALIZATION", 
                 String.format("Message parsed successfully - CorrelationId: %s, ProductId: %s", 
                     message.getCorrelationId(), message.getProductId()));
-            
             // Create initial consumption log
             consumptionLog = createInitialConsumptionLog(message, topic, partition, 
                     offset, consumedAt);
             consumptionLog = consumptionLogRepository.save(consumptionLog);
-            
             EnhancedLoggingConfig.LoggingUtils.logComponentInfo("DATABASE_OPERATION", 
                 "Initial consumption log created and saved");
-            
             // Validate message hash
             if (!validateMessageHash(message)) {
                 EnhancedLoggingConfig.LoggingUtils.logError("HASH_VALIDATION", 
                     "Message hash validation failed", null, messageId);
                 throw new RuntimeException("Message hash validation failed");
             }
-            
             EnhancedLoggingConfig.LoggingUtils.logComponentInfo("HASH_VALIDATION", 
                 "Message hash validation successful");
-            
             // Check for duplicate processing
             if (isDuplicateMessage(message)) {
                 EnhancedLoggingConfig.LoggingUtils.logComponentInfo("DUPLICATE_CHECK", 
@@ -128,7 +140,6 @@ public class KafkaConsumerService {
                 acknowledgment.acknowledge();
                 return;
             }
-            
             // Check if message has expired
             if (message.isExpired()) {
                 EnhancedLoggingConfig.LoggingUtils.logComponentInfo("EXPIRY_CHECK", 
@@ -139,39 +150,28 @@ public class KafkaConsumerService {
                 acknowledgment.acknowledge();
                 return;
             }
-            
             // Process message asynchronously
             processMessageAsync(message, consumptionLog)
                     .whenComplete((result, throwable) -> {
-                        long duration = System.currentTimeMillis() - startTime;
-                        
+                        long duration = System.currentTimeMillis() - startTimeFinal;
                         if (throwable != null) {
                             EnhancedLoggingConfig.LoggingUtils.logError("ASYNC_PROCESSING", 
-                                "Async processing failed", throwable, message.getCorrelationId());
+                                "Async processing failed", throwable, messageFinal.getCorrelationId());
                         } else {
                             EnhancedLoggingConfig.LoggingUtils.logPerformanceMetrics("MESSAGE_PROCESSING", duration);
                             EnhancedLoggingConfig.LoggingUtils.logComponentInfo("ASYNC_PROCESSING", 
                                 String.format("Processing completed successfully - Duration: %dms", duration));
                         }
-                        acknowledgment.acknowledge();
+                        acknowledgmentFinal.acknowledge();
                         EnhancedLoggingConfig.LoggingUtils.logComponentInfo("KAFKA_ACK", 
                             "Message acknowledged");
                     });
-            
-        } catch (JsonProcessingException e) {
-            EnhancedLoggingConfig.LoggingUtils.logError("JSON_PARSING", 
-                "Failed to parse message payload", e, messageId);
-            handleParsingError(messagePayload, topic, partition, offset, consumedAt, e);
-            acknowledgment.acknowledge();
-            
         } catch (Exception e) {
             EnhancedLoggingConfig.LoggingUtils.logError("MESSAGE_PROCESSING", 
                 "Unexpected error processing message", e, messageId);
-            
             if (consumptionLog != null) {
                 updateLogWithError(consumptionLog, e);
             }
-            
             // Let retry mechanism handle the error by not acknowledging
             throw new RuntimeException("Processing failed", e);
         } finally {
@@ -428,80 +428,11 @@ public class KafkaConsumerService {
      */
     private void sendNotificationAsync(String correlationId, String productId, 
                                      boolean success, String message) {
-        externalApiService.sendNotification(correlationId, productId, success, message)
-                .subscribe(
-                        result -> log.debug("Notification sent for correlation ID: {}", correlationId),
-                        error -> log.warn("Failed to send notification for correlation ID: {} - Error: {}", 
-                                correlationId, error.getMessage())
-                );
-    }
-}
-
-/**
- * Message Hash Service
- * 
- * Service for calculating and validating message hashes.
- */
-@Service
-@Slf4j
-class MessageHashService {
-    
-    private final ObjectMapper objectMapper;
-    
-    public MessageHashService(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-    
-    /**
-     * Calculate SHA-256 hash for message verification
-     */
-    public String calculateMessageHash(StockUpdateMessage message) {
-        try {
-            // Create a copy without the hash field for calculation
-            StockUpdateMessage messageForHash = StockUpdateMessage.builder()
-                    .correlationId(message.getCorrelationId())
-                    .productId(message.getProductId())
-                    .quantity(message.getQuantity())
-                    .price(message.getPrice())
-                    .operation(message.getOperation())
-                    .category(message.getCategory())
-                    .supplier(message.getSupplier())
-                    .location(message.getLocation())
-                    .publishedAt(message.getPublishedAt())
-                    .priority(message.getPriority())
-                    .deadline(message.getDeadline())
-                    .build();
-            
-            String messageJson = objectMapper.writeValueAsString(messageForHash);
-            
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashBytes = digest.digest(messageJson.getBytes("UTF-8"));
-            
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hashBytes) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
-            }
-            
-            return hexString.toString();
-            
-        } catch (Exception e) {
-            log.error("Error calculating message hash", e);
-            throw new RuntimeException("Hash calculation failed", e);
-        }
-    }
-    
-    /**
-     * Generate unique message ID from consumer record
-     */
-    private String generateMessageId(ConsumerRecord<String, String> record) {
-        return String.format("%s-%d-%d-%d", 
-                record.topic(), 
-                record.partition(), 
-                record.offset(), 
-                record.timestamp());
+    externalApiService.sendNotification(correlationId, productId, success, message)
+        .subscribe(
+            result -> log.debug("Notification sent for correlation ID: {}", correlationId),
+            error -> log.warn("Failed to send notification for correlation ID: {} - Error: {}", 
+                correlationId, error.getMessage())
+        );
     }
 }

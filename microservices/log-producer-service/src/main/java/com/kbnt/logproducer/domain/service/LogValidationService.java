@@ -123,9 +123,8 @@ public class LogValidationService {
     private void validateBusinessRules(LogEntry logEntry, List<String> errors) {
         // Validar que logs de erro devem ter mais detalhes
         if (logEntry.getLevel().isError() || logEntry.getLevel().isFatal()) {
-            if (logEntry.getException() == null && 
-                (logEntry.getMessage().length() < 20)) {
-                errors.add("Logs de erro devem conter mais detalhes ou informações de exceção");
+            if (logEntry.getMessage().length() < 20) {
+                errors.add("Logs de erro devem conter mais detalhes");
             }
         }
         

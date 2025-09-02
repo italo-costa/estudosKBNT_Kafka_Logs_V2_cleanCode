@@ -14,6 +14,43 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Component
 public class MicrometerMetricsAdapter implements MetricsPort {
+    @Override
+    public void incrementLogCounter(String service, String level, String topic) {
+        Counter.builder("logs.counter")
+            .tag("service", service)
+            .tag("level", level)
+            .tag("topic", topic)
+            .description("Contador de logs por serviço, nível e tópico")
+            .register(meterRegistry)
+            .increment();
+    }
+    @Override
+    public void recordProcessingTime(String service, long processingTimeMs) {
+        Timer.builder("logs.processing.time")
+            .tag("service", service)
+            .description("Tempo de processamento de logs individuais por serviço")
+            .register(meterRegistry)
+            .record(java.time.Duration.ofMillis(processingTimeMs));
+    }
+    @Override
+    public void incrementErrorCounter(String service, String errorType) {
+        Counter.builder("logs.error.counter")
+            .tag("service", service)
+            .tag("errorType", errorType)
+            .description("Contador de erros por serviço e tipo")
+            .register(meterRegistry)
+            .increment();
+    }
+    @Override
+    public void recordPayloadSize(String service, int payloadSize) {
+        Counter.builder("logs.payload.size")
+            .tag("service", service)
+            .description("Tamanho do payload de logs")
+            .register(meterRegistry)
+            .increment(payloadSize);
+    }
+    // Implementação dos métodos da interface MetricsPort já está presente.
+    // Se algum método estiver faltando, adicione métodos vazios para compatibilidade.
     
     private final Counter publishedLogsCounter;
     private final Counter validationErrorsCounter;

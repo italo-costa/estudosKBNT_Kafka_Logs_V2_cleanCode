@@ -6,6 +6,17 @@ import com.kbnt.logproducer.domain.model.LogEntry;
  * Porta de saída para métricas
  */
 public interface MetricsPort {
+    // Métodos para compatibilidade com adapters e uso
+    void incrementPublishedLogs();
+    void incrementValidationErrors();
+    void incrementPublishingErrors();
+    void incrementSkippedLogs();
+    void incrementHighPriorityLogs();
+    void recordLogLevel(String level);
+    void recordLogService(String serviceName);
+    void recordProcessingTime(long durationMillis);
+    void recordBatchProcessing(int totalLogs, int successCount, int errorCount);
+    void recordBatchProcessingTime(long durationMillis);
     
     /**
      * Incrementa o contador de logs produzidos

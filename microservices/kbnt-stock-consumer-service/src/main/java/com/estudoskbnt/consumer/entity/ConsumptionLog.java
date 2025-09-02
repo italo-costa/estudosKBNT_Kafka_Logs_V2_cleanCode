@@ -1,20 +1,13 @@
 package com.estudoskbnt.consumer.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
  * Consumption Log Entity
- * 
  * Stores audit information about consumed Kafka messages and their processing results.
  * This provides full traceability of the consumer workflow.
- * 
  * @author KBNT Development Team
  * @version 1.0.0
  */
@@ -25,98 +18,138 @@ import java.time.LocalDateTime;
     @Index(name = "idx_status", columnList = "status"),
     @Index(name = "idx_topic_partition", columnList = "topic, partition_id")
 })
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ConsumptionLog {
-    
+    private String messageHash;
+    private String operation;
+    private LocalDateTime consumedAt;
+    public ConsumptionLog() {}
+    public ConsumptionLog(Long id, String correlationId, String topic, Integer partitionId, Long offset, String productId, Integer quantity, java.math.BigDecimal price) {
+        this.id = id;
+        this.correlationId = correlationId;
+        this.topic = topic;
+        this.partitionId = partitionId;
+        this.offset = offset;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.price = price;
+    }
+    public String getMessageHash() { return messageHash; }
+    public void setMessageHash(String messageHash) { this.messageHash = messageHash; }
+    public String getOperation() { return operation; }
+    public void setOperation(String operation) { this.operation = operation; }
+    public LocalDateTime getConsumedAt() { return consumedAt; }
+    public void setConsumedAt(LocalDateTime consumedAt) { this.consumedAt = consumedAt; }
+    public void setErrorMessage(String errorMessage) { this.errorMessage = errorMessage; }
+    public String getErrorMessage() { return this.errorMessage; }
+    public void setErrorStackTrace(String errorStackTrace) { this.errorStackTrace = errorStackTrace; }
+    public String getErrorStackTrace() { return this.errorStackTrace; }
+    public void setProcessingStartedAt(LocalDateTime processingStartedAt) { this.processingStartedAt = processingStartedAt; }
+    public LocalDateTime getProcessingStartedAt() { return this.processingStartedAt; }
+    public void setProcessingCompletedAt(LocalDateTime processingCompletedAt) { this.processingCompletedAt = processingCompletedAt; }
+    public LocalDateTime getProcessingCompletedAt() { return this.processingCompletedAt; }
+    public void setTotalProcessingTimeMs(Long totalProcessingTimeMs) { this.totalProcessingTimeMs = totalProcessingTimeMs; }
+    public Long getTotalProcessingTimeMs() { return this.totalProcessingTimeMs; }
+    public void setApiResponseCode(Integer apiResponseCode) { this.apiResponseCode = apiResponseCode; }
+    public Integer getApiResponseCode() { return this.apiResponseCode; }
+    public void setApiResponseMessage(String apiResponseMessage) { this.apiResponseMessage = apiResponseMessage; }
+    public String getApiResponseMessage() { return this.apiResponseMessage; }
+    public void setPriority(String priority) { this.priority = priority; }
+    public String getPriority() { return this.priority; }
+    public static Builder builder() { return new Builder(); }
+    public static class Builder {
+        private Long id;
+        private String correlationId;
+        private String topic;
+        private Integer partitionId;
+        private Long offset;
+        private String productId;
+        private Integer quantity;
+        private BigDecimal price;
+        private String operation;
+        private LocalDateTime consumedAt;
+        private String messageHash;
+        private ProcessingStatus status;
+        private String errorMessage;
+        private String priority;
+        private String errorStackTrace;
+        private String metadata;
+        private Integer retryCount = 0;
+        private LocalDateTime processingStartedAt;
+        private LocalDateTime processingCompletedAt;
+        private Long totalProcessingTimeMs;
+        private Integer apiResponseCode;
+        private String apiResponseMessage;
+        public Builder id(Long id) { this.id = id; return this; }
+        public Builder correlationId(String correlationId) { this.correlationId = correlationId; return this; }
+        public Builder topic(String topic) { this.topic = topic; return this; }
+        public Builder partitionId(Integer partitionId) { this.partitionId = partitionId; return this; }
+        public Builder offset(Long offset) { this.offset = offset; return this; }
+        public Builder productId(String productId) { this.productId = productId; return this; }
+        public Builder quantity(Integer quantity) { this.quantity = quantity; return this; }
+        public Builder price(BigDecimal price) { this.price = price; return this; }
+        public Builder operation(String operation) { this.operation = operation; return this; }
+        public Builder consumedAt(LocalDateTime consumedAt) { this.consumedAt = consumedAt; return this; }
+        public Builder messageHash(String messageHash) { this.messageHash = messageHash; return this; }
+        public Builder status(ProcessingStatus status) { this.status = status; return this; }
+        public Builder errorMessage(String errorMessage) { this.errorMessage = errorMessage; return this; }
+        public Builder priority(String priority) { this.priority = priority; return this; }
+        public Builder errorStackTrace(String errorStackTrace) { this.errorStackTrace = errorStackTrace; return this; }
+        public Builder metadata(String metadata) { this.metadata = metadata; return this; }
+        public Builder retryCount(Integer retryCount) { this.retryCount = retryCount; return this; }
+        public Builder processingStartedAt(LocalDateTime processingStartedAt) { this.processingStartedAt = processingStartedAt; return this; }
+        public Builder processingCompletedAt(LocalDateTime processingCompletedAt) { this.processingCompletedAt = processingCompletedAt; return this; }
+        public Builder totalProcessingTimeMs(Long totalProcessingTimeMs) { this.totalProcessingTimeMs = totalProcessingTimeMs; return this; }
+        public Builder apiResponseCode(Integer apiResponseCode) { this.apiResponseCode = apiResponseCode; return this; }
+        public Builder apiResponseMessage(String apiResponseMessage) { this.apiResponseMessage = apiResponseMessage; return this; }
+        public ConsumptionLog build() {
+            ConsumptionLog log = new ConsumptionLog(id, correlationId, topic, partitionId, offset, productId, quantity, price);
+            log.operation = this.operation;
+            log.consumedAt = this.consumedAt;
+            log.messageHash = this.messageHash;
+            log.status = this.status;
+            log.errorMessage = this.errorMessage;
+            log.priority = this.priority;
+            log.errorStackTrace = this.errorStackTrace;
+            log.metadata = this.metadata;
+            log.retryCount = this.retryCount;
+            log.processingStartedAt = this.processingStartedAt;
+            log.processingCompletedAt = this.processingCompletedAt;
+            log.totalProcessingTimeMs = this.totalProcessingTimeMs;
+            log.apiResponseCode = this.apiResponseCode;
+            log.apiResponseMessage = this.apiResponseMessage;
+            return log;
+        }
+    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getCorrelationId() { return correlationId; }
+    public void setCorrelationId(String correlationId) { this.correlationId = correlationId; }
+    public String getTopic() { return topic; }
+    public void setTopic(String topic) { this.topic = topic; }
+    public Integer getPartitionId() { return partitionId; }
+    public void setPartitionId(Integer partitionId) { this.partitionId = partitionId; }
+    public Long getOffset() { return offset; }
+    public void setOffset(Long offset) { this.offset = offset; }
+    public String getProductId() { return productId; }
+    public void setProductId(String productId) { this.productId = productId; }
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public BigDecimal getPrice() { return price; }
+    public void setPrice(BigDecimal price) { this.price = price; }
+    // ...existing code...
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    /**
-     * Correlation ID from the original message
-     */
-    @Column(name = "correlation_id", nullable = false, length = 100)
     private String correlationId;
-    
-    /**
-     * Kafka topic name
-     */
-    @Column(name = "topic", nullable = false, length = 200)
     private String topic;
-    
-    /**
-     * Kafka partition ID
-     */
-    @Column(name = "partition_id", nullable = false)
     private Integer partitionId;
-    
-    /**
-     * Kafka offset
-     */
-    @Column(name = "offset_value", nullable = false)
     private Long offset;
-    
-    /**
-     * Product ID from the message
-     */
-    @Column(name = "product_id", nullable = false, length = 50)
     private String productId;
-    
-    /**
-     * Stock quantity from the message
-     */
-    @Column(name = "quantity")
     private Integer quantity;
-    
-    /**
-     * Product price from the message
-     */
-    @Column(name = "price", precision = 10, scale = 2)
-    private BigDecimal price;
-    
-    /**
-     * Operation type from the message
-     */
-    @Column(name = "operation", length = 20)
-    private String operation;
-    
-    /**
-     * Message hash for verification
-     */
-    @Column(name = "message_hash", length = 64)
-    private String messageHash;
-    
-    /**
-     * When the message was consumed
-     */
-    @Column(name = "consumed_at", nullable = false)
-    private LocalDateTime consumedAt;
-    
-    /**
-     * When the message processing started
-     */
-    @Column(name = "processing_started_at")
+    private java.math.BigDecimal price;
     private LocalDateTime processingStartedAt;
-    
-    /**
-     * When the message processing completed
-     */
-    @Column(name = "processing_completed_at")
     private LocalDateTime processingCompletedAt;
-    
-    /**
-     * Processing status
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
     private ProcessingStatus status;
-    
-    /**
-     * External API call duration in milliseconds
-     */
     @Column(name = "api_call_duration_ms")
     private Long apiCallDurationMs;
     
@@ -148,8 +181,11 @@ public class ConsumptionLog {
      * Number of retry attempts made
      */
     @Column(name = "retry_count", nullable = false)
-    @Builder.Default
     private Integer retryCount = 0;
+    public Integer getRetryCount() { return retryCount; }
+    public void setRetryCount(Integer retryCount) { this.retryCount = retryCount; }
+    public void setStatus(ProcessingStatus status) { this.status = status; }
+    public ProcessingStatus getStatus() { return this.status; }
     
     /**
      * Total processing time in milliseconds

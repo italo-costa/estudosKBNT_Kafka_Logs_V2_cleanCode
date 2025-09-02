@@ -1,7 +1,8 @@
 package com.estudoskbnt.kbntlogservice.producer;
 
 import com.estudoskbnt.kbntlogservice.model.LogMessage;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -16,11 +17,11 @@ import java.util.concurrent.CompletableFuture;
  * Unified Log Producer Service for AMQ Streams
  * Routes different log types to appropriate topics
  */
-@Slf4j
 @Service
 @ConditionalOnExpression("'${app.processing.modes}'.contains('producer')")
 public class UnifiedLogProducer {
 
+    private static final Logger log = LoggerFactory.getLogger(UnifiedLogProducer.class);
     private final KafkaTemplate<String, LogMessage> kafkaTemplate;
     
     @Value("${app.kafka.topics.application-logs}")

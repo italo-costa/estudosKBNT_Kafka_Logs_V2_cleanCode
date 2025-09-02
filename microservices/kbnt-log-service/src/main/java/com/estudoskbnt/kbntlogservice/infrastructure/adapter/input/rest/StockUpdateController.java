@@ -2,15 +2,18 @@ package com.estudoskbnt.kbntlogservice.infrastructure.adapter.input.rest;
 
 import com.estudoskbnt.kbntlogservice.domain.model.*;
 import com.estudoskbnt.kbntlogservice.domain.port.input.*;
+import com.estudoskbnt.kbntlogservice.model.StockUpdateMessage;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -264,6 +267,9 @@ public class StockUpdateController {
             public Quantity getQuantity() { return Quantity.of(quantity); }
             
             @Override
+            public Operation getOperation() { return Operation.of("ADD", "Add stock operation"); }
+            
+            @Override
             public CorrelationId getCorrelationId() { return CorrelationId.of(correlationId); }
             
             @Override
@@ -291,6 +297,9 @@ public class StockUpdateController {
             
             @Override
             public Quantity getQuantity() { return Quantity.of(quantity); }
+            
+            @Override
+            public Operation getOperation() { return Operation.of("REMOVE", "Remove stock operation"); }
             
             @Override
             public CorrelationId getCorrelationId() { return CorrelationId.of(correlationId); }
@@ -321,6 +330,9 @@ public class StockUpdateController {
             
             @Override
             public Quantity getQuantity() { return Quantity.of(quantity); }
+            
+            @Override
+            public Operation getOperation() { return Operation.of("TRANSFER", "Transfer stock operation"); }
             
             @Override
             public CorrelationId getCorrelationId() { return CorrelationId.of(correlationId); }
@@ -355,6 +367,9 @@ public class StockUpdateController {
             public Quantity getQuantity() { return Quantity.of(quantity); }
             
             @Override
+            public Operation getOperation() { return Operation.of("RESERVE", "Reserve stock operation"); }
+            
+            @Override
             public CorrelationId getCorrelationId() { return CorrelationId.of(correlationId); }
             
             @Override
@@ -384,6 +399,9 @@ public class StockUpdateController {
             public Quantity getQuantity() { return Quantity.of(quantity); }
             
             @Override
+            public Operation getOperation() { return Operation.of("RELEASE", "Release stock operation"); }
+            
+            @Override
             public CorrelationId getCorrelationId() { return CorrelationId.of(correlationId); }
             
             @Override
@@ -398,19 +416,19 @@ public class StockUpdateController {
 
     private ResponseEntity<Map<String, Object>> createSuccessResponse(StockUpdateResult result) {
         if (result.isSuccess()) {
-            var response = Map.<String, Object>of(
-                    "status", "success",
-                    "correlationId", result.getEvent().getCorrelationId().getValue(),
-                    "operation", result.getEvent().getOperation().getType(),
-                    "productId", result.getEvent().getProductId().getValue(),
-                    "distributionCenter", result.getEvent().getDistributionCenter().getCode(),
-                    "branch", result.getEvent().getBranch().getCode(),
-                    "quantity", result.getEvent().getQuantity().getValue(),
-                    "eventId", result.getEvent().getEventId(),
-                    "eventType", result.getEvent().getEventType().name(),
-                    "targetTopic", result.getEvent().getTargetTopic(),
-                    "message", result.getMessage()
-            );
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", "success");
+            response.put("correlationId", result.getEvent().getCorrelationId().getValue());
+            response.put("operation", result.getEvent().getOperation().getType());
+            response.put("productId", result.getEvent().getProductId().getValue());
+            response.put("distributionCenter", result.getEvent().getDistributionCenter().getCode());
+            response.put("branch", result.getEvent().getBranch().getCode());
+            response.put("quantity", result.getEvent().getQuantity().getValue());
+            response.put("eventId", result.getEvent().getEventId());
+            response.put("eventType", result.getEvent().getEventType().name());
+            response.put("targetTopic", result.getEvent().getTargetTopic());
+            response.put("message", result.getMessage());
+            
             return ResponseEntity.ok(response);
         } else {
             var response = Map.<String, Object>of(
