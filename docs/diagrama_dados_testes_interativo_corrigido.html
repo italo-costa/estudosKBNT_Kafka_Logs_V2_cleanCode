@@ -253,9 +253,17 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         .pulse {
@@ -267,6 +275,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -333,49 +342,64 @@
 
                         <!-- Microservices Layer -->
                         <rect x="50" y="50" width="150" height="60" rx="10" fill="#3498db" opacity="0.8" />
-                        <text x="125" y="85" font-size="12" font-weight="bold" fill="white" text-anchor="middle">API Gateway</text>
-                        
+                        <text x="125" y="85" font-size="12" font-weight="bold" fill="white" text-anchor="middle">API
+                            Gateway</text>
+
                         <rect x="250" y="50" width="150" height="60" rx="10" fill="#3498db" opacity="0.8" />
-                        <text x="325" y="85" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Virtual Stock Service</text>
-                        
+                        <text x="325" y="85" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Virtual
+                            Stock Service</text>
+
                         <rect x="450" y="50" width="150" height="60" rx="10" fill="#3498db" opacity="0.8" />
-                        <text x="525" y="85" font-size="12" font-weight="bold" fill="white" text-anchor="middle">KBNT Log Service</text>
+                        <text x="525" y="85" font-size="12" font-weight="bold" fill="white" text-anchor="middle">KBNT
+                            Log Service</text>
 
                         <!-- Middleware Layer -->
                         <rect x="150" y="150" width="150" height="60" rx="10" fill="#e67e22" opacity="0.8" />
-                        <text x="225" y="185" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Apache Kafka</text>
-                        
+                        <text x="225" y="185" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Apache
+                            Kafka</text>
+
                         <rect x="350" y="150" width="150" height="60" rx="10" fill="#e67e22" opacity="0.8" />
-                        <text x="425" y="185" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Redis Cache</text>
+                        <text x="425" y="185" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Redis
+                            Cache</text>
 
                         <!-- Database Layer -->
                         <rect x="50" y="250" width="150" height="60" rx="10" fill="#27ae60" opacity="0.8" />
-                        <text x="125" y="285" font-size="12" font-weight="bold" fill="white" text-anchor="middle">PostgreSQL</text>
-                        
+                        <text x="125" y="285" font-size="12" font-weight="bold" fill="white"
+                            text-anchor="middle">PostgreSQL</text>
+
                         <rect x="250" y="250" width="150" height="60" rx="10" fill="#27ae60" opacity="0.8" />
-                        <text x="325" y="285" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Elasticsearch</text>
-                        
+                        <text x="325" y="285" font-size="12" font-weight="bold" fill="white"
+                            text-anchor="middle">Elasticsearch</text>
+
                         <rect x="450" y="250" width="150" height="60" rx="10" fill="#27ae60" opacity="0.8" />
-                        <text x="525" y="285" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Redis Logs</text>
+                        <text x="525" y="285" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Redis
+                            Logs</text>
 
                         <!-- Monitoring Layer -->
                         <rect x="650" y="150" width="150" height="60" rx="10" fill="#9b59b6" opacity="0.8" />
-                        <text x="725" y="185" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Performance Monitor</text>
-                        
+                        <text x="725" y="185" font-size="12" font-weight="bold" fill="white"
+                            text-anchor="middle">Performance Monitor</text>
+
                         <rect x="650" y="250" width="150" height="60" rx="10" fill="#9b59b6" opacity="0.8" />
-                        <text x="725" y="285" font-size="12" font-weight="bold" fill="white" text-anchor="middle">System Metrics</text>
+                        <text x="725" y="285" font-size="12" font-weight="bold" fill="white" text-anchor="middle">System
+                            Metrics</text>
 
                         <!-- Conexões -->
-                        <line x1="125" y1="110" x2="225" y2="150" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrowhead)" />
-                        <line x1="325" y1="110" x2="425" y2="150" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrowhead)" />
-                        <line x1="525" y1="110" x2="225" y2="150" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrowhead)" />
+                        <line x1="125" y1="110" x2="225" y2="150" stroke="#7f8c8d" stroke-width="2"
+                            marker-end="url(#arrowhead)" />
+                        <line x1="325" y1="110" x2="425" y2="150" stroke="#7f8c8d" stroke-width="2"
+                            marker-end="url(#arrowhead)" />
+                        <line x1="525" y1="110" x2="225" y2="150" stroke="#7f8c8d" stroke-width="2"
+                            marker-end="url(#arrowhead)" />
 
                         <line x1="125" y1="250" x2="125" y2="320" stroke="#7f8c8d" stroke-width="2" />
                         <line x1="325" y1="250" x2="325" y2="320" stroke="#7f8c8d" stroke-width="2" />
                         <line x1="525" y1="250" x2="525" y2="320" stroke="#7f8c8d" stroke-width="2" />
 
-                        <line x1="600" y1="80" x2="650" y2="180" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrowhead)" />
-                        <line x1="725" y1="210" x2="725" y2="250" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrowhead)" />
+                        <line x1="600" y1="80" x2="650" y2="180" stroke="#7f8c8d" stroke-width="2"
+                            marker-end="url(#arrowhead)" />
+                        <line x1="725" y1="210" x2="725" y2="250" stroke="#7f8c8d" stroke-width="2"
+                            marker-end="url(#arrowhead)" />
 
                         <!-- Labels das camadas -->
                         <text x="850" y="80" font-size="14" font-weight="bold" fill="#2c3e50">Microserviços</text>
@@ -388,7 +412,8 @@
 
             <!-- Estatísticas dos Testes Atuais -->
             <div class="diagram-container">
-                <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">📊 Estatísticas dos Testes Realizados</h2>
+                <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">📊 Estatísticas dos Testes
+                    Realizados</h2>
                 <div class="metrics-grid">
                     <div class="metric-card pulse">
                         <div class="metric-value">400,000</div>
@@ -418,7 +443,8 @@
 
                 <!-- Gráfico de Performance por Estratégia -->
                 <div style="background: white; margin-top: 30px; padding: 25px; border-radius: 15px;">
-                    <h3 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">📈 Performance por Estratégia (Teste 100K)</h3>
+                    <h3 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">📈 Performance por Estratégia
+                        (Teste 100K)</h3>
                     <div id="performance-chart" style="position: relative;">
                         <canvas id="strategyChart" width="800" height="300"></canvas>
                     </div>
@@ -426,7 +452,8 @@
 
                 <!-- Tabela Comparativa Detalhada -->
                 <div style="background: white; margin-top: 30px; padding: 25px; border-radius: 15px; overflow-x: auto;">
-                    <h3 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">📋 Comparação Detalhada - Teste 100K</h3>
+                    <h3 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">📋 Comparação Detalhada - Teste
+                        100K</h3>
                     <table class="performance-table">
                         <thead>
                             <tr>
@@ -488,11 +515,13 @@
 
             <!-- Estrutura de Dados -->
             <div class="diagram-container">
-                <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">🏗️ Estrutura de Dados de Testes</h2>
-                
+                <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">🏗️ Estrutura de Dados de Testes
+                </h2>
+
                 <div class="structure-card animate-slide">
                     <div class="structure-title">📊 PerformanceResult</div>
-                    <div class="structure-description">Estrutura principal que armazena os resultados de cada teste de performance</div>
+                    <div class="structure-description">Estrutura principal que armazena os resultados de cada teste de
+                        performance</div>
                     <div class="structure-fields">
                         strategy: str<br>
                         total_requests: int<br>
@@ -507,7 +536,8 @@
 
                 <div class="structure-card animate-slide">
                     <div class="structure-title">💾 SystemMetrics</div>
-                    <div class="structure-description">Métricas de recursos computacionais coletadas durante os testes</div>
+                    <div class="structure-description">Métricas de recursos computacionais coletadas durante os testes
+                    </div>
                     <div class="structure-fields">
                         avg_cpu_percent: float<br>
                         peak_cpu_percent: float<br>
@@ -570,11 +600,11 @@
         // Função para executar simulação
         function runSimulation() {
             alert('⚡ Executando nova simulação...\n\n' +
-                  'Comando: python performance-test-high-load.py\n' +
-                  'Parâmetros: 100,000 req/estratégia\n' +
-                  'Estratégias: 4 (Free Tier, Simple, Complete, Enterprise)\n' +
-                  'Tempo estimado: ~15 minutos\n' +
-                  'Total de requisições: 400,000');
+                'Comando: python performance-test-high-load.py\n' +
+                'Parâmetros: 100,000 req/estratégia\n' +
+                'Estratégias: 4 (Free Tier, Simple, Complete, Enterprise)\n' +
+                'Tempo estimado: ~15 minutos\n' +
+                'Total de requisições: 400,000');
         }
 
         // Função para ver relatórios
@@ -592,23 +622,23 @@
         // Função para exportar dados
         function exportData() {
             alert('💾 Exportação de dados disponível em:\n\n' +
-                  '• JSON: Dados estruturados completos\n' +
-                  '• CSV: Tabelas para análise\n' +
-                  '• PNG: Gráficos e visualizações\n' +
-                  '• PDF: Relatórios executivos');
+                '• JSON: Dados estruturados completos\n' +
+                '• CSV: Tabelas para análise\n' +
+                '• PNG: Gráficos e visualizações\n' +
+                '• PDF: Relatórios executivos');
         }
 
         // Função para mostrar arquitetura
         function showArchitecture() {
             alert('🏗️ Arquitetura KBNT Kafka Logs:\n\n' +
-                  '• API Gateway (:8080)\n' +
-                  '• Virtual Stock Service (:8081)\n' +
-                  '• KBNT Log Service (:8082)\n' +
-                  '• Apache Kafka (:9092)\n' +
-                  '• PostgreSQL (:5432)\n' +
-                  '• Elasticsearch (:9200)\n' +
-                  '• Redis Cache (:6379)\n' +
-                  '• Performance Monitor');
+                '• API Gateway (:8080)\n' +
+                '• Virtual Stock Service (:8081)\n' +
+                '• KBNT Log Service (:8082)\n' +
+                '• Apache Kafka (:9092)\n' +
+                '• PostgreSQL (:5432)\n' +
+                '• Elasticsearch (:9200)\n' +
+                '• Redis Cache (:6379)\n' +
+                '• Performance Monitor');
         }
 
         // Renderizar gráfico de performance
@@ -693,12 +723,12 @@
                 // Barra RPS (mais espessa)
                 const rpsHeight = (strategy.rps / maxRps) * (chartHeight * 0.75);
                 ctx.fillStyle = strategy.color;
-                ctx.fillRect(x - barWidth/2, height - margin - rpsHeight, barWidth * 0.5, rpsHeight);
+                ctx.fillRect(x - barWidth / 2, height - margin - rpsHeight, barWidth * 0.5, rpsHeight);
 
                 // Barra Success Rate (mais espessa, ao lado)
                 const successHeight = (strategy.success / maxSuccess) * (chartHeight * 0.75);
                 ctx.fillStyle = strategy.color + 'AA'; // Semi-transparente
-                ctx.fillRect(x + barWidth/2 - barWidth * 0.25, height - margin - successHeight, barWidth * 0.5, successHeight);
+                ctx.fillRect(x + barWidth / 2 - barWidth * 0.25, height - margin - successHeight, barWidth * 0.5, successHeight);
 
                 // Labels das estratégias (com quebra de linha se necessário)
                 ctx.fillStyle = '#34495e';
@@ -713,11 +743,11 @@
                 ctx.fillStyle = strategy.color;
                 ctx.font = 'bold 11px Arial';
                 const rpsText = strategy.rps >= 1000 ? (strategy.rps / 1000).toFixed(1) + 'K' : strategy.rps.toFixed(0);
-                ctx.fillText(rpsText, x - barWidth/4, height - margin - rpsHeight - 10);
+                ctx.fillText(rpsText, x - barWidth / 4, height - margin - rpsHeight - 10);
 
                 // Valores Success Rate (acima da barra)
                 ctx.fillStyle = strategy.color;
-                ctx.fillText(strategy.success.toFixed(1) + '%', x + barWidth/4, height - margin - successHeight - 10);
+                ctx.fillText(strategy.success.toFixed(1) + '%', x + barWidth / 4, height - margin - successHeight - 10);
 
                 // Latência como ponto (melhor posicionado)
                 const latencyY = margin + (1 - strategy.latency / maxLatency) * (chartHeight * 0.75);

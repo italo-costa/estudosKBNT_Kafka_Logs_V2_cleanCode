@@ -86,89 +86,89 @@
         .metric-label {
             font-size: 0.9em;
             opacity: 0.9;
-        ctx.font='12px Arial';
-        ctx.textAlign='center';
+            ctx.font='12px Arial';
+            ctx.textAlign='center';
 
-        // Label X
-        ctx.fillText('Estratégias de Deployment', width / 2, height - 10);
+            // Label X
+            ctx.fillText('Estratégias de Deployment', width / 2, height - 10);
 
-        // Label Y esquerdo
-        ctx.save();
-        ctx.translate(15, height / 2);
-        ctx.rotate(-Math.PI / 2);
-        ctx.fillText('Requests per Second (RPS)', 0, 0);
-        ctx.restore();
+            // Label Y esquerdo
+            ctx.save();
+            ctx.translate(15, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('Requests per Second (RPS)', 0, 0);
+            ctx.restore();
 
-        // Label Y direito
-        ctx.save();
-        ctx.translate(width - 15, height / 2);
-        ctx.rotate(Math.PI / 2);
-        ctx.fillText('Success Rate (%)', 0, 0);
-        ctx.restore();
+            // Label Y direito
+            ctx.save();
+            ctx.translate(width - 15, height / 2);
+            ctx.rotate(Math.PI / 2);
+            ctx.fillText('Success Rate (%)', 0, 0);
+            ctx.restore();
 
-        // Desenhar barras e dados
-        strategies.forEach((strategy, index)=> {
-                const x=margin + (index + 0.5) * (chartWidth / strategies.length);
+            // Desenhar barras e dados
+            strategies.forEach((strategy, index)=> {
+                    const x=margin + (index + 0.5) * (chartWidth / strategies.length);
 
-                // Barra RPS
-                const rpsHeight=(strategy.rps / maxRps) * (chartHeight * 0.8);
-                ctx.fillStyle=strategy.color;
-                ctx.fillRect(x - barWidth/2, height - margin - rpsHeight, barWidth * 0.4, rpsHeight);
+                    // Barra RPS
+                    const rpsHeight=(strategy.rps / maxRps) * (chartHeight * 0.8);
+                    ctx.fillStyle=strategy.color;
+                    ctx.fillRect(x - barWidth/2, height - margin - rpsHeight, barWidth * 0.4, rpsHeight);
 
-                // Barra Success Rate
-                const successHeight=(strategy.success / maxSuccess) * (chartHeight * 0.8);
-                ctx.fillStyle=strategy.color + '80'; // Semi-transparente
-                ctx.fillRect(x - barWidth/2 + barWidth * 0.5, height - margin - successHeight, barWidth * 0.4, successHeight);
+                    // Barra Success Rate
+                    const successHeight=(strategy.success / maxSuccess) * (chartHeight * 0.8);
+                    ctx.fillStyle=strategy.color + '80'; // Semi-transparente
+                    ctx.fillRect(x - barWidth/2 + barWidth * 0.5, height - margin - successHeight, barWidth * 0.4, successHeight);
 
-                // Labels das estratégias
-                ctx.fillStyle='#34495e';
-                ctx.font='10px Arial';
-                ctx.textAlign='center';
-                ctx.fillText(strategy.name, x, height - margin + 15);
+                    // Labels das estratégias
+                    ctx.fillStyle='#34495e';
+                    ctx.font='10px Arial';
+                    ctx.textAlign='center';
+                    ctx.fillText(strategy.name, x, height - margin + 15);
 
-                // Valores RPS
-                ctx.fillStyle=strategy.color;
-                ctx.font='bold 10px Arial';
-                ctx.fillText(strategy.rps.toFixed(1), x - barWidth/4, height - margin - rpsHeight - 5);
+                    // Valores RPS
+                    ctx.fillStyle=strategy.color;
+                    ctx.font='bold 10px Arial';
+                    ctx.fillText(strategy.rps.toFixed(1), x - barWidth/4, height - margin - rpsHeight - 5);
 
-                // Valores Success Rate
-                ctx.fillStyle=strategy.color;
-                ctx.fillText(strategy.success.toFixed(1) + '%', x + barWidth/4, height - margin - successHeight - 5);
+                    // Valores Success Rate
+                    ctx.fillStyle=strategy.color;
+                    ctx.fillText(strategy.success.toFixed(1) + '%', x + barWidth/4, height - margin - successHeight - 5);
 
-                // Latência como ponto
-                const latencyY=margin + (1 - strategy.latency / maxLatency) * (chartHeight * 0.8);
-                ctx.beginPath();
-                ctx.fillStyle='#f39c12';
-                ctx.arc(x, latencyY, 4, 0, 2 * Math.PI);
-                ctx.fill();
+                    // Latência como ponto
+                    const latencyY=margin + (1 - strategy.latency / maxLatency) * (chartHeight * 0.8);
+                    ctx.beginPath();
+                    ctx.fillStyle='#f39c12';
+                    ctx.arc(x, latencyY, 4, 0, 2 * Math.PI);
+                    ctx.fill();
 
-                // Valor de latência
-                ctx.fillStyle='#f39c12';
-                ctx.font='bold 9px Arial';
-                ctx.fillText(strategy.latency.toFixed(0) + 'ms', x, latencyY - 8);
-            });
+                    // Valor de latência
+                    ctx.fillStyle='#f39c12';
+                    ctx.font='bold 9px Arial';
+                    ctx.fillText(strategy.latency.toFixed(0) + 'ms', x, latencyY - 8);
+                });
 
-        // Legenda
-        const legendY=margin - 30;
-        ctx.font='11px Arial';
-        ctx.textAlign='left';
+            // Legenda
+            const legendY=margin - 30;
+            ctx.font='11px Arial';
+            ctx.textAlign='left';
 
-        ctx.fillStyle=strategies[0].color;
-        ctx.fillRect(margin, legendY, 15, 10);
-        ctx.fillStyle='#34495e';
-        ctx.fillText('RPS', margin + 20, legendY + 8);
+            ctx.fillStyle=strategies[0].color;
+            ctx.fillRect(margin, legendY, 15, 10);
+            ctx.fillStyle='#34495e';
+            ctx.fillText('RPS', margin + 20, legendY + 8);
 
-        ctx.fillStyle=strategies[0].color+'80';
-        ctx.fillRect(margin + 80, legendY, 15, 10);
-        ctx.fillStyle='#34495e';
-        ctx.fillText('Success %', margin + 100, legendY + 8);
+            ctx.fillStyle=strategies[0].color+'80';
+            ctx.fillRect(margin + 80, legendY, 15, 10);
+            ctx.fillStyle='#34495e';
+            ctx.fillText('Success %', margin + 100, legendY + 8);
 
-        ctx.beginPath();
-        ctx.fillStyle='#f39c12';
-        ctx.arc(margin + 180, legendY + 5, 4, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.fillStyle='#34495e';
-        ctx.fillText('Latência (ms)', margin + 190, legendY + 8);
+            ctx.beginPath();
+            ctx.fillStyle='#f39c12';
+            ctx.arc(margin + 180, legendY + 5, 4, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillStyle='#34495e';
+            ctx.fillText('Latência (ms)', margin + 190, legendY + 8);
         }
 
         // Adicionar animação aos cards ao carregarder-radius: 20px;
