@@ -1,6 +1,188 @@
-# KBNT Microservices Kafka Logs System
+# 🚀 KBNT Microservices Kafka Logs System
 
-Sistema de microserviços para gerenciamento de estoque virtual com arquitetura orientada a eventos usando Kafka para processamento de logs e monitoramento.
+Sistema de microserviços para gerenciamento de estoque virtual com **arquitetura escalável horizontal e vertical**, orientado a eventos usando Kafka para processamento de logs e monitoramento.
+
+## 📊 **STATUS ATUAL: ✅ ARQUITETURA ESCALÁVEL IMPLEMENTADA**
+
+🎯 **Conquistas Recentes (Setembro 2025):**
+- ✅ **5 Estratégias de Deployment** completas implementadas
+- ✅ **Escalabilidade Horizontal** com múltiplas instâncias e load balancing  
+- ✅ **Escalabilidade Vertical** com otimizações de performance
+- ✅ **36+ Containers** em configuração enterprise de alta disponibilidade
+- ✅ **Cluster Kafka** (3 brokers) + PostgreSQL Master-Replica
+- ✅ **Stack de Monitoramento** completa (Prometheus + Grafana)
+- ✅ **Diagramas Mermaid** detalhados para todas as estratégias
+
+---
+
+## 🎯 **ESTRATÉGIAS DE DEPLOYMENT DISPONÍVEIS**
+
+| Estratégia | Containers | Uso Recomendado | Recursos | Documentação |
+|------------|-----------|-----------------|-----------|--------------|
+| 🧪 **Local Dev** | 6 | Desenvolvimento local | 2GB RAM | `docker-compose.yml` |
+| 🔧 **Free Tier** | 8 | Testes CI/CD | 3GB RAM | `docker-compose.free-tier.yml` |
+| 🏗️ **Infrastructure** | 4 | Base infraestrutura | 2GB RAM | `docker-compose.infrastructure-only.yml` |
+| 📈 **Scalable Simple** | 15 | Produção básica | 6GB RAM | `docker-compose.scalable-simple.yml` |
+| 🏢 **Enterprise Full** | 36+ | Produção enterprise | 12GB+ RAM | `docker-compose.scalable.yml` |
+
+📋 **Documentação Completa:**
+- 📊 [`DEPLOYMENT_STRATEGIES.md`](DEPLOYMENT_STRATEGIES.md) - Estratégias completas com diagramas Mermaid
+- 🔄 [`DEPLOYMENT_SEQUENCE.md`](DEPLOYMENT_SEQUENCE.md) - Sequências de CI/CD e fluxos
+- 🏗️ [`DEPLOYMENT_ARCHITECTURE.md`](DEPLOYMENT_ARCHITECTURE.md) - Arquitetura enterprise detalhada
+- 📈 [`RELATORIO-ESCALABILIDADE-COMPLETO.md`](RELATORIO-ESCALABILIDADE-COMPLETO.md) - Relatório executivo
+
+---
+
+## 🚀 **QUICK START - ESCOLHA SUA ESTRATÉGIA**
+
+### 🧪 **Desenvolvimento Local (6 containers)**
+```bash
+# Deploy básico para desenvolvimento
+docker-compose up -d
+
+# Acesso: http://localhost:8080
+```
+
+### 📈 **Produção Escalável (15 containers)**
+```bash
+# Deploy escalável com alta disponibilidade
+docker-compose -f docker-compose.scalable-simple.yml up -d
+
+# Scaling horizontal
+docker-compose -f docker-compose.scalable-simple.yml up --scale virtual-stock-service=4 -d
+
+# Monitoramento: http://localhost:3000 (Grafana)
+```
+
+### 🏢 **Enterprise Full (36+ containers)**
+```bash
+# Deploy enterprise completo
+docker-compose -f docker-compose.scalable.yml up -d
+
+# Sistemas disponíveis:
+# - API Gateway: http://localhost:8080
+# - Grafana: http://localhost:3000
+# - Prometheus: http://localhost:9090
+# - Elasticsearch: http://localhost:9200
+```
+
+---
+
+## 🏗️ Arquitetura do Sistema - Visão Geral
+
+```mermaid
+graph TB
+    %% Client Layer
+    Client[Client/Browser] -->|HTTP REST| Gateway[API Gateway<br/>Port 8090<br/>Spring Cloud Gateway]
+    Client -->|Direct Access| KafkaUI[Kafka UI<br/>Port 8080<br/>Monitoring]
+    Client -->|Direct Access| Kibana[Kibana<br/>Port 5601<br/>Analytics]
+    
+---
+
+## 📊 **DIAGRAMAS MERMAID - ESTRATÉGIAS DE DEPLOYMENT**
+
+### 🎯 **Fluxograma Completo de Deployment**
+Visualize todas as estratégias de deployment em [`DEPLOYMENT_STRATEGIES.md`](DEPLOYMENT_STRATEGIES.md):
+
+```mermaid
+flowchart TD
+    A[🚀 Início Deploy] --> B{Escolha Estratégia}
+    
+    B --> C[🧪 Desenvolvimento Local]
+    C --> C1[docker-compose.yml<br/>6 containers]
+    C1 --> C3[✅ Ambiente Dev Pronto]
+    
+    B --> F[📈 Escalável Simples]
+    F --> F1[docker-compose.scalable-simple.yml<br/>15 containers]
+    F1 --> F3[✅ Sistema Escalável]
+    
+    B --> G[🏢 Enterprise Full]
+    G --> G1[docker-compose.scalable.yml<br/>36+ containers]
+    G1 --> G3[✅ Produção Enterprise]
+    
+    C3 --> I[🔍 Health Checks]
+    F3 --> I
+    G3 --> I
+    
+    I --> J{Todos Healthy?}
+    J -->|Sim| K[✅ Deploy Sucesso]
+    J -->|Não| L[🔧 Fix Issues]
+    L --> B
+    
+    K --> O[📊 Monitoramento Contínuo]
+```
+
+### 🏗️ **Arquitetura Enterprise Escalável**
+Arquitetura completa com 36+ containers em [`DEPLOYMENT_ARCHITECTURE.md`](DEPLOYMENT_ARCHITECTURE.md):
+
+```mermaid
+graph TB
+    subgraph "⚖️ LOAD BALANCER"
+        LB[HAProxy]
+    end
+    
+    subgraph "🚪 API GATEWAY TIER"
+        API1[API Gateway-1]
+        API2[API Gateway-2]
+        API3[API Gateway-3]
+    end
+    
+    subgraph "💼 APPLICATION TIER"
+        VS1[Virtual Stock-1]
+        VS2[Virtual Stock-2]
+        VS3[Virtual Stock-3]
+        VS4[Virtual Stock-4]
+    end
+    
+    subgraph "📨 MESSAGE LAYER"
+        K1[Kafka-1:9092]
+        K2[Kafka-2:9093]
+        K3[Kafka-3:9094]
+    end
+    
+    subgraph "💾 DATA LAYER"
+        PG1[PostgreSQL Master]
+        PG2[PostgreSQL Replica]
+        ES1[Elasticsearch-1]
+        ES2[Elasticsearch-2]
+    end
+    
+    LB --> API1
+    LB --> API2
+    LB --> API3
+    API1 --> VS1
+    API2 --> VS2
+    API3 --> VS3
+    VS1 --> K1
+    VS2 --> K2
+    VS3 --> K3
+    K1 --> PG1
+    K2 --> PG2
+    K3 --> ES1
+```
+
+### 🔄 **CI/CD Pipeline Implementado**
+Sequência completa de deployment em [`DEPLOYMENT_SEQUENCE.md`](DEPLOYMENT_SEQUENCE.md):
+
+```mermaid
+sequenceDiagram
+    participant Dev as 👨‍💻 Developer
+    participant Git as 🌐 GitHub
+    participant Test as 🧪 Test Env
+    participant Prod as 🏭 Production
+    participant Monitor as 📊 Monitoring
+    
+    Dev->>Git: git push feature/xxx
+    Git->>Test: Auto-deploy test
+    Test->>Test: Run integration tests
+    Test->>Dev: ✅ Test results
+    Dev->>Git: Create release tag
+    Git->>Prod: Deploy production
+    Prod->>Monitor: Start monitoring
+    Monitor->>Dev: 🎉 Deploy success
+```
+
+---
 
 ## 🏗️ Arquitetura do Sistema - Visão Geral
 
