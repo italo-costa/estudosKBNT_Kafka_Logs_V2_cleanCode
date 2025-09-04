@@ -1,0 +1,228 @@
+# =============================================================================
+# API Gateway - High Performance & Scalability Configuration
+# =============================================================================
+
+# Server Configuration
+server:
+  port: 8080
+  netty:
+    connection-timeout: 10s
+    idle-timeout: 30s
+  max-http-header-size: 16KB
+
+# Spring Cloud Gateway Configuration
+spring:
+  application:
+    name: api-gateway
+  
+  cloud:
+    gateway:
+      # Global settings for high performance
+      httpclient:
+        connect-timeout: 5000
+        response-timeout: 30s
+        pool:
+          max-connections: 500         # Increased connection pool
+          max-idle-time: 30s
+          max-life-time: 60s
+          acquire-timeout: 10000
+        
+      # Route configurations optimized for performance
+      routes:
+      # Virtual Stock Service - Core business operations
+      - id: virtual-stock-route
+        uri: lb://virtual-stock-service  # Load balanced
+        predicates:
+        - Path=/api/v1/virtual-stock/**
+        filters:
+        - name: CircuitBreaker
+          args:
+            name: virtual-stock-cb
+            fallbackUri: forward:/fallback/virtual-stock
+        - name: Retry
+          args:
+            retries: 2
+            statuses: BAD_GATEWAY,SERVICE_UNAVAILABLE
+            backoff:
+              firstBackoff: 100ms
+              maxBackoff: 1000ms
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter:
+              replenish-rate: 100    # tokens per second
+              burst-capacity: 200    # bucket capacity
+              requested-tokens: 1
+        - StripPrefix=1
+        
+      # Log Producer Service - High throughput
+      - id: log-producer-route
+        uri: lb://log-producer-service
+        predicates:
+        - Path=/api/v1/logs/**
+        filters:
+        - name: CircuitBreaker
+          args:
+            name: log-producer-cb
+            fallbackUri: forward:/fallback/logs
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter:
+              replenish-rate: 200    # Higher rate for logs
+              burst-capacity: 500
+              requested-tokens: 1
+        - StripPrefix=1
+        
+      # Log Consumer Service - Analytics
+      - id: log-consumer-route
+        uri: lb://log-consumer-service
+        predicates:
+        - Path=/api/v1/analytics/**
+        filters:
+        - name: CircuitBreaker
+          args:
+            name: log-consumer-cb
+            fallbackUri: forward:/fallback/analytics
+        - StripPrefix=1
+        
+      # KBNT Log Service - Business logs
+      - id: kbnt-log-route
+        uri: lb://kbnt-log-service
+        predicates:
+        - Path=/api/v1/kbnt-logs/**
+        filters:
+        - name: CircuitBreaker
+          args:
+            name: kbnt-log-cb
+        - StripPrefix=1
+
+      # Global filters for all routes
+      default-filters:
+      - name: GlobalFilter
+      - name: AddRequestHeader
+        args:
+          name: X-Request-Source
+          value: api-gateway
+      - name: AddResponseHeader
+        args:
+          name: X-Response-Time
+          value: ${spring.cloud.gateway.filter.request-time}
+
+  # Load balancer configuration
+  loadbalancer:
+    ribbon:
+      enabled: false
+    cache:
+      enabled: true
+      ttl: 5s
+      capacity: 256
+
+# Circuit Breaker Configuration (Resilience4J)
+resilience4j:
+  circuitbreaker:
+    instances:
+      virtual-stock-cb:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 20
+        minimum-number-of-calls: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        
+      log-producer-cb:
+        sliding-window-type: TIME_BASED
+        sliding-window-size: 60  # 60 seconds
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 60
+        wait-duration-in-open-state: 20s
+        
+      log-consumer-cb:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 15
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 40
+        wait-duration-in-open-state: 45s
+
+  retry:
+    instances:
+      default:
+        max-attempts: 2
+        wait-duration: 200ms
+        exponential-backoff-multiplier: 1.5
+
+  ratelimiter:
+    instances:
+      default:
+        limit-for-period: 1000
+        limit-refresh-period: 1s
+        timeout-duration: 100ms
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,gateway
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+    gateway:
+      enabled: true  # Gateway-specific endpoints
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles:
+        http.server.requests: 0.5, 0.75, 0.95, 0.99
+        spring.cloud.gateway.requests: 0.5, 0.75, 0.95, 0.99
+  server:
+    port: 8081
+
+# Logging configuration
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+    org.springframework.web.reactive: WARN
+    io.netty: WARN
+    reactor.netty: WARN
+    com.kbnt.apigateway: INFO
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{36} - %msg%n"
+
+# Custom configuration for fallbacks and error handling
+app:
+  gateway:
+    # Fallback responses configuration
+    fallbacks:
+      virtual-stock:
+        message: "Virtual Stock service is temporarily unavailable"
+        retry-after: 30
+      logs:
+        message: "Log service is temporarily unavailable"  
+        retry-after: 10
+      analytics:
+        message: "Analytics service is temporarily unavailable"
+        retry-after: 60
+    
+    # CORS configuration for web clients
+    cors:
+      allowed-origins: 
+        - "http://localhost:3000"  # React frontend
+        - "http://localhost:4200"  # Angular frontend
+        - "http://localhost:8080"  # Kafka UI
+        - "http://localhost:5601"  # Kibana
+      allowed-methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      allowed-headers: "*"
+      allow-credentials: true
+      max-age: 3600
+
+# JVM tuning for high performance
+# JAVA_OPTS: -Xmx256m -Xms128m -XX:+UseG1GC -XX:MaxGCPauseMillis=50

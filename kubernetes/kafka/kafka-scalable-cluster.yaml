@@ -1,0 +1,213 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: kbnt-scalable-cluster
+  namespace: kbnt-scalable
+  labels:
+    environment: scalable-performance
+spec:
+  kafka:
+    version: 3.5.0
+    replicas: 3  # 3 brokers for high availability
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+        configuration:
+          brokerCertChainAndKey:
+            secretName: kafka-cluster-ca-cert
+            certificate: ca.crt
+            key: ca.key
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+    
+    # High performance configuration
+    config:
+      # Replication and availability
+      offsets.topic.replication.factor: 3
+      transaction.state.log.replication.factor: 3
+      transaction.state.log.min.isr: 2
+      default.replication.factor: 3
+      min.insync.replicas: 2
+      
+      # Performance tuning
+      num.network.threads: 8
+      num.io.threads: 16
+      socket.send.buffer.bytes: 102400
+      socket.receive.buffer.bytes: 102400
+      socket.request.max.bytes: 104857600
+      
+      # Log configuration for high throughput
+      num.partitions: 6  # Default partitions for new topics
+      log.retention.hours: 168  # 7 days
+      log.segment.bytes: 1073741824  # 1GB segments
+      log.retention.check.interval.ms: 300000
+      log.cleanup.policy: delete
+      
+      # Producer optimizations
+      compression.type: lz4
+      batch.size: 32768
+      linger.ms: 5
+      buffer.memory: 67108864
+      
+      # Consumer optimizations
+      fetch.min.bytes: 1024
+      fetch.max.wait.ms: 500
+      max.partition.fetch.bytes: 1048576
+      
+      # JVM performance
+      log4j.rootLogger: INFO
+      
+    # Resource allocation
+    resources:
+      requests:
+        memory: 1Gi
+        cpu: 500m
+      limits:
+        memory: 2Gi
+        cpu: 1000m
+    
+    # JVM Options for performance
+    jvmOptions:
+      -Xms: 512m
+      -Xmx: 1024m
+      -XX: 
+        - "UseG1GC"
+        - "MaxGCPauseMillis=20"
+        - "InitiatingHeapOccupancyPercent=35"
+        - "ExplicitGCInvokesConcurrent"
+        - "UseStringDeduplication"
+    
+    # Storage configuration
+    storage:
+      type: persistent-claim
+      size: 10Gi
+      class: fast-ssd  # Use fast storage class
+      deleteClaim: false
+    
+    # Rack awareness for better distribution
+    rack:
+      topologyKey: kubernetes.io/hostname
+
+  zookeeper:
+    replicas: 3
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 250m
+      limits:
+        memory: 1Gi
+        cpu: 500m
+    jvmOptions:
+      -Xms: 256m
+      -Xmx: 512m
+      -XX:
+        - "UseG1GC"
+        - "MaxGCPauseMillis=20"
+    storage:
+      type: persistent-claim
+      size: 5Gi
+      class: fast-ssd
+      deleteClaim: false
+
+  entityOperator:
+    topicOperator:
+      resources:
+        requests:
+          memory: 256Mi
+          cpu: 100m
+        limits:
+          memory: 512Mi
+          cpu: 250m
+    userOperator:
+      resources:
+        requests:
+          memory: 256Mi
+          cpu: 100m
+        limits:
+          memory: 512Mi
+          cpu: 250m
+
+---
+# =============================================================================
+# Kafka Topics - Optimized for High Performance
+# =============================================================================
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: virtual-stock-events
+  namespace: kbnt-scalable
+  labels:
+    strimzi.io/cluster: kbnt-scalable-cluster
+spec:
+  partitions: 12  # High partitions for parallelism
+  replicas: 3
+  config:
+    # Performance optimizations
+    compression.type: lz4
+    cleanup.policy: delete
+    retention.ms: 604800000  # 7 days
+    segment.ms: 86400000     # 1 day
+    min.insync.replicas: 2
+    # High throughput settings
+    segment.bytes: 1073741824  # 1GB
+    index.interval.bytes: 4096
+    flush.ms: 10000
+    flush.messages: 10000
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: application-logs
+  namespace: kbnt-scalable
+  labels:
+    strimzi.io/cluster: kbnt-scalable-cluster
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    compression.type: lz4
+    cleanup.policy: delete
+    retention.ms: 2592000000  # 30 days for logs
+    segment.ms: 86400000
+    min.insync.replicas: 2
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: error-logs
+  namespace: kbnt-scalable
+  labels:
+    strimzi.io/cluster: kbnt-scalable-cluster
+spec:
+  partitions: 6
+  replicas: 3
+  config:
+    compression.type: lz4
+    cleanup.policy: delete
+    retention.ms: 7776000000  # 90 days for error logs
+    segment.ms: 86400000
+    min.insync.replicas: 2
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: audit-logs
+  namespace: kbnt-scalable
+  labels:
+    strimzi.io/cluster: kbnt-scalable-cluster
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    compression.type: lz4
+    cleanup.policy: delete
+    retention.ms: 31536000000  # 1 year for audit logs
+    segment.ms: 604800000      # 1 week segments
+    min.insync.replicas: 2

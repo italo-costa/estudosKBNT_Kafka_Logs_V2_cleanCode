@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -112,10 +114,10 @@ class ApiGatewayIntegrationTest {
         String testUrl = "http://localhost:" + port + "/api/v1/virtual-stock/stocks";
 
         // When - OPTIONS request for CORS preflight
-        ResponseEntity<String> response = restTemplate.optionsForAllow(testUrl);
+        Set<HttpMethod> allowedMethods = restTemplate.optionsForAllow(testUrl);
 
         // Then
-        assertNotNull(response);
+        assertNotNull(allowedMethods);
         // CORS headers should be present in a real CORS-enabled scenario
     }
 
@@ -141,7 +143,7 @@ class ApiGatewayIntegrationTest {
 
         // When - Using PATCH method which might not be supported
         try {
-            ResponseEntity<String> response = restTemplate.patchForObject(testUrl, null, String.class);
+            String response = restTemplate.patchForObject(testUrl, null, String.class);
             // Should not crash the gateway
         } catch (Exception e) {
             // Expected behavior - method not allowed or service unavailable

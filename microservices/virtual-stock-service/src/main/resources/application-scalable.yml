@@ -1,0 +1,187 @@
+# =============================================================================
+# KBNT Microservices - High Scalability Configuration
+# Profile: scalable-performance
+# =============================================================================
+
+# Server Configuration for High Throughput
+server:
+  port: 8080
+  tomcat:
+    threads:
+      max: 200          # Increased thread pool
+      min-spare: 10
+    max-connections: 8192
+    accept-count: 100
+    connection-timeout: 20000
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+    min-response-size: 1024
+
+# Spring Boot Performance Tuning
+spring:
+  application:
+    name: virtual-stock-service
+  
+  # JPA Optimizations for High Performance
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      jdbc:
+        batch_size: 50        # Batch operations
+        fetch_size: 100       # Fetch optimization
+    show-sql: false
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+        batch_versioned_data: true
+        connection:
+          provider_disables_autocommit: true
+        cache:
+          use_second_level_cache: true
+          use_query_cache: true
+          region:
+            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+
+  # Database Connection Pool (Optimized for Scalability)
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:virtualstock}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 25        # Increased pool size
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 300000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
+      pool-name: VirtualStockHikariCP
+
+  # Kafka Producer Configuration (High Throughput)
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      acks: 1                      # Balance between performance and reliability
+      retries: 3
+      batch-size: 32768            # Increased batch size for throughput
+      linger-ms: 5                 # Reduced latency
+      buffer-memory: 67108864      # 64MB buffer
+      compression-type: lz4        # Fast compression
+      max-in-flight-requests-per-connection: 5
+      enable-idempotence: true
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        # Performance optimizations
+        delivery.timeout.ms: 30000
+        request.timeout.ms: 25000
+        max.block.ms: 10000
+
+  # Cache Configuration (Redis-compatible)
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=10000,expireAfterWrite=5m,recordStats
+    cache-names:
+      - stockCache
+      - productCache
+      - priceCache
+
+# Management & Monitoring (Production Ready)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,loggers,configprops
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+    metrics:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles:
+        http.server.requests: 0.5, 0.75, 0.95, 0.99
+        spring.kafka.producer: 0.5, 0.75, 0.95, 0.99
+      sla:
+        http.server.requests: 10ms, 50ms, 100ms, 200ms, 500ms
+  server:
+    port: 8081
+
+# Logging Configuration (Optimized for Performance)
+logging:
+  level:
+    com.kbnt: INFO
+    org.springframework.kafka: WARN
+    org.hibernate: WARN
+    org.springframework.web: WARN
+    org.apache.kafka: WARN
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{50} - %msg%n"
+  file:
+    name: logs/virtual-stock-service.log
+    max-size: 100MB
+    max-history: 30
+
+# Custom Application Configuration for Scalability
+app:
+  virtual-stock:
+    # Business Rules Configuration
+    stock:
+      reservation-timeout-minutes: 15
+      low-stock-threshold: 10
+      max-reservation-per-request: 1000
+    
+    # Event Publishing Configuration
+    events:
+      async-publishing: true
+      batch-publishing: true
+      batch-size: 100
+      batch-timeout-ms: 1000
+    
+    # Performance Monitoring
+    monitoring:
+      enable-detailed-metrics: true
+      slow-query-threshold-ms: 100
+      cache-hit-ratio-threshold: 0.8
+
+# Resilience4J Configuration (Circuit Breaker)
+resilience4j:
+  circuitbreaker:
+    instances:
+      stock-operations:
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 10
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 20
+        wait-duration-in-open-state: 30s
+        automatic-transition-from-open-to-half-open-enabled: true
+        permitted-number-of-calls-in-half-open-state: 5
+      
+  retry:
+    instances:
+      database-operations:
+        max-attempts: 3
+        wait-duration: 500ms
+        exponential-backoff-multiplier: 2
+        
+  ratelimiter:
+    instances:
+      api-operations:
+        limit-for-period: 1000      # 1000 requests per period
+        limit-refresh-period: 1s
+        timeout-duration: 100ms
+
+# JVM Performance Tuning Hints (for deployment)
+# JAVA_OPTS: -Xmx512m -Xms256m -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+UseStringDeduplication

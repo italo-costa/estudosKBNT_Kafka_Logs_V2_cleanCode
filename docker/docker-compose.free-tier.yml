@@ -1,0 +1,260 @@
+version: '3.8'
+
+services:
+  # ==============================================
+  # INFRASTRUCTURE SERVICES (Resource Optimized)
+  # ==============================================
+  
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: zookeeper-free
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 128M
+          cpus: '0.25'
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper/data
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka-free
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      # Resource optimization for free tier
+      KAFKA_HEAP_OPTS: "-Xmx256M -Xms128M"
+      KAFKA_JVM_PERFORMANCE_OPTS: "-XX:+UseG1GC -XX:MaxGCPauseMillis=20"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '1.0'
+        reservations:
+          memory: 256M
+          cpus: '0.5'
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+
+  postgres:
+    image: postgres:15-alpine  # Alpine for smaller footprint
+    container_name: postgres-free
+    environment:
+      POSTGRES_DB: virtualstock
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      # Performance tuning for low resources
+      POSTGRES_SHARED_BUFFERS: 32MB
+      POSTGRES_EFFECTIVE_CACHE_SIZE: 128MB
+    ports:
+      - "5432:5432"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 128M
+          cpus: '0.25'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    container_name: elasticsearch-free
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"  # Reduced heap for free tier
+      - bootstrap.memory_lock=true
+    ports:
+      - "9200:9200"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '1.0'
+        reservations:
+          memory: 256M
+          cpus: '0.5'
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+
+  # ==============================================
+  # MICROSERVICES (Lightweight Configuration)
+  # ==============================================
+
+  virtual-stock-service:
+    build: ../microservices/virtual-stock-service
+    container_name: virtual-stock-service-free
+    depends_on:
+      - kafka
+      - postgres
+    ports:
+      - "8086:8080"
+      - "8087:8081"  # Management port
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,scalable
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=virtualstock
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      # JVM tuning optimized
+      - JAVA_OPTS=-Xmx384m -Xms192m -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+UseStringDeduplication
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.75'
+        reservations:
+          memory: 384M
+          cpus: '0.5'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  log-producer-service:
+    build: ../microservices/log-producer-service
+    container_name: log-producer-service-free
+    depends_on:
+      - kafka
+    ports:
+      - "8085:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,free-tier
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - JAVA_OPTS=-Xmx256m -Xms128m -XX:+UseG1GC
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+
+  log-consumer-service:
+    build: ../microservices/log-consumer-service
+    container_name: log-consumer-service-free
+    depends_on:
+      - kafka
+      - elasticsearch
+    ports:
+      - "8084:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,free-tier
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT=9200
+      - JAVA_OPTS=-Xmx256m -Xms128m -XX:+UseG1GC
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+
+  api-gateway:
+    build: ../microservices/api-gateway
+    container_name: api-gateway-free
+    depends_on:
+      - virtual-stock-service
+      - log-producer-service
+      - log-consumer-service
+    ports:
+      - "8090:8080"
+      - "8091:8081"  # Management port
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,scalable
+      - JAVA_OPTS=-Xmx384m -Xms192m -XX:+UseG1GC -XX:MaxGCPauseMillis=50
+      # Service discovery for load balancing
+      - VIRTUAL_STOCK_SERVICE_URL=http://virtual-stock-service:8080
+      - LOG_PRODUCER_SERVICE_URL=http://log-producer-service:8080
+      - LOG_CONSUMER_SERVICE_URL=http://log-consumer-service:8080
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.75'
+        reservations:
+          memory: 384M
+          cpus: '0.5'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+
+  # ==============================================
+  # MONITORING (Optional - Enable if resources allow)
+  # ==============================================
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui-free
+    depends_on:
+      - kafka
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.3'
+    profiles:
+      - monitoring  # Enable with: docker compose --profile monitoring up
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.8.0
+    container_name: kibana-free
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - SERVER_MAXPAYLOADBYTES=1048576  # 1MB limit for free tier
+    ports:
+      - "5601:5601"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.3'
+    profiles:
+      - monitoring  # Enable with: docker compose --profile monitoring up
+
+volumes:
+  zookeeper-data:
+  kafka-data:
+  elasticsearch-data:
+  postgres-data:
+
+networks:
+  default:
+    name: kbnt-free-tier-network
