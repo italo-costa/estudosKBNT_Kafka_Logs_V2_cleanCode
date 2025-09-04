@@ -1,0 +1,289 @@
+# =============================================================================
+# VIRTUAL STOCK SERVICE - CONFIGURAÇÃO ULTRA ESCALÁVEL
+# =============================================================================
+# Configurações otimizadas para escalabilidade horizontal e vertical máxima
+# Performance-tuned para clusters e alta concorrência
+# =============================================================================
+
+# Server Configuration - Optimized for high concurrency
+server:
+  port: 8080
+  tomcat:
+    # Thread pool tuning for high throughput
+    threads:
+      max: 400
+      min-spare: 50
+    accept-count: 200
+    max-connections: 2000
+    connection-timeout: 20000
+    keep-alive-timeout: 60000
+    max-keep-alive-requests: 100
+  compression:
+    enabled: true
+    mime-types: application/json,text/plain,text/html,application/xml
+
+# Spring Boot Configuration
+spring:
+  application:
+    name: virtual-stock-service
+  
+  # Profile-specific configurations
+  profiles:
+    active: scalable
+  
+  # Database Configuration - Optimized for high performance
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    # Connection URL will be set via environment variables
+    hikari:
+      # Connection Pool Optimization
+      maximum-pool-size: 50          # Increased for high concurrency
+      minimum-idle: 20               # Higher minimum for quick response
+      connection-timeout: 30000      # 30 seconds
+      idle-timeout: 600000           # 10 minutes
+      max-lifetime: 1800000          # 30 minutes
+      leak-detection-threshold: 60000 # 1 minute
+      # Connection Validation
+      connection-test-query: SELECT 1
+      validation-timeout: 5000
+      # Performance Settings
+      auto-commit: false
+      transaction-isolation: TRANSACTION_READ_COMMITTED
+      # Pool Name for monitoring
+      pool-name: VirtualStockHikariPool
+      # Additional Performance Settings
+      allow-pool-suspension: true
+      catalog: kbnt_db
+      connection-init-sql: SET application_name = 'virtual-stock-service'
+  
+  # JPA/Hibernate Configuration - High Performance
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL15Dialect
+    hibernate:
+      ddl-auto: validate
+      connection:
+        provider_disables_autocommit: true
+      # Second Level Cache
+      cache:
+        use_second_level_cache: true
+        use_query_cache: true
+        region:
+          factory_class: org.hibernate.cache.caffeine.CaffeineCacheRegionFactory
+    properties:
+      hibernate:
+        # SQL Optimization
+        format_sql: false
+        use_sql_comments: false
+        generate_statistics: true
+        # Batch Processing
+        jdbc:
+          batch_size: 50
+          order_inserts: true
+          order_updates: true
+          batch_versioned_data: true
+        # Query Optimization
+        query:
+          fail_on_pagination_over_collection_fetch: true
+          in_clause_parameter_padding: true
+        # Connection Pool Integration
+        connection:
+          provider_disables_autocommit: true
+        # Performance Tuning
+        enable_lazy_load_no_trans: true
+        max_fetch_depth: 3
+        default_batch_fetch_size: 16
+  
+  # Kafka Configuration - Ultra High Performance
+  kafka:
+    # Producer Configuration
+    producer:
+      bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      # Performance Optimization
+      acks: "1"                      # Balance between performance and durability
+      retries: 3
+      batch-size: 65536              # 64KB batches for maximum throughput
+      linger-ms: 20                  # Wait up to 20ms to batch messages
+      buffer-memory: 134217728       # 128MB buffer
+      compression-type: lz4          # Fast compression
+      max-in-flight-requests-per-connection: 5
+      enable-idempotence: true
+      # Timeout Configuration
+      request-timeout-ms: 30000
+      delivery-timeout-ms: 120000
+      # Additional Performance Settings
+      partitioner-class: org.apache.kafka.clients.producer.RoundRobinPartitioner
+    
+    # Consumer Configuration
+    consumer:
+      bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+      group-id: virtual-stock-consumer-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      # Performance Optimization
+      auto-offset-reset: latest
+      enable-auto-commit: false      # Manual commit for better control
+      max-poll-records: 500          # Process more records per poll
+      max-poll-interval-ms: 300000   # 5 minutes max processing time
+      session-timeout-ms: 30000      # 30 seconds
+      heartbeat-interval-ms: 10000   # 10 seconds
+      fetch-min-bytes: 50000         # Wait for at least 50KB
+      fetch-max-wait-ms: 500         # Max wait 500ms
+      # Memory Management
+      receive-buffer-bytes: 262144   # 256KB receive buffer
+      send-buffer-bytes: 131072      # 128KB send buffer
+      # Concurrency
+      properties:
+        spring.json.trusted.packages: "com.kbnt.virtualstock.model,com.kbnt.common.events"
+    
+    # Listener Configuration
+    listener:
+      type: batch                    # Batch processing for higher throughput
+      concurrency: 10                # 10 consumer threads
+      ack-mode: batch               # Batch acknowledgment
+      poll-timeout: 3000
+
+# Cache Configuration - Distributed Caching
+spring.cache:
+  type: caffeine
+  cache-names: 
+    - virtualStock
+    - products
+    - reservations
+    - stockLevels
+  caffeine:
+    spec: |
+      maximumSize=10000,
+      expireAfterWrite=5m,
+      expireAfterAccess=2m,
+      recordStats
+
+# Actuator Configuration - Monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,httptrace,threaddump,heapdump
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+        step: 10s
+    tags:
+      application: ${spring.application.name}
+      instance: ${eureka.instance.instance-id:${spring.application.name}:${random.value}}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+        kafka.consumer.batch.size: true
+      percentiles:
+        http.server.requests: 0.5,0.9,0.95,0.99
+      sla:
+        http.server.requests: 10ms,50ms,100ms,200ms,500ms,1s
+
+# Logging Configuration - High Performance
+logging:
+  level:
+    com.kbnt.virtualstock: INFO
+    org.springframework.kafka: WARN
+    org.hibernate.SQL: WARN
+    org.hibernate.type: WARN
+    org.springframework.web: WARN
+    org.apache.kafka: WARN
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level [%logger{36}] [%X{traceId:-},%X{spanId:-}] - %msg%n"
+  appender:
+    console:
+      target: SYSTEM_OUT
+
+# Application Specific Configuration
+app:
+  virtual-stock:
+    # Stock Management Configuration
+    default-stock-level: 1000
+    low-stock-threshold: 50
+    reservation-timeout-minutes: 15
+    max-reservation-per-product: 100
+    
+    # Performance Configuration
+    batch-size: 100
+    thread-pool-size: 20
+    max-concurrent-reservations: 1000
+    
+    # Circuit Breaker Configuration
+    circuit-breaker:
+      failure-rate-threshold: 50
+      minimum-number-of-calls: 10
+      sliding-window-size: 20
+      wait-duration-in-open-state: 30s
+      permitted-number-of-calls-in-half-open-state: 5
+    
+    # Retry Configuration
+    retry:
+      max-attempts: 3
+      wait-duration: 1s
+      exponential-backoff-multiplier: 2
+    
+    # Rate Limiting Configuration
+    rate-limit:
+      limit-for-period: 1000
+      limit-refresh-period: 1s
+      timeout-duration: 0ms
+
+# Resilience4j Configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      virtualStockService:
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 10
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 20
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        record-exceptions:
+          - java.sql.SQLException
+          - org.springframework.dao.DataAccessException
+  
+  retry:
+    instances:
+      virtualStockService:
+        max-attempts: 3
+        wait-duration: 1s
+        exponential-backoff-multiplier: 2
+        retry-exceptions:
+          - java.sql.SQLTransientException
+          - org.springframework.dao.TransientDataAccessException
+  
+  ratelimiter:
+    instances:
+      virtualStockService:
+        limit-refresh-period: 1s
+        limit-for-period: 1000
+        timeout-duration: 0ms
+
+# Thread Pool Configuration
+spring.task:
+  execution:
+    pool:
+      core-size: 20
+      max-size: 50
+      queue-capacity: 1000
+      keep-alive: 60s
+    thread-name-prefix: vstock-exec-
+  scheduling:
+    pool:
+      size: 5
+    thread-name-prefix: vstock-sched-

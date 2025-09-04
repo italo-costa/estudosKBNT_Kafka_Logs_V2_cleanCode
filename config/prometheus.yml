@@ -1,0 +1,99 @@
+# =============================================================================
+# PROMETHEUS CONFIGURATION
+# KBNT Kafka Logs - Monitoring and Metrics
+# =============================================================================
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'kbnt-scalable'
+    environment: 'production'
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # API Gateway instances
+  - job_name: 'api-gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: 
+        - '172.20.6.10:8081'
+        - '172.20.6.11:8081'
+    scrape_interval: 10s
+
+  # Virtual Stock Service instances
+  - job_name: 'virtual-stock-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets:
+        - '172.20.7.10:8081'
+        - '172.20.7.11:8081'
+        - '172.20.7.12:8081'
+    scrape_interval: 10s
+
+  # Log Producer Service instances
+  - job_name: 'log-producer-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets:
+        - '172.20.8.10:8081'
+        - '172.20.8.11:8081'
+    scrape_interval: 15s
+
+  # Log Consumer Service instances
+  - job_name: 'log-consumer-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets:
+        - '172.20.9.10:8081'
+        - '172.20.9.11:8081'
+    scrape_interval: 15s
+
+  # PostgreSQL Master/Replica
+  - job_name: 'postgres'
+    static_configs:
+      - targets:
+        - '172.20.1.10:9187'  # postgres_exporter on master
+        - '172.20.1.11:9187'  # postgres_exporter on replica
+
+  # Kafka Cluster
+  - job_name: 'kafka'
+    static_configs:
+      - targets:
+        - '172.20.3.10:9308'  # kafka_exporter for broker 1
+        - '172.20.3.11:9308'  # kafka_exporter for broker 2
+        - '172.20.3.12:9308'  # kafka_exporter for broker 3
+
+  # Elasticsearch Cluster
+  - job_name: 'elasticsearch'
+    static_configs:
+      - targets:
+        - '172.20.4.10:9114'  # elasticsearch_exporter node 1
+        - '172.20.4.11:9114'  # elasticsearch_exporter node 2
+
+  # HAProxy Load Balancer
+  - job_name: 'haproxy'
+    static_configs:
+      - targets: ['172.20.5.10:8404']
+    metrics_path: '/stats?stats;csv'
+
+  # Redis Cluster
+  - job_name: 'redis'
+    static_configs:
+      - targets:
+        - '172.20.11.10:9121'  # redis_exporter cluster 1
+        - '172.20.11.11:9121'  # redis_exporter cluster 2
+        - '172.20.11.12:9121'  # redis_exporter cluster 3
+
+  # Docker Container metrics
+  - job_name: 'docker'
+    static_configs:
+      - targets: ['172.17.0.1:8080']  # cadvisor

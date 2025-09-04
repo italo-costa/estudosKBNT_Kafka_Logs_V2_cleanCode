@@ -1,0 +1,110 @@
+# =============================================================================
+# VIRTUAL STOCK SERVICE - CONFIGURAÇÃO ESCALÁVEL SIMPLIFICADA
+# =============================================================================
+
+# Server Configuration
+server:
+  port: 8080
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 25
+    accept-count: 100
+    max-connections: 1000
+
+# Spring Boot Configuration
+spring:
+  application:
+    name: virtual-stock-service
+  
+  # Database Configuration - HikariCP
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+      pool-name: VirtualStockHikariPool
+  
+  # JPA Configuration - Simplified
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL15Dialect
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: false
+        use_sql_comments: false
+        jdbc:
+          batch_size: 20
+          order_inserts: true
+          order_updates: true
+        enable_lazy_load_no_trans: true
+        max_fetch_depth: 3
+  
+  # Kafka Configuration
+  kafka:
+    producer:
+      bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka1:9092,kafka2:9093,kafka3:9094}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: 1
+      retries: 3
+      batch-size: 16384
+      linger-ms: 5
+      compression-type: lz4
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+    
+    consumer:
+      bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka1:9092,kafka2:9093,kafka3:9094}
+      group-id: virtual-stock-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      enable-auto-commit: false
+      max-poll-records: 500
+      fetch-min-size: 1024
+      fetch-max-wait: 500
+      properties:
+        spring.json.trusted.packages: com.kbnt
+        isolation.level: read_committed
+
+# Logging Configuration
+logging:
+  level:
+    com.kbnt: INFO
+    org.springframework.kafka: WARN
+    org.hibernate: WARN
+    root: WARN
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info,prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Application Specific Configuration
+kbnt:
+  virtual-stock:
+    processing:
+      batch-size: 100
+      thread-pool-size: 20
+    cache:
+      enabled: false  # Disabled to avoid cache issues
+    performance:
+      enable-metrics: true
+      async-processing: true
