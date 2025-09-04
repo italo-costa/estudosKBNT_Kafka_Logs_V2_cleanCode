@@ -1,0 +1,175 @@
+{
+  "refactoring_completed": true,
+  "timestamp": "C:\\workspace\\estudosKBNT_Kafka_Logs",
+  "cleanup_summary": {
+    "items_cleaned": 22,
+    "cleaned_items": [
+      "directory: alternatives",
+      "directory: config",
+      "directory: consumers",
+      "directory: dashboard",
+      "directory: demo-results",
+      "directory: docs",
+      "directory: examples",
+      "directory: final-test",
+      "directory: hybrid-deployment",
+      "directory: kafka",
+      "directory: kubernetes",
+      "directory: logs",
+      "directory: producers",
+      "directory: reports",
+      "directory: scripts",
+      "directory: simple-app",
+      "directory: simulation",
+      "directory: src",
+      "directory: test-environment",
+      "directory: test-results",
+      "directory: venv",
+      "directory: __pycache__"
+    ]
+  },
+  "layer_validation": {
+    "valid_layers": [
+      "01-presentation-layer",
+      "02-application-layer",
+      "03-domain-layer",
+      "04-infrastructure-layer",
+      "05-microservices",
+      "06-deployment",
+      "07-testing",
+      "08-configuration",
+      "09-documentation",
+      "10-tools-utilities"
+    ],
+    "missing_layers": [],
+    "extra_directories": [],
+    "layer_stats": {
+      "01-presentation-layer": {
+        "exists": true,
+        "has_readme": true,
+        "file_count": 12,
+        "subdirs": [
+          "api-gateway",
+          "monitoring-dashboards",
+          "rest-controllers",
+          "web-interfaces"
+        ]
+      },
+      "02-application-layer": {
+        "exists": true,
+        "has_readme": true,
+        "file_count": 1,
+        "subdirs": [
+          "application-services",
+          "command-handlers",
+          "use-cases",
+          "workflow-orchestrators"
+        ]
+      },
+      "03-domain-layer": {
+        "exists": true,
+        "has_readme": true,
+        "file_count": 1,
+        "subdirs": [
+          "business-rules",
+          "core-domain",
+          "domain-events",
+          "value-objects"
+        ]
+      },
+      "04-infrastructure-layer": {
+        "exists": true,
+        "has_readme": true,
+        "file_count": 1,
+        "subdirs": [
+          "caching",
+          "configuration",
+          "data-persistence",
+          "external-services",
+          "message-brokers"
+        ]
+      },
+      "05-microservices": {
+        "exists": true,
+        "has_readme": true,
+        "file_count": 1118,
+        "subdirs": [
+          "api-gateway",
+          "database",
+          "kbnt-log-service",
+          "kbnt-stock-consumer-service",
+          "log-analytics-service",
+          "log-consumer-service",
+          "log-producer-service",
+          "microservices",
+          "virtual-stock-service"
+        ]
+      },
+      "06-deployment": {
+        "exists": true,
+        "has_readme": true,
+        "file_count": 112,
+        "subdirs": [
+          "docker",
+          "docker-compose",
+          "environments",
+          "kubernetes",
+          "scripts"
+        ]
+      },
+      "07-testing": {
+        "exists": true,
+        "has_readme": true,
+        "file_count": 371,
+        "subdirs": [
+          "e2e-tests",
+          "integration",
+          "integration-tests",
+          "performance",
+          "performance-tests",
+          "reports",
+          "unit",
+          "unit-tests"
+        ]
+      },
+      "08-configuration": {
+        "exists": true,
+        "has_readme": false,
+        "file_count": 25,
+        "subdirs": []
+      },
+      "09-documentation": {
+        "exists": true,
+        "has_readme": true,
+        "file_count": 155,
+        "subdirs": [
+          "api",
+          "architecture",
+          "deployment",
+          "docs",
+          "performance"
+        ]
+      },
+      "10-tools-utilities": {
+        "exists": true,
+        "has_readme": false,
+        "file_count": 1219,
+        "subdirs": [
+          "automation",
+          "monitoring",
+          "scripts",
+          "simulation"
+        ]
+      }
+    }
+  },
+  "quality_metrics": {
+    "layers_implemented": 10,
+    "layers_with_readme": 8,
+    "total_files_organized": 3015,
+    "architecture_compliance": 100.0
+  },
+  "recommendations": [
+    "Add README files to: 08-configuration, 10-tools-utilities"
+  ]
+}

@@ -1,0 +1,45 @@
+﻿{
+    "Scores":  {
+                   "ProcessingScore":  90,
+                   "ReliabilityScore":  90,
+                   "Status":  [
+                                  "MUITO BOM - Performance solida",
+                                  "BOM - Sistema estavel",
+                                  "REGULAR - Precisa otimizacoes"
+                              ],
+                   "FinalScore":  86,
+                   "ThroughputScore":  80
+               },
+    "Infrastructure":  {
+                           "PostgreSQL":  "RUNNING",
+                           "VirtualStock":  "RUNNING",
+                           "Kafka":  "RUNNING",
+                           "Consumer":  "RUNNING",
+                           "LogService":  "RUNNING"
+                       },
+    "TestInfo":  {
+                     "ActualDuration":  66.982917399999991,
+                     "MessageCount":  1000,
+                     "Duration":  66.982917399999991,
+                     "Type":  "Real1000MessageTest",
+                     "EndTime":  {
+                                     "value":  "\/Date(1756642063403)\/",
+                                     "DisplayHint":  2,
+                                     "DateTime":  "domingo, 31 de agosto de 2025 09:07:43"
+                                 },
+                     "StartTime":  {
+                                       "value":  "\/Date(1756641996420)\/",
+                                       "DisplayHint":  2,
+                                       "DateTime":  "domingo, 31 de agosto de 2025 09:06:36"
+                                   }
+                 },
+    "Results":  {
+                    "ProcessingRate":  94.7906026557712,
+                    "MessagesSent":  979,
+                    "Errors":  21,
+                    "MessagesProcessed":  928,
+                    "Throughput":  14.61566676998754,
+                    "MessagesGenerated":  1000,
+                    "SuccessRate":  97.899999999999991
+                }
+}

@@ -1,0 +1,26 @@
+﻿{
+    "MinLatency":  1.6778000000000002,
+    "StocksRequests":  75,
+    "SuccessfulRequests":  300,
+    "TotalLatency":  1880.4453000000012,
+    "TestRequests":  75,
+    "FailedRequests":  0,
+    "StartTime":  {
+                      "value":  "\/Date(1756597299853)\/",
+                      "DisplayHint":  2,
+                      "DateTime":  "sábado, 30 de agosto de 2025 20:41:39"
+                  },
+    "Throughput":  23.17,
+    "MaxLatency":  16,
+    "TotalRequests":  300,
+    "HealthChecks":  75,
+    "InfoRequests":  75,
+    "TotalDuration":  12.9482124,
+    "SuccessRate":  100,
+    "EndTime":  {
+                    "value":  "\/Date(1756597312802)\/",
+                    "DisplayHint":  2,
+                    "DateTime":  "sábado, 30 de agosto de 2025 20:41:52"
+                },
+    "AverageLatency":  6.27
+}

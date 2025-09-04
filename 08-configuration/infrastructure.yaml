@@ -1,0 +1,157 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: microservices
+  labels:
+    name: microservices
+    purpose: kafka-microservices
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-external-config
+  namespace: microservices
+data:
+  # Configurações do cluster AMQ Streams no ambiente Red Hat
+  bootstrap-servers: "REPLACE_WITH_YOUR_REDHAT_KAFKA_HOST:9092"
+  security-protocol: "SASL_SSL"
+  sasl-mechanism: "SCRAM-SHA-512"
+  
+  # Consumer Group Configuration
+  consumer-group: "microservices-logs-consumer"
+  auto-offset-reset: "earliest"
+  
+  # Topics Configuration
+  topics-application-logs: "application-logs"
+  topics-error-logs: "error-logs"
+  topics-audit-logs: "audit-logs"
+  
+  # Performance Tuning para conexão externa
+  request-timeout-ms: "60000"
+  delivery-timeout-ms: "300000"
+  retry-backoff-ms: "1000"
+  fetch-min-bytes: "1024"
+  fetch-max-wait-ms: "500"
+  max-poll-records: "500"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kafka-external-credentials
+  namespace: microservices
+type: Opaque
+stringData:
+  # SUBSTITUIR COM SUAS CREDENCIAIS REAIS
+  kafka-username: "microservices-user"
+  kafka-password: "REPLACE_WITH_YOUR_PASSWORD"
+  
+  # Passwords para keystores/truststores
+  truststore-password: "REPLACE_WITH_TRUSTSTORE_PASSWORD"
+  keystore-password: "REPLACE_WITH_KEYSTORE_PASSWORD"
+  
+# Uncomment and add your actual certificates (base64 encoded)
+# data:
+#   truststore.jks: LS0tLS1CRUdJTi... # base64 encoded truststore
+#   keystore.jks: LS0tLS1CRUdJTi...   # base64 encoded keystore (if needed)
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: database-config
+  namespace: microservices
+data:
+  database-url: "jdbc:postgresql://postgres-service:5432/loganalytics"
+  database-name: "loganalytics"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: database-credentials
+  namespace: microservices
+type: Opaque
+stringData:
+  username: "loguser"
+  password: "logpass123"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: microservices
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: database-config
+              key: database-name
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: database-credentials
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database-credentials
+              key: password
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: postgres-pvc
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: microservices
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: microservices
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+  type: ClusterIP

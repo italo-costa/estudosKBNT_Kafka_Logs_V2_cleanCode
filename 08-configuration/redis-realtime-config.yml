@@ -1,0 +1,27 @@
+spring:
+  redis:
+    host: redis-logs
+    port: 6379
+    timeout: 1000ms
+    lettuce:
+      pool:
+        max-active: 100
+        max-idle: 20
+        min-idle: 5
+    # Configurações para near real-time
+    stream:
+      consumer-group: log-consumers
+      block-time: 100ms  # Bloqueia por apenas 100ms
+      batch-size: 50     # Processa em pequenos lotes
+
+# Pipeline otimizada
+kbnt:
+  logging:
+    real-time:
+      enabled: true
+      flush-interval: 100ms    # Flush a cada 100ms
+      batch-size: 10          # Pequenos lotes
+      async-processing: true  # Processamento assíncrono
+      circuit-breaker:
+        enabled: true
+        timeout: 500ms        # Timeout baixo

@@ -1,0 +1,2695 @@
+{
+  "summary": {
+    "total_files": 148,
+    "files_with_issues": 23,
+    "files_fixed": 23,
+    "total_issues": 38
+  },
+  "issue_types": {
+    "Unused import": 33,
+    "Duplicate import": 1,
+    "Too many wildcard imports": 4
+  },
+  "suggestions": {},
+  "files": [
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\test\\java\\com\\kbnt\\virtualstock\\integration\\VirtualStockServiceIntegrationTestSimple.java",
+      "package": "com.kbnt.virtualstock.integration",
+      "imports": [
+        "com.kbnt.virtualstock.VirtualStockApplication",
+        "org.junit.jupiter.api.Test",
+        "org.springframework.boot.test.context.SpringBootTest",
+        "org.springframework.test.context.ActiveProfiles",
+        "org.junit.jupiter.api.Assertions.assertDoesNotThrow"
+      ],
+      "classes": [
+        "VirtualStockServiceIntegrationTestSimple"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\test\\java\\com\\kbnt\\virtualstock\\domain\\model\\StockTestSimple.java",
+      "package": "",
+      "imports": [],
+      "classes": [],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\test\\java\\com\\kbnt\\virtualstock\\application\\service\\StockManagementApplicationServiceTestSimple.java",
+      "package": "com.kbnt.virtualstock.application.service",
+      "imports": [
+        "com.kbnt.virtualstock.domain.model.Stock",
+        "com.kbnt.virtualstock.domain.port.input.StockManagementUseCase",
+        "org.junit.jupiter.api.BeforeEach",
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.extension.ExtendWith",
+        "org.mockito.InjectMocks",
+        "org.mockito.Mock",
+        "org.mockito.junit.jupiter.MockitoExtension",
+        "java.math.BigDecimal",
+        "java.time.LocalDateTime",
+        "org.junit.jupiter.api.Assertions.*"
+      ],
+      "classes": [
+        "StockManagementApplicationServiceTestSimple"
+      ],
+      "issues": [
+        "Unused import: com.kbnt.virtualstock.domain.port.input.StockManagementUseCase"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\VirtualStockApplication.java",
+      "package": "com.kbnt.virtualstock",
+      "imports": [
+        "org.springframework.boot.SpringApplication",
+        "org.springframework.boot.autoconfigure.SpringBootApplication",
+        "org.springframework.kafka.annotation.EnableKafka",
+        "org.springframework.scheduling.annotation.EnableAsync",
+        "org.springframework.transaction.annotation.EnableTransactionManagement"
+      ],
+      "classes": [
+        "VirtualStockApplication"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\config\\EnhancedLoggingConfig.java",
+      "package": "com.kbnt.virtualstock.infrastructure.config",
+      "imports": [
+        "org.slf4j.MDC",
+        "org.springframework.context.annotation.Configuration",
+        "org.springframework.stereotype.Component",
+        "ch.qos.logback.classic.Logger",
+        "ch.qos.logback.classic.LoggerContext",
+        "ch.qos.logback.classic.encoder.PatternLayoutEncoder",
+        "ch.qos.logback.core.rolling.RollingFileAppender",
+        "ch.qos.logback.core.rolling.TimeBasedRollingPolicy",
+        "org.slf4j.LoggerFactory",
+        "javax.annotation.PostConstruct",
+        "java.time.LocalDateTime",
+        "java.time.format.DateTimeFormatter"
+      ],
+      "classes": [
+        "EnhancedLoggingConfig",
+        "LoggingUtils"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\output\\kafka\\KafkaStockEventPublisherAdapter.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.output.kafka",
+      "imports": [
+        "com.fasterxml.jackson.core.JsonProcessingException",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "com.kbnt.virtualstock.domain.model.StockUpdatedEvent",
+        "com.kbnt.virtualstock.domain.port.output.StockEventPublisherPort",
+        "com.kbnt.virtualstock.infrastructure.config.EnhancedLoggingConfig",
+        "lombok.RequiredArgsConstructor",
+        "lombok.extern.slf4j.Slf4j",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.kafka.core.KafkaTemplate",
+        "org.springframework.kafka.support.SendResult",
+        "org.springframework.stereotype.Component",
+        "org.springframework.util.concurrent.FailureCallback",
+        "org.springframework.util.concurrent.SuccessCallback",
+        "java.security.MessageDigest",
+        "java.time.LocalDateTime",
+        "java.time.format.DateTimeFormatter",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "KafkaStockEventPublisherAdapter"
+      ],
+      "issues": [
+        "Unused import: com.fasterxml.jackson.core.JsonProcessingException",
+        "Unused import: org.springframework.util.concurrent.FailureCallback",
+        "Unused import: org.springframework.util.concurrent.SuccessCallback",
+        "Unused import: java.util.concurrent.CompletableFuture"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\output\\kafka\\KafkaStockUpdateMessage.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.output.kafka",
+      "imports": [
+        "java.math.BigDecimal",
+        "java.time.LocalDateTime",
+        "com.fasterxml.jackson.annotation.JsonFormat",
+        "lombok.Builder",
+        "lombok.Getter",
+        "lombok.ToString"
+      ],
+      "classes": [
+        "KafkaStockUpdateMessage"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\output\\repository\\JpaStockRepositoryAdapter.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.output.repository",
+      "imports": [
+        "com.kbnt.virtualstock.domain.model.Stock",
+        "com.kbnt.virtualstock.domain.port.output.StockRepositoryPort",
+        "lombok.RequiredArgsConstructor",
+        "lombok.extern.slf4j.Slf4j",
+        "org.springframework.stereotype.Repository",
+        "java.util.List",
+        "java.util.Optional",
+        "java.util.stream.Collectors"
+      ],
+      "classes": [
+        "JpaStockRepositoryAdapter"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\output\\repository\\SpringDataStockRepository.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.output.repository",
+      "imports": [
+        "org.springframework.data.jpa.repository.JpaRepository",
+        "org.springframework.data.jpa.repository.Query",
+        "org.springframework.data.repository.query.Param",
+        "org.springframework.stereotype.Repository",
+        "java.util.List",
+        "java.util.Optional"
+      ],
+      "classes": [
+        "SpringDataStockRepository"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\output\\repository\\StockEntity.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.output.repository",
+      "imports": [
+        "lombok.Data",
+        "lombok.NoArgsConstructor",
+        "javax.persistence.*",
+        "java.math.BigDecimal",
+        "java.time.LocalDateTime"
+      ],
+      "classes": [
+        "StockEntity",
+        "StockStatus"
+      ],
+      "issues": [],
+      "suggestions": [
+        "Consider migrating from javax to jakarta imports"
+      ]
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\ApiResponse.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.input.rest",
+      "imports": [],
+      "classes": [
+        "ApiResponse"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\CommandImplementations.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.input.rest",
+      "imports": [
+        "com.kbnt.virtualstock.domain.model.Stock",
+        "com.kbnt.virtualstock.domain.port.input.StockManagementUseCase"
+      ],
+      "classes": [],
+      "issues": [
+        "Unused import: com.kbnt.virtualstock.domain.port.input.StockManagementUseCase"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\CreateStockCommandImpl.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.input.rest",
+      "imports": [
+        "com.kbnt.virtualstock.domain.model.Stock",
+        "com.kbnt.virtualstock.domain.port.input.StockManagementUseCase"
+      ],
+      "classes": [
+        "CreateStockCommandImpl"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\CreateStockRequest.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.input.rest",
+      "imports": [
+        "java.math.BigDecimal",
+        "javax.validation.constraints.*"
+      ],
+      "classes": [
+        "CreateStockRequest"
+      ],
+      "issues": [],
+      "suggestions": [
+        "Consider migrating from javax to jakarta imports"
+      ]
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\ReserveStockCommandImpl.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.input.rest",
+      "imports": [
+        "com.kbnt.virtualstock.domain.model.Stock",
+        "com.kbnt.virtualstock.domain.port.input.StockManagementUseCase"
+      ],
+      "classes": [
+        "ReserveStockCommandImpl"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\ReserveStockRequest.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.input.rest",
+      "imports": [
+        "javax.validation.constraints.*"
+      ],
+      "classes": [
+        "ReserveStockRequest"
+      ],
+      "issues": [],
+      "suggestions": [
+        "Consider migrating from javax to jakarta imports"
+      ]
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\RestModels.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.input.rest",
+      "imports": [
+        "java.math.BigDecimal",
+        "javax.validation.constraints.*",
+        "com.kbnt.virtualstock.domain.model.Stock"
+      ],
+      "classes": [],
+      "issues": [
+        "Unused import: java.math.BigDecimal",
+        "Unused import: com.kbnt.virtualstock.domain.model.Stock"
+      ],
+      "suggestions": [
+        "Consider migrating from javax to jakarta imports"
+      ]
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\StockReservationResponse.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.input.rest",
+      "imports": [],
+      "classes": [
+        "StockReservationResponse",
+        "Builder"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\StockResponse.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.input.rest",
+      "imports": [
+        "java.math.BigDecimal",
+        "com.kbnt.virtualstock.domain.model.Stock"
+      ],
+      "classes": [
+        "StockResponse"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\UpdatePriceRequest.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.input.rest",
+      "imports": [
+        "java.math.BigDecimal",
+        "javax.validation.constraints.*"
+      ],
+      "classes": [
+        "UpdatePriceRequest"
+      ],
+      "issues": [],
+      "suggestions": [
+        "Consider migrating from javax to jakarta imports"
+      ]
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\UpdateQuantityRequest.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.input.rest",
+      "imports": [
+        "javax.validation.constraints.*"
+      ],
+      "classes": [
+        "UpdateQuantityRequest"
+      ],
+      "issues": [],
+      "suggestions": [
+        "Consider migrating from javax to jakarta imports"
+      ]
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\UpdateStockPriceCommandImpl.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.input.rest",
+      "imports": [
+        "com.kbnt.virtualstock.domain.model.Stock",
+        "com.kbnt.virtualstock.domain.port.input.StockManagementUseCase"
+      ],
+      "classes": [
+        "UpdateStockPriceCommandImpl"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\UpdateStockQuantityCommandImpl.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.input.rest",
+      "imports": [
+        "com.kbnt.virtualstock.domain.model.Stock",
+        "com.kbnt.virtualstock.domain.port.input.StockManagementUseCase"
+      ],
+      "classes": [
+        "UpdateStockQuantityCommandImpl"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\VirtualStockController.java",
+      "package": "com.kbnt.virtualstock.infrastructure.adapter.input.rest",
+      "imports": [
+        "com.kbnt.virtualstock.domain.model.Stock",
+        "com.kbnt.virtualstock.domain.port.input.StockManagementUseCase",
+        "com.kbnt.virtualstock.infrastructure.config.EnhancedLoggingConfig",
+        "lombok.RequiredArgsConstructor",
+        "lombok.extern.slf4j.Slf4j",
+        "org.springframework.http.HttpStatus",
+        "org.springframework.http.ResponseEntity",
+        "org.springframework.web.bind.annotation.*",
+        "javax.validation.Valid",
+        "java.time.LocalDateTime",
+        "java.util.List",
+        "java.util.Optional",
+        "java.util.stream.Collectors"
+      ],
+      "classes": [
+        "VirtualStockController"
+      ],
+      "issues": [],
+      "suggestions": [
+        "Consider migrating from javax to jakarta imports"
+      ]
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\domain\\model\\Stock.java",
+      "package": "com.kbnt.virtualstock.domain.model",
+      "imports": [
+        "java.math.BigDecimal",
+        "java.time.LocalDateTime",
+        "java.util.Objects",
+        "lombok.AllArgsConstructor",
+        "lombok.Builder",
+        "lombok.Getter",
+        "lombok.NoArgsConstructor",
+        "lombok.ToString"
+      ],
+      "classes": [
+        "Stock",
+        "StockBuilder",
+        "StockId",
+        "ProductId",
+        "StockStatus"
+      ],
+      "issues": [
+        "Unused import: lombok.AllArgsConstructor",
+        "Unused import: lombok.Getter",
+        "Unused import: lombok.NoArgsConstructor",
+        "Unused import: lombok.ToString"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\domain\\model\\StockUpdatedEvent.java",
+      "package": "com.kbnt.virtualstock.domain.model",
+      "imports": [
+        "java.math.BigDecimal",
+        "java.time.LocalDateTime",
+        "lombok.AllArgsConstructor",
+        "lombok.Builder",
+        "lombok.Getter",
+        "lombok.NoArgsConstructor",
+        "lombok.ToString"
+      ],
+      "classes": [
+        "StockUpdatedEvent",
+        "Builder",
+        "StockOperation"
+      ],
+      "issues": [
+        "Unused import: lombok.AllArgsConstructor",
+        "Unused import: lombok.NoArgsConstructor",
+        "Unused import: lombok.ToString"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\domain\\port\\input\\StockManagementUseCase.java",
+      "package": "com.kbnt.virtualstock.domain.port.input",
+      "imports": [
+        "com.kbnt.virtualstock.domain.model.Stock",
+        "com.kbnt.virtualstock.domain.model.StockUpdatedEvent",
+        "java.math.BigDecimal",
+        "java.util.List",
+        "java.util.Optional"
+      ],
+      "classes": [
+        "StockManagementUseCase",
+        "CreateStockCommand",
+        "UpdateStockQuantityCommand",
+        "UpdateStockPriceCommand",
+        "ReserveStockCommand",
+        "StockCreationResult",
+        "StockUpdateResult",
+        "StockReservationResult",
+        "SuccessfulStockCreationResult",
+        "FailedStockCreationResult",
+        "SuccessfulStockUpdateResult",
+        "FailedStockUpdateResult",
+        "SuccessfulStockReservationResult",
+        "FailedStockReservationResult"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\domain\\port\\output\\StockEventPublisherPort.java",
+      "package": "com.kbnt.virtualstock.domain.port.output",
+      "imports": [
+        "com.kbnt.virtualstock.domain.model.StockUpdatedEvent"
+      ],
+      "classes": [
+        "StockEventPublisherPort",
+        "EventPublicationResult",
+        "SuccessResult",
+        "FailureResult"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\domain\\port\\output\\StockRepositoryPort.java",
+      "package": "com.kbnt.virtualstock.domain.port.output",
+      "imports": [
+        "com.kbnt.virtualstock.domain.model.Stock",
+        "java.util.List",
+        "java.util.Optional"
+      ],
+      "classes": [
+        "StockRepositoryPort"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\application\\service\\StockManagementApplicationService.java",
+      "package": "com.kbnt.virtualstock.application.service",
+      "imports": [
+        "com.kbnt.virtualstock.domain.model.Stock",
+        "com.kbnt.virtualstock.domain.model.StockUpdatedEvent",
+        "com.kbnt.virtualstock.domain.port.input.StockManagementUseCase",
+        "com.kbnt.virtualstock.domain.port.output.StockEventPublisherPort",
+        "com.kbnt.virtualstock.domain.port.output.StockRepositoryPort",
+        "java.time.LocalDateTime",
+        "java.util.List",
+        "java.util.Optional",
+        "org.springframework.stereotype.Service",
+        "org.springframework.transaction.annotation.Transactional"
+      ],
+      "classes": [
+        "StockManagementApplicationService"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\test\\java\\com\\kbnt\\logproducer\\infrastructure\\adapter\\input\\rest\\LogControllerTest.java",
+      "package": "com.kbnt.logproducer.infrastructure.adapter.input.rest",
+      "imports": [
+        "com.kbnt.logproducer.application.usecase.LogProductionUseCaseImpl",
+        "com.kbnt.logproducer.domain.model.LogMessage",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "org.junit.jupiter.api.BeforeEach",
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.DisplayName",
+        "org.springframework.beans.factory.annotation.Autowired",
+        "org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest",
+        "org.springframework.boot.test.mock.mockito.MockBean",
+        "org.springframework.http.MediaType",
+        "org.springframework.test.web.servlet.MockMvc",
+        "java.time.LocalDateTime",
+        "org.mockito.ArgumentMatchers.any",
+        "org.mockito.Mockito.doNothing",
+        "org.mockito.Mockito.verify",
+        "org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*",
+        "org.springframework.test.web.servlet.result.MockMvcResultMatchers.*"
+      ],
+      "classes": [
+        "LogControllerTest"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\LogProducerApplication.java",
+      "package": "com.kbnt.logproducer",
+      "imports": [
+        "org.springframework.boot.SpringApplication",
+        "org.springframework.boot.autoconfigure.SpringBootApplication",
+        "org.springframework.kafka.annotation.EnableKafka"
+      ],
+      "classes": [
+        "LogProducerApplication"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\config\\EnhancedLoggingConfig.java",
+      "package": "com.kbnt.logproducer.config",
+      "imports": [
+        "org.slf4j.MDC",
+        "org.springframework.context.annotation.Configuration",
+        "org.springframework.stereotype.Component",
+        "ch.qos.logback.classic.Logger",
+        "ch.qos.logback.classic.LoggerContext",
+        "ch.qos.logback.classic.encoder.PatternLayoutEncoder",
+        "ch.qos.logback.core.rolling.RollingFileAppender",
+        "ch.qos.logback.core.rolling.TimeBasedRollingPolicy",
+        "org.slf4j.LoggerFactory",
+        "javax.annotation.PostConstruct",
+        "java.time.LocalDateTime",
+        "java.time.format.DateTimeFormatter"
+      ],
+      "classes": [
+        "EnhancedLoggingConfig",
+        "LoggingUtils"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\model\\LogEntry.java",
+      "package": "com.kbnt.logproducer.model",
+      "imports": [
+        "com.fasterxml.jackson.annotation.JsonFormat",
+        "lombok.AllArgsConstructor",
+        "lombok.Builder",
+        "lombok.Data",
+        "lombok.NoArgsConstructor",
+        "jakarta.validation.constraints.NotBlank",
+        "jakarta.validation.constraints.NotNull",
+        "jakarta.validation.constraints.Pattern",
+        "java.time.Instant",
+        "java.util.Map"
+      ],
+      "classes": [
+        "LogEntry"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\service\\LogProducerService.java",
+      "package": "com.kbnt.logproducer.service",
+      "imports": [
+        "com.kbnt.logproducer.model.LogEntry",
+        "com.kbnt.logproducer.config.EnhancedLoggingConfig",
+        "lombok.extern.slf4j.Slf4j",
+        "org.springframework.beans.factory.annotation.Qualifier",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.kafka.core.KafkaTemplate",
+        "org.springframework.kafka.support.SendResult",
+        "org.springframework.stereotype.Service",
+        "java.util.UUID",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "LogProducerService"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\infrastructure\\config\\DomainConfig.java",
+      "package": "com.kbnt.logproducer.infrastructure.config",
+      "imports": [
+        "com.kbnt.logproducer.domain.service.LogRoutingService",
+        "com.kbnt.logproducer.domain.service.LogValidationService",
+        "org.springframework.context.annotation.Bean",
+        "org.springframework.context.annotation.Configuration"
+      ],
+      "classes": [
+        "DomainConfig"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\infrastructure\\config\\KafkaConfig.java",
+      "package": "com.kbnt.logproducer.infrastructure.config",
+      "imports": [
+        "com.kbnt.logproducer.domain.model.LogEntry",
+        "org.apache.kafka.clients.producer.ProducerConfig",
+        "org.apache.kafka.common.serialization.StringSerializer",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.context.annotation.Bean",
+        "org.springframework.context.annotation.Configuration",
+        "org.springframework.kafka.core.DefaultKafkaProducerFactory",
+        "org.springframework.kafka.core.KafkaTemplate",
+        "org.springframework.kafka.core.ProducerFactory",
+        "org.springframework.kafka.support.serializer.JsonSerializer",
+        "java.util.HashMap",
+        "java.util.Map"
+      ],
+      "classes": [
+        "KafkaConfig"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\infrastructure\\adapter\\output\\KafkaLogPublisherAdapter.java",
+      "package": "com.kbnt.logproducer.infrastructure.adapter.output",
+      "imports": [
+        "com.kbnt.logproducer.domain.model.LogEntry",
+        "com.kbnt.logproducer.domain.port.output.LogPublisherPort",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "org.springframework.kafka.core.KafkaTemplate",
+        "org.springframework.kafka.support.SendResult",
+        "org.springframework.stereotype.Component",
+        "java.time.format.DateTimeFormatter",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "KafkaLogPublisherAdapter",
+        "LogEntryDto"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\infrastructure\\adapter\\output\\MicrometerMetricsAdapter.java",
+      "package": "com.kbnt.logproducer.infrastructure.adapter.output",
+      "imports": [
+        "com.kbnt.logproducer.domain.port.output.MetricsPort",
+        "io.micrometer.core.instrument.Counter",
+        "io.micrometer.core.instrument.MeterRegistry",
+        "io.micrometer.core.instrument.Timer",
+        "org.springframework.stereotype.Component",
+        "java.time.Duration",
+        "java.util.concurrent.atomic.AtomicLong"
+      ],
+      "classes": [
+        "MicrometerMetricsAdapter",
+        "MetricsPort"
+      ],
+      "issues": [
+        "Unused import: java.util.concurrent.atomic.AtomicLong"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\infrastructure\\adapter\\input\\rest\\LogController.java",
+      "package": "com.kbnt.logproducer.infrastructure.adapter.input.rest",
+      "imports": [
+        "com.kbnt.logproducer.application.usecase.LogValidationUseCaseImpl",
+        "com.kbnt.logproducer.domain.model.LogEntry",
+        "com.kbnt.logproducer.domain.model.LogLevel",
+        "com.kbnt.logproducer.domain.model.RequestId",
+        "com.kbnt.logproducer.domain.model.ServiceName",
+        "com.kbnt.logproducer.domain.port.input.LogProductionUseCase",
+        "org.springframework.http.ResponseEntity",
+        "org.springframework.web.bind.annotation.*",
+        "javax.validation.Valid",
+        "java.time.Instant",
+        "java.util.List",
+        "java.util.Map",
+        "java.util.stream.Collectors"
+      ],
+      "classes": [
+        "LogController",
+        "LogRequest"
+      ],
+      "issues": [
+        "Unused import: com.kbnt.logproducer.application.usecase.LogValidationUseCaseImpl"
+      ],
+      "suggestions": [
+        "Consider migrating from javax to jakarta imports"
+      ]
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\domain\\model\\LogEntry.java",
+      "package": "com.kbnt.logproducer.domain.model",
+      "imports": [
+        "lombok.Builder",
+        "lombok.Value",
+        "lombok.With",
+        "java.time.Instant",
+        "java.util.Map"
+      ],
+      "classes": [
+        "LogEntry"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\domain\\model\\LogLevel.java",
+      "package": "com.kbnt.logproducer.domain.model",
+      "imports": [
+        "lombok.Value"
+      ],
+      "classes": [
+        "LogLevel"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\domain\\model\\RequestId.java",
+      "package": "com.kbnt.logproducer.domain.model",
+      "imports": [
+        "lombok.Value",
+        "java.util.UUID"
+      ],
+      "classes": [
+        "RequestId"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\domain\\model\\ServiceName.java",
+      "package": "com.kbnt.logproducer.domain.model",
+      "imports": [
+        "lombok.Value"
+      ],
+      "classes": [
+        "ServiceName"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\domain\\service\\LogRoutingService.java",
+      "package": "com.kbnt.logproducer.domain.service",
+      "imports": [
+        "com.kbnt.logproducer.domain.model.LogEntry",
+        "com.kbnt.logproducer.domain.model.LogLevel"
+      ],
+      "classes": [
+        "LogRoutingService"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\domain\\service\\LogValidationService.java",
+      "package": "com.kbnt.logproducer.domain.service",
+      "imports": [
+        "com.kbnt.logproducer.domain.model.LogEntry",
+        "com.kbnt.logproducer.domain.model.LogLevel",
+        "java.util.List",
+        "java.util.ArrayList"
+      ],
+      "classes": [
+        "LogValidationService"
+      ],
+      "issues": [
+        "Unused import: com.kbnt.logproducer.domain.model.LogLevel"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\domain\\port\\input\\LogProductionUseCase.java",
+      "package": "com.kbnt.logproducer.domain.port.input",
+      "imports": [
+        "com.kbnt.logproducer.domain.model.LogEntry"
+      ],
+      "classes": [
+        "LogProductionUseCase"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\domain\\port\\input\\LogValidationUseCase.java",
+      "package": "com.kbnt.logproducer.domain.port.input",
+      "imports": [
+        "com.kbnt.logproducer.domain.model.LogEntry"
+      ],
+      "classes": [
+        "LogValidationUseCase"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\domain\\port\\output\\LogPublisherPort.java",
+      "package": "com.kbnt.logproducer.domain.port.output",
+      "imports": [
+        "com.kbnt.logproducer.domain.model.LogEntry",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "LogPublisherPort"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\domain\\port\\output\\MetricsPort.java",
+      "package": "com.kbnt.logproducer.domain.port.output",
+      "imports": [
+        "com.kbnt.logproducer.domain.model.LogEntry"
+      ],
+      "classes": [
+        "MetricsPort"
+      ],
+      "issues": [
+        "Unused import: com.kbnt.logproducer.domain.model.LogEntry"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\application\\usecase\\LogProductionUseCaseImpl.java",
+      "package": "com.kbnt.logproducer.application.usecase",
+      "imports": [
+        "com.kbnt.logproducer.domain.model.LogEntry",
+        "com.kbnt.logproducer.domain.port.input.LogProductionUseCase",
+        "com.kbnt.logproducer.domain.port.output.LogPublisherPort",
+        "com.kbnt.logproducer.domain.port.output.MetricsPort",
+        "com.kbnt.logproducer.domain.service.LogRoutingService",
+        "com.kbnt.logproducer.domain.service.LogValidationService",
+        "org.springframework.stereotype.Service",
+        "java.util.List"
+      ],
+      "classes": [
+        "LogProductionUseCaseImpl"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\application\\usecase\\LogValidationUseCaseImpl.java",
+      "package": "com.kbnt.logproducer.application.usecase",
+      "imports": [
+        "com.kbnt.logproducer.domain.model.LogEntry",
+        "com.kbnt.logproducer.domain.port.input.LogValidationUseCase",
+        "com.kbnt.logproducer.domain.service.LogValidationService",
+        "org.springframework.stereotype.Service",
+        "java.util.List"
+      ],
+      "classes": [
+        "LogValidationUseCaseImpl",
+        "BatchValidationResult"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\estudoskbnt\\logproducer\\infrastructure\\config\\IndependentTopicConfiguration.java",
+      "package": "com.estudoskbnt.logproducer.infrastructure.config",
+      "imports": [
+        "lombok.extern.slf4j.Slf4j",
+        "org.apache.kafka.clients.admin.AdminClient",
+        "org.apache.kafka.clients.admin.CreateTopicsResult",
+        "org.apache.kafka.clients.admin.ListTopicsResult",
+        "org.apache.kafka.clients.admin.NewTopic",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.boot.ApplicationArguments",
+        "org.springframework.boot.ApplicationRunner",
+        "org.springframework.boot.autoconfigure.condition.ConditionalOnProperty",
+        "org.springframework.kafka.core.KafkaAdmin",
+        "org.springframework.stereotype.Component",
+        "java.time.Duration",
+        "java.util.Arrays",
+        "java.util.List",
+        "java.util.Set",
+        "java.util.concurrent.CompletableFuture",
+        "java.util.concurrent.TimeUnit"
+      ],
+      "classes": [
+        "IndependentTopicConfiguration"
+      ],
+      "issues": [
+        "Unused import: java.time.Duration"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\estudoskbnt\\logproducer\\infrastructure\\health\\KafkaIndependentHealthIndicator.java",
+      "package": "com.estudoskbnt.logproducer.infrastructure.health",
+      "imports": [
+        "lombok.extern.slf4j.Slf4j",
+        "org.apache.kafka.clients.admin.AdminClient",
+        "org.apache.kafka.clients.admin.DescribeTopicsResult",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.boot.actuate.health.Health",
+        "org.springframework.boot.actuate.health.HealthIndicator",
+        "java.util.Set",
+        "org.springframework.kafka.core.KafkaAdmin",
+        "org.springframework.stereotype.Component",
+        "java.time.Duration",
+        "java.util.Arrays",
+        "java.util.List",
+        "java.util.Map",
+        "java.util.concurrent.TimeUnit"
+      ],
+      "classes": [
+        "KafkaIndependentHealthIndicator"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\kbnt\\logconsumer\\LogConsumerApplication.java",
+      "package": "com.kbnt.logconsumer",
+      "imports": [
+        "org.springframework.boot.SpringApplication",
+        "org.springframework.boot.autoconfigure.SpringBootApplication",
+        "org.springframework.kafka.annotation.EnableKafka"
+      ],
+      "classes": [
+        "LogConsumerApplication"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\kbnt\\logconsumer\\domain\\model\\ApiEndpoint.java",
+      "package": "com.kbnt.logconsumer.domain.model",
+      "imports": [
+        "java.util.Objects"
+      ],
+      "classes": [
+        "ApiEndpoint",
+        "HttpMethod"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\kbnt\\logconsumer\\domain\\model\\ConsumedLog.java",
+      "package": "com.kbnt.logconsumer.domain.model",
+      "imports": [
+        "java.time.Instant",
+        "java.util.Map",
+        "java.util.Objects"
+      ],
+      "classes": [
+        "ConsumedLog"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\kbnt\\logconsumer\\domain\\model\\ExternalApiResponse.java",
+      "package": "com.kbnt.logconsumer.domain.model",
+      "imports": [
+        "java.util.Objects"
+      ],
+      "classes": [
+        "ExternalApiResponse"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\kbnt\\logconsumer\\domain\\model\\LogLevel.java",
+      "package": "com.kbnt.logconsumer.domain.model",
+      "imports": [
+        "java.util.Objects"
+      ],
+      "classes": [
+        "LogLevel"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\kbnt\\logconsumer\\domain\\model\\ProcessingStatus.java",
+      "package": "com.kbnt.logconsumer.domain.model",
+      "imports": [],
+      "classes": [
+        "ProcessingStatus"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\kbnt\\logconsumer\\domain\\model\\RequestId.java",
+      "package": "com.kbnt.logconsumer.domain.model",
+      "imports": [
+        "java.util.Objects",
+        "java.util.regex.Pattern"
+      ],
+      "classes": [
+        "RequestId"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\kbnt\\logconsumer\\domain\\model\\ServiceName.java",
+      "package": "com.kbnt.logconsumer.domain.model",
+      "imports": [
+        "java.util.Objects"
+      ],
+      "classes": [
+        "ServiceName"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\kbnt\\logconsumer\\domain\\port\\input\\ExternalApiIntegrationUseCase.java",
+      "package": "com.kbnt.logconsumer.domain.port.input",
+      "imports": [
+        "com.kbnt.logconsumer.domain.model.ConsumedLog",
+        "com.kbnt.logconsumer.domain.model.ApiEndpoint"
+      ],
+      "classes": [
+        "ExternalApiIntegrationUseCase"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\kbnt\\logconsumer\\domain\\port\\input\\LogProcessingUseCase.java",
+      "package": "com.kbnt.logconsumer.domain.port.input",
+      "imports": [
+        "com.kbnt.logconsumer.domain.model.ConsumedLog"
+      ],
+      "classes": [
+        "LogProcessingUseCase"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\kbnt\\logconsumer\\domain\\port\\output\\ConsumerMetricsPort.java",
+      "package": "com.kbnt.logconsumer.domain.port.output",
+      "imports": [],
+      "classes": [
+        "ConsumerMetricsPort"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\kbnt\\logconsumer\\domain\\port\\output\\ExternalApiPort.java",
+      "package": "com.kbnt.logconsumer.domain.port.output",
+      "imports": [
+        "com.kbnt.logconsumer.domain.model.ConsumedLog",
+        "com.kbnt.logconsumer.domain.model.ApiEndpoint",
+        "com.kbnt.logconsumer.domain.model.ExternalApiResponse"
+      ],
+      "classes": [
+        "ExternalApiPort"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\kbnt\\logconsumer\\domain\\port\\output\\LogPersistencePort.java",
+      "package": "com.kbnt.logconsumer.domain.port.output",
+      "imports": [
+        "com.kbnt.logconsumer.domain.model.ConsumedLog",
+        "java.util.List",
+        "java.util.Optional"
+      ],
+      "classes": [
+        "LogPersistencePort"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\estudoskbnt\\logconsumer\\config\\ConsumerTopicConfiguration.java",
+      "package": "com.estudoskbnt.logconsumer.config",
+      "imports": [
+        "com.estudoskbnt.logconsumer.infrastructure.kafka.IndependentTopicConfiguration",
+        "lombok.extern.slf4j.Slf4j",
+        "org.apache.kafka.clients.admin.AdminClient",
+        "org.apache.kafka.clients.admin.CreateTopicsResult",
+        "org.apache.kafka.clients.admin.NewTopic",
+        "org.apache.kafka.common.errors.TopicExistsException",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.context.annotation.Bean",
+        "org.springframework.context.annotation.Configuration",
+        "org.springframework.kafka.core.KafkaAdmin",
+        "jakarta.annotation.PostConstruct",
+        "java.util.Arrays",
+        "java.util.List",
+        "java.util.Map",
+        "java.util.concurrent.CompletableFuture",
+        "java.util.concurrent.TimeUnit"
+      ],
+      "classes": [
+        "ConsumerTopicConfiguration"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-consumer-service\\src\\main\\java\\com\\estudoskbnt\\logconsumer\\infrastructure\\kafka\\IndependentTopicConfiguration.java",
+      "package": "com.estudoskbnt.logconsumer.infrastructure.kafka",
+      "imports": [
+        "lombok.extern.slf4j.Slf4j",
+        "org.apache.kafka.clients.admin.AdminClient",
+        "org.apache.kafka.clients.admin.CreateTopicsResult",
+        "org.apache.kafka.clients.admin.NewTopic",
+        "org.apache.kafka.common.errors.TopicExistsException",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.kafka.core.KafkaAdmin",
+        "org.springframework.stereotype.Component",
+        "java.util.Arrays",
+        "java.util.List",
+        "java.util.Map",
+        "java.util.concurrent.CompletableFuture",
+        "java.util.concurrent.TimeUnit"
+      ],
+      "classes": [
+        "IndependentTopicConfiguration"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-analytics-service\\src\\main\\java\\com\\kbnt\\loganalytics\\LogAnalyticsApplication.java",
+      "package": "com.kbnt.loganalytics",
+      "imports": [
+        "org.springframework.boot.SpringApplication",
+        "org.springframework.boot.autoconfigure.SpringBootApplication"
+      ],
+      "classes": [
+        "LogAnalyticsApplication"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\test\\java\\com\\estudoskbnt\\consumer\\integration\\StockConsumerIntegrationTest.java",
+      "package": "com.estudoskbnt.consumer.integration",
+      "imports": [
+        "com.estudoskbnt.consumer.entity.ConsumptionLog",
+        "com.estudoskbnt.consumer.model.StockUpdateMessage",
+        "com.estudoskbnt.consumer.repository.ConsumptionLogRepository",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "com.github.tomakehurst.wiremock.WireMockServer",
+        "org.junit.jupiter.api.*",
+        "org.springframework.beans.factory.annotation.Autowired",
+        "org.springframework.boot.test.context.SpringBootTest",
+        "org.springframework.kafka.core.KafkaTemplate",
+        "org.springframework.kafka.test.context.EmbeddedKafka",
+        "org.springframework.test.annotation.DirtiesContext",
+        "org.springframework.test.context.ActiveProfiles",
+        "org.springframework.test.context.DynamicPropertyRegistry",
+        "org.springframework.test.context.DynamicPropertySource",
+        "org.testcontainers.containers.PostgreSQLContainer",
+        "org.testcontainers.junit.jupiter.Container",
+        "org.testcontainers.junit.jupiter.Testcontainers",
+        "java.math.BigDecimal",
+        "java.time.LocalDateTime",
+        "java.util.List",
+        "java.util.concurrent.TimeUnit",
+        "com.github.tomakehurst.wiremock.client.WireMock.*",
+        "org.awaitility.Awaitility.await",
+        "org.junit.jupiter.api.Assertions.*"
+      ],
+      "classes": [
+        "StockConsumerIntegrationTest"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\test\\java\\com\\estudoskbnt\\consumer\\service\\KafkaConsumerServiceTest.java",
+      "package": "com.estudoskbnt.consumer.service",
+      "imports": [
+        "com.estudoskbnt.consumer.entity.ConsumptionLog",
+        "com.estudoskbnt.consumer.model.StockUpdateMessage",
+        "com.estudoskbnt.consumer.repository.ConsumptionLogRepository",
+        "com.estudoskbnt.consumer.service.ExternalApiService.ApiResponse",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "org.junit.jupiter.api.BeforeEach",
+        "org.junit.jupiter.api.DisplayName",
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.extension.ExtendWith",
+        "org.mockito.InjectMocks",
+        "org.mockito.Mock",
+        "org.mockito.junit.jupiter.MockitoExtension",
+        "reactor.core.publisher.Mono",
+        "java.math.BigDecimal",
+        "java.time.LocalDateTime",
+        "java.util.Optional",
+        "org.junit.jupiter.api.Assertions.*",
+        "org.mockito.ArgumentMatchers.*",
+        "org.mockito.Mockito.*"
+      ],
+      "classes": [
+        "KafkaConsumerServiceTest"
+      ],
+      "issues": [
+        "Unused import: java.util.Optional"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\ACLVirtualStockApplication.java",
+      "package": "com.estudoskbnt.consumer",
+      "imports": [
+        "org.springframework.boot.SpringApplication",
+        "org.springframework.boot.autoconfigure.SpringBootApplication"
+      ],
+      "classes": [
+        "ACLVirtualStockApplication"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\KBNTStockConsumerApplication.java",
+      "package": "com.estudoskbnt.consumer",
+      "imports": [
+        "org.springframework.boot.SpringApplication",
+        "org.springframework.boot.autoconfigure.SpringBootApplication",
+        "org.springframework.kafka.annotation.EnableKafka",
+        "org.springframework.scheduling.annotation.EnableAsync",
+        "org.springframework.transaction.annotation.EnableTransactionManagement"
+      ],
+      "classes": [
+        "KBNTStockConsumerApplication"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\config\\EnhancedLoggingConfig.java",
+      "package": "com.estudoskbnt.consumer.config",
+      "imports": [
+        "org.slf4j.MDC",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.context.annotation.Bean",
+        "org.springframework.context.annotation.Configuration",
+        "org.springframework.core.env.Environment",
+        "ch.qos.logback.classic.Logger",
+        "ch.qos.logback.classic.LoggerContext",
+        "ch.qos.logback.core.ConsoleAppender",
+        "ch.qos.logback.core.rolling.RollingFileAppender",
+        "ch.qos.logback.core.rolling.TimeBasedRollingPolicy",
+        "ch.qos.logback.classic.encoder.PatternLayoutEncoder",
+        "org.slf4j.LoggerFactory",
+        "java.net.InetAddress",
+        "java.net.UnknownHostException"
+      ],
+      "classes": [
+        "EnhancedLoggingConfig",
+        "LoggingUtils"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\config\\KafkaConsumerConfig.java",
+      "package": "com.estudoskbnt.consumer.config",
+      "imports": [
+        "org.springframework.util.backoff.FixedBackOff",
+        "com.estudoskbnt.consumer.model.StockUpdateMessage",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "lombok.extern.slf4j.Slf4j",
+        "org.apache.kafka.clients.consumer.ConsumerConfig",
+        "org.apache.kafka.common.serialization.StringDeserializer",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.context.annotation.Bean",
+        "org.springframework.context.annotation.Configuration",
+        "org.springframework.kafka.annotation.EnableKafka",
+        "org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory",
+        "org.springframework.kafka.core.ConsumerFactory",
+        "org.springframework.kafka.core.DefaultKafkaConsumerFactory",
+        "org.springframework.kafka.listener.ContainerProperties",
+        "org.springframework.kafka.support.serializer.JsonDeserializer",
+        "java.util.HashMap",
+        "java.util.Map",
+        "org.springframework.util.backoff.FixedBackOff"
+      ],
+      "classes": [
+        "KafkaConsumerConfig"
+      ],
+      "issues": [
+        "Duplicate import: org.springframework.util.backoff.FixedBackOff"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\config\\WebClientConfig.java",
+      "package": "com.estudoskbnt.consumer.config",
+      "imports": [
+        "org.springframework.context.annotation.Bean",
+        "org.springframework.context.annotation.Configuration",
+        "org.springframework.web.reactive.function.client.WebClient"
+      ],
+      "classes": [
+        "WebClientConfig"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\controller\\MonitoringController.java",
+      "package": "com.estudoskbnt.consumer.controller",
+      "imports": [
+        "com.estudoskbnt.consumer.entity.ConsumptionLog",
+        "com.estudoskbnt.consumer.repository.ConsumptionLogRepository",
+        "lombok.RequiredArgsConstructor",
+        "lombok.extern.slf4j.Slf4j",
+        "org.springframework.data.domain.Page",
+        "org.springframework.data.domain.PageRequest",
+        "org.springframework.data.domain.Pageable",
+        "org.springframework.http.ResponseEntity",
+        "org.springframework.web.bind.annotation.*",
+        "java.time.LocalDateTime",
+        "java.util.HashMap",
+        "java.util.List",
+        "java.util.Map"
+      ],
+      "classes": [
+        "MonitoringController"
+      ],
+      "issues": [
+        "Unused import: lombok.extern.slf4j.Slf4j"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\entity\\ConsumptionLog.java",
+      "package": "com.estudoskbnt.consumer.entity",
+      "imports": [
+        "jakarta.persistence.*",
+        "java.math.BigDecimal",
+        "java.time.LocalDateTime"
+      ],
+      "classes": [
+        "ConsumptionLog",
+        "Builder",
+        "ProcessingStatus"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\model\\StockUpdateMessage.java",
+      "package": "com.estudoskbnt.consumer.model",
+      "imports": [
+        "com.fasterxml.jackson.annotation.JsonProperty",
+        "com.fasterxml.jackson.annotation.JsonFormat",
+        "jakarta.validation.constraints.*",
+        "java.math.BigDecimal",
+        "java.time.LocalDateTime"
+      ],
+      "classes": [
+        "StockUpdateMessage",
+        "Builder",
+        "Priority"
+      ],
+      "issues": [
+        "Unused import: com.fasterxml.jackson.annotation.JsonProperty",
+        "Unused import: com.fasterxml.jackson.annotation.JsonFormat"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\repository\\ConsumptionLogRepository.java",
+      "package": "com.estudoskbnt.consumer.repository",
+      "imports": [
+        "com.estudoskbnt.consumer.entity.ConsumptionLog",
+        "org.springframework.data.domain.Page",
+        "org.springframework.data.domain.Pageable",
+        "org.springframework.data.jpa.repository.JpaRepository",
+        "org.springframework.data.jpa.repository.Query",
+        "org.springframework.data.repository.query.Param",
+        "org.springframework.stereotype.Repository",
+        "java.time.LocalDateTime",
+        "java.util.List",
+        "java.util.Optional"
+      ],
+      "classes": [
+        "ConsumptionLogRepository"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\service\\ExternalApiService.java",
+      "package": "com.estudoskbnt.consumer.service",
+      "imports": [
+        "com.estudoskbnt.consumer.model.StockUpdateMessage",
+        "lombok.extern.slf4j.Slf4j",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.http.HttpStatus",
+        "org.springframework.http.MediaType",
+        "org.springframework.stereotype.Service",
+        "org.springframework.web.reactive.function.client.WebClient",
+        "org.springframework.web.reactive.function.client.WebClientResponseException",
+        "reactor.core.publisher.Mono",
+        "reactor.util.retry.Retry",
+        "java.time.Duration",
+        "java.time.LocalDateTime",
+        "java.util.Map"
+      ],
+      "classes": [
+        "ExternalApiService",
+        "ApiResponse",
+        "Builder",
+        "ValidationResponse",
+        "Builder",
+        "StockInfo",
+        "Builder",
+        "StockProcessingRequest",
+        "Builder",
+        "NotificationRequest",
+        "Builder"
+      ],
+      "issues": [
+        "Unused import: lombok.extern.slf4j.Slf4j"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\service\\KafkaConsumerService.java",
+      "package": "com.estudoskbnt.consumer.service",
+      "imports": [
+        "com.estudoskbnt.consumer.entity.ConsumptionLog",
+        "com.estudoskbnt.consumer.model.StockUpdateMessage",
+        "com.estudoskbnt.consumer.repository.ConsumptionLogRepository",
+        "com.estudoskbnt.consumer.service.ExternalApiService.ApiResponse",
+        "com.estudoskbnt.consumer.config.EnhancedLoggingConfig",
+        "com.fasterxml.jackson.core.JsonProcessingException",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "lombok.RequiredArgsConstructor",
+        "lombok.extern.slf4j.Slf4j",
+        "org.apache.kafka.clients.consumer.ConsumerRecord",
+        "org.slf4j.MDC",
+        "org.springframework.kafka.annotation.KafkaListener",
+        "org.springframework.kafka.annotation.RetryableTopic",
+        "org.springframework.kafka.retrytopic.TopicSuffixingStrategy",
+        "org.springframework.kafka.support.Acknowledgment",
+        "org.springframework.kafka.support.KafkaHeaders",
+        "org.springframework.messaging.handler.annotation.Header",
+        "org.springframework.messaging.handler.annotation.Payload",
+        "org.springframework.retry.annotation.Backoff",
+        "org.springframework.stereotype.Service",
+        "org.springframework.transaction.annotation.Transactional",
+        "reactor.core.publisher.Mono",
+        "java.security.MessageDigest",
+        "java.security.NoSuchAlgorithmException",
+        "java.time.LocalDateTime",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "KafkaConsumerService"
+      ],
+      "issues": [
+        "Unused import: reactor.core.publisher.Mono",
+        "Unused import: java.security.MessageDigest",
+        "Unused import: java.security.NoSuchAlgorithmException"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\service\\MessageHashService.java",
+      "package": "com.estudoskbnt.consumer.service",
+      "imports": [
+        "com.estudoskbnt.consumer.model.StockUpdateMessage",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "org.apache.kafka.clients.consumer.ConsumerRecord",
+        "org.springframework.stereotype.Service",
+        "java.security.MessageDigest"
+      ],
+      "classes": [
+        "MessageHashService"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\test\\java\\com\\estudoskbnt\\kbntlogservice\\controller\\StockUpdateControllerTest.java",
+      "package": "com.estudoskbnt.kbntlogservice.controller",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.model.StockUpdateMessage",
+        "com.estudoskbnt.kbntlogservice.producer.StockUpdateProducer",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "org.apache.kafka.clients.producer.RecordMetadata",
+        "org.apache.kafka.common.TopicPartition",
+        "org.junit.jupiter.api.BeforeEach",
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.DisplayName",
+        "org.springframework.beans.factory.annotation.Autowired",
+        "org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest",
+        "org.springframework.boot.test.mock.mockito.MockBean",
+        "org.springframework.http.MediaType",
+        "org.apache.kafka.clients.producer.ProducerRecord",
+        "org.springframework.kafka.support.SendResult",
+        "org.springframework.test.context.TestPropertySource",
+        "org.springframework.test.web.servlet.MockMvc",
+        "java.util.concurrent.CompletableFuture",
+        "org.mockito.ArgumentMatchers.any",
+        "org.mockito.Mockito.when",
+        "org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post",
+        "org.springframework.test.web.servlet.result.MockMvcResultMatchers.*",
+        "org.hamcrest.Matchers.containsString"
+      ],
+      "classes": [
+        "StockUpdateControllerTest"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\test\\java\\com\\estudoskbnt\\kbntlogservice\\model\\KafkaPublicationLogTest.java",
+      "package": "com.estudoskbnt.kbntlogservice.model",
+      "imports": [
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.DisplayName",
+        "java.time.LocalDateTime",
+        "org.junit.jupiter.api.Assertions.*"
+      ],
+      "classes": [
+        "KafkaPublicationLogTest"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\test\\java\\com\\estudoskbnt\\kbntlogservice\\performance\\KafkaPublicationPerformanceTest.java",
+      "package": "com.estudoskbnt.kbntlogservice.performance",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.model.KafkaPublicationLog",
+        "com.estudoskbnt.kbntlogservice.model.StockUpdateMessage",
+        "com.estudoskbnt.kbntlogservice.producer.StockUpdateProducer",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.DisplayName",
+        "org.junit.jupiter.api.BeforeEach",
+        "org.junit.jupiter.api.Timeout",
+        "org.junit.jupiter.api.extension.ExtendWith",
+        "org.mockito.ArgumentCaptor",
+        "org.mockito.InjectMocks",
+        "org.mockito.Mock",
+        "org.mockito.junit.jupiter.MockitoExtension",
+        "org.springframework.kafka.core.KafkaTemplate",
+        "org.springframework.kafka.support.SendResult",
+        "java.time.LocalDateTime",
+        "java.util.Set",
+        "java.util.concurrent.*",
+        "java.util.concurrent.atomic.AtomicInteger",
+        "java.util.concurrent.atomic.AtomicLong",
+        "org.junit.jupiter.api.Assertions.*",
+        "org.mockito.ArgumentMatchers.*",
+        "org.mockito.Mockito.*"
+      ],
+      "classes": [
+        "KafkaPublicationPerformanceTest"
+      ],
+      "issues": [
+        "Unused import: com.estudoskbnt.kbntlogservice.model.KafkaPublicationLog",
+        "Too many wildcard imports: 4"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\test\\java\\com\\estudoskbnt\\kbntlogservice\\performance\\StockUpdateControllerPerformanceTest.java",
+      "package": "com.estudoskbnt.kbntlogservice.performance",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.controller.StockUpdateController",
+        "com.estudoskbnt.kbntlogservice.model.StockUpdateMessage",
+        "com.estudoskbnt.kbntlogservice.producer.StockUpdateProducer",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.DisplayName",
+        "org.junit.jupiter.api.BeforeEach",
+        "org.junit.jupiter.api.Timeout",
+        "org.springframework.beans.factory.annotation.Autowired",
+        "org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest",
+        "org.springframework.boot.test.mock.mockito.MockBean",
+        "org.springframework.http.MediaType",
+        "org.springframework.test.web.servlet.MockMvc",
+        "org.springframework.test.web.servlet.MvcResult",
+        "java.time.LocalDateTime",
+        "java.util.ArrayList",
+        "java.util.List",
+        "java.util.concurrent.*",
+        "java.util.concurrent.atomic.AtomicInteger",
+        "java.util.concurrent.atomic.AtomicLong",
+        "org.junit.jupiter.api.Assertions.*",
+        "org.mockito.ArgumentMatchers.any",
+        "org.mockito.ArgumentMatchers.anyString",
+        "org.mockito.Mockito.*",
+        "org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post",
+        "org.springframework.test.web.servlet.result.MockMvcResultMatchers.*"
+      ],
+      "classes": [
+        "StockUpdateControllerPerformanceTest",
+        "TestResult"
+      ],
+      "issues": [
+        "Too many wildcard imports: 4"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\test\\java\\com\\estudoskbnt\\kbntlogservice\\producer\\StockUpdateProducerTest.java",
+      "package": "com.estudoskbnt.kbntlogservice.producer",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.model.StockUpdateMessage",
+        "com.estudoskbnt.kbntlogservice.model.KafkaPublicationLog",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "org.apache.kafka.clients.producer.ProducerRecord",
+        "org.apache.kafka.clients.producer.RecordMetadata",
+        "org.apache.kafka.common.TopicPartition",
+        "org.junit.jupiter.api.BeforeEach",
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.DisplayName",
+        "org.junit.jupiter.api.extension.ExtendWith",
+        "org.mockito.ArgumentCaptor",
+        "org.mockito.Mock",
+        "org.mockito.junit.jupiter.MockitoExtension",
+        "org.springframework.kafka.core.KafkaTemplate",
+        "org.springframework.kafka.support.SendResult",
+        "org.springframework.test.util.ReflectionTestUtils",
+        "java.time.LocalDateTime",
+        "java.util.concurrent.CompletableFuture",
+        "org.junit.jupiter.api.Assertions.*",
+        "org.mockito.ArgumentMatchers.*",
+        "org.mockito.Mockito.*"
+      ],
+      "classes": [
+        "StockUpdateProducerTest"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\test\\java\\com\\estudoskbnt\\kbntlogservice\\infrastructure\\adapter\\output\\kafka\\KafkaEventPublisherAdapterTest.java",
+      "package": "com.estudoskbnt.kbntlogservice.infrastructure.adapter.output.kafka",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.event.StockUpdateEvent",
+        "com.estudoskbnt.kbntlogservice.domain.model.*",
+        "org.apache.kafka.clients.producer.RecordMetadata",
+        "org.apache.kafka.common.TopicPartition",
+        "org.junit.jupiter.api.BeforeEach",
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.DisplayName",
+        "org.junit.jupiter.api.extension.ExtendWith",
+        "org.mockito.InjectMocks",
+        "org.mockito.Mock",
+        "org.mockito.junit.jupiter.MockitoExtension",
+        "org.springframework.kafka.core.KafkaTemplate",
+        "org.springframework.kafka.support.SendResult",
+        "java.util.HashMap",
+        "java.util.Map",
+        "java.util.concurrent.CompletableFuture",
+        "org.junit.jupiter.api.Assertions.*",
+        "org.mockito.ArgumentMatchers.any",
+        "org.mockito.ArgumentMatchers.eq",
+        "org.mockito.Mockito.*"
+      ],
+      "classes": [
+        "KafkaEventPublisherAdapterTest"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\test\\java\\com\\estudoskbnt\\kbntlogservice\\infrastructure\\adapter\\input\\rest\\StockUpdateControllerTest.java",
+      "package": "com.estudoskbnt.kbntlogservice.infrastructure.adapter.input.rest",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.port.input.*",
+        "com.estudoskbnt.kbntlogservice.domain.model.*",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "org.junit.jupiter.api.BeforeEach",
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.DisplayName",
+        "org.springframework.beans.factory.annotation.Autowired",
+        "org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest",
+        "org.springframework.boot.test.mock.mockito.MockBean",
+        "org.springframework.http.MediaType",
+        "org.springframework.test.context.TestPropertySource",
+        "org.springframework.test.web.servlet.MockMvc",
+        "java.util.concurrent.CompletableFuture",
+        "org.mockito.ArgumentMatchers.any",
+        "org.mockito.Mockito.when",
+        "org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*",
+        "org.springframework.test.web.servlet.result.MockMvcResultMatchers.*",
+        "org.hamcrest.Matchers.containsString"
+      ],
+      "classes": [
+        "StockUpdateControllerTest"
+      ],
+      "issues": [
+        "Too many wildcard imports: 4"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\test\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\StockUpdateTest.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.event.StockUpdateEvent",
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.DisplayName",
+        "org.junit.jupiter.api.Assertions.*"
+      ],
+      "classes": [
+        "StockUpdateTest"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\test\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\ValueObjectsTest.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.DisplayName",
+        "org.junit.jupiter.api.Assertions.*"
+      ],
+      "classes": [
+        "ValueObjectsTest"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\test\\java\\com\\estudoskbnt\\kbntlogservice\\application\\service\\StockUpdateApplicationServiceTest.java",
+      "package": "com.estudoskbnt.kbntlogservice.application.service",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.model.*",
+        "com.estudoskbnt.kbntlogservice.domain.port.input.*",
+        "com.estudoskbnt.kbntlogservice.domain.port.output.*",
+        "com.estudoskbnt.kbntlogservice.domain.event.StockUpdateEvent",
+        "org.junit.jupiter.api.BeforeEach",
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.DisplayName",
+        "org.junit.jupiter.api.extension.ExtendWith",
+        "org.mockito.InjectMocks",
+        "org.mockito.Mock",
+        "org.mockito.junit.jupiter.MockitoExtension",
+        "java.util.Optional",
+        "java.util.concurrent.CompletableFuture",
+        "org.junit.jupiter.api.Assertions.*",
+        "org.mockito.ArgumentMatchers.any",
+        "org.mockito.Mockito.*"
+      ],
+      "classes": [
+        "StockUpdateApplicationServiceTest"
+      ],
+      "issues": [
+        "Unused import: java.util.Optional",
+        "Too many wildcard imports: 5"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\KbntLogServiceApplication.java",
+      "package": "com.estudoskbnt.kbntlogservice",
+      "imports": [
+        "org.springframework.boot.SpringApplication",
+        "org.springframework.boot.autoconfigure.SpringBootApplication",
+        "org.springframework.kafka.annotation.EnableKafka",
+        "org.springframework.scheduling.annotation.EnableAsync",
+        "org.springframework.scheduling.annotation.EnableScheduling"
+      ],
+      "classes": [
+        "KbntLogServiceApplication"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\config\\AmqStreamsTopicConfiguration.java",
+      "package": "com.estudoskbnt.kbntlogservice.config",
+      "imports": [
+        "org.apache.kafka.clients.admin.AdminClient",
+        "org.apache.kafka.clients.admin.CreateTopicsResult",
+        "org.apache.kafka.clients.admin.NewTopic",
+        "org.apache.kafka.common.errors.TopicExistsException",
+        "org.slf4j.Logger",
+        "org.slf4j.LoggerFactory",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.context.annotation.Configuration",
+        "org.springframework.kafka.core.KafkaAdmin",
+        "jakarta.annotation.PostConstruct",
+        "java.util.Arrays",
+        "java.util.List",
+        "java.util.Map",
+        "java.util.concurrent.CompletableFuture",
+        "java.util.concurrent.TimeUnit"
+      ],
+      "classes": [
+        "AmqStreamsTopicConfiguration"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\config\\EnhancedKafkaProducerConfig.java",
+      "package": "com.estudoskbnt.kbntlogservice.config",
+      "imports": [
+        "org.apache.kafka.clients.producer.ProducerConfig",
+        "org.apache.kafka.common.serialization.StringSerializer",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.context.annotation.Bean",
+        "org.springframework.context.annotation.Configuration",
+        "org.springframework.kafka.core.DefaultKafkaProducerFactory",
+        "org.springframework.kafka.core.KafkaTemplate",
+        "org.springframework.kafka.core.ProducerFactory",
+        "org.springframework.kafka.support.serializer.JsonSerializer",
+        "java.util.HashMap",
+        "java.util.Map"
+      ],
+      "classes": [
+        "EnhancedKafkaProducerConfig"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\config\\ProcessingModeConfiguration.java",
+      "package": "com.estudoskbnt.kbntlogservice.config",
+      "imports": [
+        "lombok.extern.slf4j.Slf4j",
+        "org.slf4j.Logger",
+        "org.slf4j.LoggerFactory",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.boot.autoconfigure.condition.ConditionalOnProperty",
+        "org.springframework.context.annotation.Configuration",
+        "org.springframework.core.env.Environment",
+        "jakarta.annotation.PostConstruct",
+        "java.util.Arrays",
+        "java.util.List"
+      ],
+      "classes": [
+        "ProcessingModeConfiguration",
+        "ProducerModeConfiguration",
+        "ConsumerModeConfiguration",
+        "ProcessorModeConfiguration"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\controller\\UnifiedLogController.java",
+      "package": "com.estudoskbnt.kbntlogservice.controller",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.model.LogMessage",
+        "com.estudoskbnt.kbntlogservice.producer.UnifiedLogProducer",
+        "io.micrometer.core.annotation.Timed",
+        "org.slf4j.Logger",
+        "org.slf4j.LoggerFactory",
+        "org.springframework.boot.autoconfigure.condition.ConditionalOnExpression",
+        "org.springframework.http.ResponseEntity",
+        "org.springframework.kafka.support.SendResult",
+        "org.springframework.validation.annotation.Validated",
+        "org.springframework.web.bind.annotation.*",
+        "jakarta.validation.Valid",
+        "java.util.Map",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "UnifiedLogController"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\model\\KafkaPublicationLog.java",
+      "package": "com.estudoskbnt.kbntlogservice.model",
+      "imports": [
+        "lombok.AllArgsConstructor",
+        "lombok.Builder",
+        "lombok.Data",
+        "lombok.NoArgsConstructor",
+        "java.time.LocalDateTime"
+      ],
+      "classes": [
+        "KafkaPublicationLog",
+        "PublicationStatus"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\model\\LogMessage.java",
+      "package": "com.estudoskbnt.kbntlogservice.model",
+      "imports": [
+        "com.fasterxml.jackson.annotation.JsonFormat",
+        "jakarta.validation.constraints.NotBlank",
+        "jakarta.validation.constraints.NotNull",
+        "java.time.LocalDateTime",
+        "java.util.Map"
+      ],
+      "classes": [
+        "LogMessage",
+        "LogMessageBuilder",
+        "ExceptionInfo"
+      ],
+      "issues": [
+        "Unused import: jakarta.validation.constraints.NotNull"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\model\\StockUpdateMessage.java",
+      "package": "com.estudoskbnt.kbntlogservice.model",
+      "imports": [
+        "com.fasterxml.jackson.annotation.JsonFormat",
+        "lombok.AllArgsConstructor",
+        "lombok.Builder",
+        "lombok.Data",
+        "lombok.NoArgsConstructor",
+        "jakarta.validation.constraints.NotBlank",
+        "jakarta.validation.constraints.NotNull",
+        "jakarta.validation.constraints.Positive",
+        "jakarta.validation.constraints.PositiveOrZero",
+        "java.time.LocalDateTime"
+      ],
+      "classes": [
+        "StockUpdateMessage"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\producer\\StockUpdateProducer.java",
+      "package": "com.estudoskbnt.kbntlogservice.producer",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.model.StockUpdateMessage",
+        "com.estudoskbnt.kbntlogservice.model.KafkaPublicationLog",
+        "com.fasterxml.jackson.core.JsonProcessingException",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "lombok.extern.slf4j.Slf4j",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.boot.autoconfigure.condition.ConditionalOnExpression",
+        "org.springframework.kafka.core.KafkaTemplate",
+        "org.springframework.kafka.support.SendResult",
+        "org.springframework.stereotype.Service",
+        "java.nio.charset.StandardCharsets",
+        "java.security.MessageDigest",
+        "java.security.NoSuchAlgorithmException",
+        "java.time.LocalDateTime",
+        "java.time.format.DateTimeFormatter",
+        "java.util.UUID",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "StockUpdateProducer"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\producer\\UnifiedLogProducer.java",
+      "package": "com.estudoskbnt.kbntlogservice.producer",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.model.LogMessage",
+        "org.slf4j.Logger",
+        "org.slf4j.LoggerFactory",
+        "org.springframework.beans.factory.annotation.Value",
+        "org.springframework.boot.autoconfigure.condition.ConditionalOnExpression",
+        "org.springframework.kafka.core.KafkaTemplate",
+        "org.springframework.kafka.support.SendResult",
+        "org.springframework.stereotype.Service",
+        "java.time.LocalDateTime",
+        "java.util.UUID",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "UnifiedLogProducer"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\infrastructure\\config\\HexagonalArchitectureConfig.java",
+      "package": "com.estudoskbnt.kbntlogservice.infrastructure.config",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.application.service.StockUpdateApplicationService",
+        "com.estudoskbnt.kbntlogservice.domain.port.input.StockUpdateUseCase",
+        "com.estudoskbnt.kbntlogservice.domain.port.output.EventPublisherPort",
+        "com.estudoskbnt.kbntlogservice.domain.port.output.StockUpdateRepositoryPort",
+        "com.estudoskbnt.kbntlogservice.infrastructure.adapter.output.kafka.KafkaEventPublisherAdapter",
+        "com.estudoskbnt.kbntlogservice.infrastructure.adapter.output.persistence.InMemoryStockUpdateRepositoryAdapter",
+        "lombok.extern.slf4j.Slf4j",
+        "org.springframework.context.annotation.Bean",
+        "org.springframework.context.annotation.Configuration",
+        "org.springframework.context.annotation.Primary"
+      ],
+      "classes": [
+        "HexagonalArchitectureConfig"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\infrastructure\\config\\TestConfiguration.java",
+      "package": "com.estudoskbnt.kbntlogservice.infrastructure.config",
+      "imports": [
+        "org.springframework.context.annotation.Bean",
+        "org.springframework.context.annotation.Configuration",
+        "org.springframework.context.annotation.Primary",
+        "org.springframework.context.annotation.Profile",
+        "org.springframework.kafka.core.KafkaTemplate",
+        "org.springframework.kafka.core.ProducerFactory",
+        "org.springframework.kafka.support.SendResult",
+        "lombok.extern.slf4j.Slf4j",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "TestConfiguration"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\infrastructure\\adapter\\output\\kafka\\KafkaApplicationLogMessage.java",
+      "package": "com.estudoskbnt.kbntlogservice.infrastructure.adapter.output.kafka",
+      "imports": [
+        "com.fasterxml.jackson.annotation.JsonProperty",
+        "lombok.AllArgsConstructor",
+        "lombok.Builder",
+        "lombok.Data",
+        "lombok.NoArgsConstructor",
+        "java.time.LocalDateTime",
+        "java.util.Map"
+      ],
+      "classes": [
+        "KafkaApplicationLogMessage"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\infrastructure\\adapter\\output\\kafka\\KafkaAuditMessage.java",
+      "package": "com.estudoskbnt.kbntlogservice.infrastructure.adapter.output.kafka",
+      "imports": [
+        "com.fasterxml.jackson.annotation.JsonProperty",
+        "lombok.AllArgsConstructor",
+        "lombok.Builder",
+        "lombok.Data",
+        "lombok.NoArgsConstructor",
+        "java.time.LocalDateTime",
+        "java.util.Map"
+      ],
+      "classes": [
+        "KafkaAuditMessage"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\infrastructure\\adapter\\output\\kafka\\KafkaEventPublisherAdapter.java",
+      "package": "com.estudoskbnt.kbntlogservice.infrastructure.adapter.output.kafka",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.event.StockUpdateEvent",
+        "com.estudoskbnt.kbntlogservice.domain.port.output.EventPublisherPort",
+        "com.estudoskbnt.kbntlogservice.domain.port.output.EventPublicationResult",
+        "com.fasterxml.jackson.core.JsonProcessingException",
+        "com.fasterxml.jackson.databind.ObjectMapper",
+        "com.fasterxml.jackson.datatype.jsr310.JavaTimeModule",
+        "lombok.RequiredArgsConstructor",
+        "org.slf4j.Logger",
+        "org.slf4j.LoggerFactory",
+        "org.springframework.kafka.core.KafkaTemplate",
+        "org.springframework.kafka.support.SendResult",
+        "org.springframework.stereotype.Component",
+        "java.util.HashMap",
+        "java.util.Map",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "KafkaEventPublisherAdapter"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\infrastructure\\adapter\\output\\kafka\\KafkaStockUpdateMessage.java",
+      "package": "com.estudoskbnt.kbntlogservice.infrastructure.adapter.output.kafka",
+      "imports": [
+        "com.fasterxml.jackson.annotation.JsonProperty",
+        "lombok.AllArgsConstructor",
+        "lombok.Builder",
+        "lombok.Data",
+        "lombok.NoArgsConstructor",
+        "java.time.LocalDateTime"
+      ],
+      "classes": [
+        "KafkaStockUpdateMessage"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\infrastructure\\adapter\\output\\persistence\\InMemoryStockUpdateRepositoryAdapter.java",
+      "package": "com.estudoskbnt.kbntlogservice.infrastructure.adapter.output.persistence",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.model.*",
+        "com.estudoskbnt.kbntlogservice.domain.port.output.StockUpdateRepositoryPort",
+        "lombok.RequiredArgsConstructor",
+        "lombok.extern.slf4j.Slf4j",
+        "org.springframework.stereotype.Component",
+        "java.time.LocalDateTime",
+        "java.util.*",
+        "java.util.concurrent.CompletableFuture",
+        "java.util.concurrent.ConcurrentHashMap"
+      ],
+      "classes": [
+        "InMemoryStockUpdateRepositoryAdapter",
+        "PersistenceException"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\infrastructure\\adapter\\input\\rest\\StockUpdateController.java",
+      "package": "com.estudoskbnt.kbntlogservice.infrastructure.adapter.input.rest",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.model.*",
+        "com.estudoskbnt.kbntlogservice.domain.port.input.*",
+        "com.estudoskbnt.kbntlogservice.model.StockUpdateMessage",
+        "io.micrometer.core.annotation.Timed",
+        "lombok.RequiredArgsConstructor",
+        "lombok.extern.slf4j.Slf4j",
+        "org.springframework.boot.autoconfigure.condition.ConditionalOnExpression",
+        "org.springframework.http.ResponseEntity",
+        "org.springframework.kafka.support.SendResult",
+        "org.springframework.validation.annotation.Validated",
+        "org.springframework.web.bind.annotation.*",
+        "jakarta.validation.Valid",
+        "java.util.HashMap",
+        "java.util.Map",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "StockUpdateController"
+      ],
+      "issues": [
+        "Unused import: com.estudoskbnt.kbntlogservice.model.StockUpdateMessage",
+        "Unused import: org.springframework.kafka.support.SendResult"
+      ],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\infrastructure\\adapter\\input\\rest\\StockUpdateRequest.java",
+      "package": "com.estudoskbnt.kbntlogservice.infrastructure.adapter.input.rest",
+      "imports": [
+        "com.fasterxml.jackson.annotation.JsonProperty",
+        "lombok.AllArgsConstructor",
+        "lombok.Builder",
+        "lombok.Data",
+        "lombok.NoArgsConstructor",
+        "jakarta.validation.constraints.NotBlank",
+        "jakarta.validation.constraints.NotNull",
+        "jakarta.validation.constraints.Positive",
+        "jakarta.validation.constraints.Pattern"
+      ],
+      "classes": [
+        "StockUpdateRequest"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\event\\EventType.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.event",
+      "imports": [],
+      "classes": [
+        "EventType"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\event\\Priority.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.event",
+      "imports": [],
+      "classes": [
+        "Priority"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\event\\StockUpdateEvent.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.event",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.model.*",
+        "java.time.LocalDateTime"
+      ],
+      "classes": [
+        "StockUpdateEvent"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\Branch.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [],
+      "classes": [
+        "Branch"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\CorrelationId.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [
+        "java.util.UUID"
+      ],
+      "classes": [
+        "CorrelationId"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\DistributionCenter.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [],
+      "classes": [
+        "DistributionCenter"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\EventMetadata.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [
+        "java.time.LocalDateTime"
+      ],
+      "classes": [
+        "EventMetadata",
+        "EventMetadataBuilder"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\Operation.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [],
+      "classes": [
+        "Operation"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\ProductId.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [],
+      "classes": [
+        "ProductId"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\Quantity.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [],
+      "classes": [
+        "Quantity"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\ReasonCode.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [],
+      "classes": [
+        "ReasonCode"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\ReferenceDocument.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [
+        "lombok.AllArgsConstructor",
+        "lombok.Getter",
+        "lombok.NoArgsConstructor"
+      ],
+      "classes": [
+        "ReferenceDocument"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\SourceBranch.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [],
+      "classes": [
+        "SourceBranch"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\StockUpdate.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.event.StockUpdateEvent",
+        "com.estudoskbnt.kbntlogservice.domain.event.EventType",
+        "com.estudoskbnt.kbntlogservice.domain.event.Priority",
+        "java.time.LocalDateTime",
+        "java.util.UUID"
+      ],
+      "classes": [
+        "StockUpdate"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\StockUpdateId.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [
+        "java.util.UUID"
+      ],
+      "classes": [
+        "StockUpdateId"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\StockUpdateStatus.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [],
+      "classes": [
+        "StockUpdateStatus"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\ValidationResult.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [],
+      "classes": [
+        "ValidationResult",
+        "InvalidStockUpdateException"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\model\\ValueObjects.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.model",
+      "imports": [],
+      "classes": [],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\port\\input\\AddStockCommand.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.port.input",
+      "imports": [],
+      "classes": [
+        "AddStockCommand"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\port\\input\\GenericStockUpdateCommand.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.port.input",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.model.*"
+      ],
+      "classes": [
+        "GenericStockUpdateCommand"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\port\\input\\ReleaseStockCommand.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.port.input",
+      "imports": [],
+      "classes": [
+        "ReleaseStockCommand"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\port\\input\\RemoveStockCommand.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.port.input",
+      "imports": [],
+      "classes": [
+        "RemoveStockCommand"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\port\\input\\ReserveStockCommand.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.port.input",
+      "imports": [],
+      "classes": [
+        "ReserveStockCommand"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\port\\input\\StockUpdateCommand.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.port.input",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.model.*"
+      ],
+      "classes": [
+        "StockUpdateCommand"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\port\\input\\StockUpdateCommands.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.port.input",
+      "imports": [],
+      "classes": [],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\port\\input\\StockUpdateResult.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.port.input",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.model.*",
+        "com.estudoskbnt.kbntlogservice.domain.event.StockUpdateEvent"
+      ],
+      "classes": [
+        "StockUpdateResult",
+        "Success",
+        "Failure"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\port\\input\\StockUpdateUseCase.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.port.input",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.model.*",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "StockUpdateUseCase"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\port\\input\\TransferStockCommand.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.port.input",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.model.*"
+      ],
+      "classes": [
+        "TransferStockCommand"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\port\\output\\EventPublicationResult.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.port.output",
+      "imports": [],
+      "classes": [
+        "EventPublicationResult",
+        "SuccessResult",
+        "FailureResult"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\port\\output\\EventPublisherPort.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.port.output",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.event.StockUpdateEvent",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "EventPublisherPort"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\domain\\port\\output\\StockUpdateRepositoryPort.java",
+      "package": "com.estudoskbnt.kbntlogservice.domain.port.output",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.model.StockUpdate",
+        "com.estudoskbnt.kbntlogservice.domain.model.StockUpdateId",
+        "com.estudoskbnt.kbntlogservice.domain.model.ProductId",
+        "java.util.Optional",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "StockUpdateRepositoryPort"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\application\\service\\StockUpdateApplicationService.java",
+      "package": "com.estudoskbnt.kbntlogservice.application.service",
+      "imports": [
+        "com.estudoskbnt.kbntlogservice.domain.model.*",
+        "com.estudoskbnt.kbntlogservice.domain.event.StockUpdateEvent",
+        "com.estudoskbnt.kbntlogservice.domain.port.input.*",
+        "com.estudoskbnt.kbntlogservice.domain.port.output.EventPublisherPort",
+        "com.estudoskbnt.kbntlogservice.domain.port.output.StockUpdateRepositoryPort",
+        "java.time.LocalDateTime",
+        "lombok.RequiredArgsConstructor",
+        "org.slf4j.Logger",
+        "org.slf4j.LoggerFactory",
+        "org.springframework.stereotype.Service",
+        "org.springframework.transaction.annotation.Transactional",
+        "java.util.concurrent.CompletableFuture"
+      ],
+      "classes": [
+        "StockUpdateApplicationService"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\api-gateway\\src\\test\\java\\com\\kbnt\\apigateway\\ApiGatewayApplicationTest.java",
+      "package": "com.kbnt.apigateway",
+      "imports": [
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.DisplayName",
+        "org.springframework.beans.factory.annotation.Autowired",
+        "org.springframework.boot.test.context.SpringBootTest",
+        "org.springframework.context.ApplicationContext",
+        "org.springframework.test.context.ActiveProfiles",
+        "org.junit.jupiter.api.Assertions.*"
+      ],
+      "classes": [
+        "ApiGatewayApplicationTest"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\api-gateway\\src\\test\\java\\com\\kbnt\\apigateway\\integration\\ApiGatewayIntegrationTest.java",
+      "package": "com.kbnt.apigateway.integration",
+      "imports": [
+        "org.junit.jupiter.api.Test",
+        "org.junit.jupiter.api.DisplayName",
+        "org.springframework.beans.factory.annotation.Autowired",
+        "org.springframework.boot.test.context.SpringBootTest",
+        "org.springframework.boot.test.web.client.TestRestTemplate",
+        "org.springframework.boot.test.web.server.LocalServerPort",
+        "org.springframework.http.HttpMethod",
+        "org.springframework.http.HttpStatus",
+        "org.springframework.http.ResponseEntity",
+        "org.springframework.test.context.ActiveProfiles",
+        "org.springframework.test.context.TestPropertySource",
+        "java.util.Set",
+        "org.junit.jupiter.api.Assertions.*"
+      ],
+      "classes": [
+        "ApiGatewayIntegrationTest"
+      ],
+      "issues": [],
+      "suggestions": []
+    },
+    {
+      "file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\api-gateway\\src\\main\\java\\com\\kbnt\\apigateway\\ApiGatewayApplication.java",
+      "package": "com.kbnt.apigateway",
+      "imports": [
+        "org.springframework.boot.SpringApplication",
+        "org.springframework.boot.autoconfigure.SpringBootApplication"
+      ],
+      "classes": [
+        "ApiGatewayApplication"
+      ],
+      "issues": [],
+      "suggestions": []
+    }
+  ],
+  "fixed_files": [
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\test\\java\\com\\kbnt\\virtualstock\\application\\service\\StockManagementApplicationServiceTestSimple.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\output\\kafka\\KafkaStockEventPublisherAdapter.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\CommandImplementations.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\infrastructure\\adapter\\input\\rest\\RestModels.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\domain\\model\\Stock.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\virtual-stock-service\\src\\main\\java\\com\\kbnt\\virtualstock\\domain\\model\\StockUpdatedEvent.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\infrastructure\\adapter\\output\\MicrometerMetricsAdapter.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\infrastructure\\adapter\\input\\rest\\LogController.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\domain\\service\\LogValidationService.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\kbnt\\logproducer\\domain\\port\\output\\MetricsPort.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\log-producer-service\\src\\main\\java\\com\\estudoskbnt\\logproducer\\infrastructure\\config\\IndependentTopicConfiguration.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\test\\java\\com\\estudoskbnt\\consumer\\service\\KafkaConsumerServiceTest.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\config\\KafkaConsumerConfig.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\controller\\MonitoringController.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\model\\StockUpdateMessage.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\service\\ExternalApiService.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-stock-consumer-service\\src\\main\\java\\com\\estudoskbnt\\consumer\\service\\KafkaConsumerService.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\test\\java\\com\\estudoskbnt\\kbntlogservice\\performance\\KafkaPublicationPerformanceTest.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\test\\java\\com\\estudoskbnt\\kbntlogservice\\performance\\StockUpdateControllerPerformanceTest.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\test\\java\\com\\estudoskbnt\\kbntlogservice\\infrastructure\\adapter\\input\\rest\\StockUpdateControllerTest.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\test\\java\\com\\estudoskbnt\\kbntlogservice\\application\\service\\StockUpdateApplicationServiceTest.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\model\\LogMessage.java",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\kbnt-log-service\\src\\main\\java\\com\\estudoskbnt\\kbntlogservice\\infrastructure\\adapter\\input\\rest\\StockUpdateController.java"
+  ]
+}

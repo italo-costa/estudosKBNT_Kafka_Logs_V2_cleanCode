@@ -1,0 +1,211 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kbnt-log-service
+  namespace: kafka
+  labels:
+    app: kbnt-log-service
+    version: v1
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: kbnt-log-service
+  template:
+    metadata:
+      labels:
+        app: kbnt-log-service
+        version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
+    spec:
+      serviceAccountName: kbnt-service-account
+      containers:
+      - name: log-service
+        image: quay.io/kbnt/log-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 8081
+          name: management
+          protocol: TCP
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "kubernetes,amq-streams"
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: "kbnt-kafka-cluster-kafka-bootstrap:9092"
+        - name: KAFKA_SECURITY_PROTOCOL
+          value: "PLAINTEXT"
+        - name: SPRING_APPLICATION_NAME
+          value: "kbnt-log-service"
+        - name: MANAGEMENT_SERVER_PORT
+          value: "8081"
+        - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
+          value: "health,info,metrics,prometheus"
+        - name: MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS
+          value: "always"
+        - name: LOGGING_LEVEL_ROOT
+          value: "INFO"
+        - name: LOGGING_LEVEL_COM_ESTUDOSKBNT
+          value: "DEBUG"
+        - name: KAFKA_TOPICS_APPLICATION_LOGS
+          value: "kbnt-application-logs"
+        - name: KAFKA_TOPICS_ERROR_LOGS
+          value: "kbnt-error-logs"
+        - name: KAFKA_TOPICS_AUDIT_LOGS
+          value: "kbnt-audit-logs"
+        - name: KAFKA_TOPICS_FINANCIAL_LOGS
+          value: "kbnt-financial-logs"
+        - name: KAFKA_TOPICS_DEAD_LETTER_QUEUE
+          value: "kbnt-dead-letter-queue"
+        - name: KAFKA_CONSUMER_GROUP_ID
+          value: "kbnt-log-consumer-group"
+        - name: KAFKA_PRODUCER_ACKS
+          value: "all"
+        - name: KAFKA_PRODUCER_RETRIES
+          value: "3"
+        - name: KAFKA_PRODUCER_BATCH_SIZE
+          value: "16384"
+        - name: KAFKA_PRODUCER_LINGER_MS
+          value: "10"
+        - name: KAFKA_CONSUMER_AUTO_OFFSET_RESET
+          value: "earliest"
+        - name: KAFKA_CONSUMER_ENABLE_AUTO_COMMIT
+          value: "false"
+        - name: KAFKA_CONSUMER_MAX_POLL_RECORDS
+          value: "500"
+        - name: KAFKA_CONSUMER_SESSION_TIMEOUT_MS
+          value: "30000"
+        - name: APP_PROCESSING_MODES
+          value: "producer,consumer,processor"
+        - name: APP_CIRCUIT_BREAKER_ENABLED
+          value: "true"
+        - name: APP_RETRY_MAX_ATTEMPTS
+          value: "3"
+        - name: APP_METRICS_ENABLED
+          value: "true"
+        - name: JVM_OPTS
+          value: "-Xms512m -Xmx1g -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
+        resources:
+          requests:
+            memory: "768Mi"
+            cpu: "300m"
+          limits:
+            memory: "1.5Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8081
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 12
+        volumeMounts:
+        - name: app-config
+          mountPath: /app/config
+          readOnly: true
+        - name: app-logs
+          mountPath: /app/logs
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+      volumes:
+      - name: app-config
+        configMap:
+          name: kbnt-log-service-config
+      - name: app-logs
+        emptyDir: {}
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kbnt-log-service
+  namespace: kafka
+  labels:
+    app: kbnt-log-service
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8081"
+    prometheus.io/path: "/actuator/prometheus"
+spec:
+  selector:
+    app: kbnt-log-service
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  - name: management
+    port: 8081
+    targetPort: 8081
+    protocol: TCP
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kbnt-service-account
+  namespace: kafka
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kbnt-service-role
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["kafka.strimzi.io"]
+  resources: ["kafkatopics", "kafkausers"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kbnt-service-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kbnt-service-role
+subjects:
+- kind: ServiceAccount
+  name: kbnt-service-account
+  namespace: kafka

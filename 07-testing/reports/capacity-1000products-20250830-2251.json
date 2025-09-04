@@ -1,0 +1,36 @@
+﻿{
+    "AvgLatency":  25.54,
+    "Timestamp":  "2025-08-30 22:51:31",
+    "ProductsPerSecond":  35.11,
+    "SuccessRate":  98.51,
+    "ThroughputOps":  124.64,
+    "Operations":  3550,
+    "SlowOps":  0,
+    "Products":  1000,
+    "CapacityScore":  100,
+    "Success":  3497,
+    "Categories":  {
+                       "ProductInfo":  {
+                                           "Time":  1448,
+                                           "Errors":  0,
+                                           "Count":  730
+                                       },
+                       "HealthChecks":  {
+                                            "Time":  1085,
+                                            "Errors":  0,
+                                            "Count":  730
+                                        },
+                       "SystemInfo":  {
+                                          "Time":  499,
+                                          "Errors":  0,
+                                          "Count":  336
+                                      },
+                       "StockQueries":  {
+                                            "Time":  86274,
+                                            "Errors":  53,
+                                            "Count":  1701
+                                        }
+                   },
+    "Level":  "EXCELENTE",
+    "Failed":  53
+}

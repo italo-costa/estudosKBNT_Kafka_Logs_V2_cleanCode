@@ -1,0 +1,46 @@
+﻿{
+    "Config":  {
+                   "Port":  8080,
+                   "Type":  "real",
+                   "TotalMessages":  2500
+               },
+    "Timestamp":  "2025-08-30 21:52:44",
+    "Results":  {
+                    "SlowCount":  0,
+                    "Total":  2500,
+                    "SuccessRate":  70.08,
+                    "TechStats":  {
+                                      "REST API":  {
+                                                       "Time":  0,
+                                                       "Errors":  748,
+                                                       "Count":  0
+                                                   },
+                                      "Actuator":  {
+                                                       "Time":  109,
+                                                       "Errors":  0,
+                                                       "Count":  936
+                                                   },
+                                      "Info":  {
+                                                   "Time":  11,
+                                                   "Errors":  0,
+                                                   "Count":  217
+                                               },
+                                      "Test":  {
+                                                   "Time":  64,
+                                                   "Errors":  0,
+                                                   "Count":  599
+                                               }
+                                  },
+                    "Success":  1752,
+                    "Latency":  {
+                                    "P99":  1,
+                                    "Min":  0,
+                                    "Max":  30,
+                                    "P95":  1,
+                                    "Avg":  0.11
+                                },
+                    "Throughput":  539.09,
+                    "Failed":  748,
+                    "Duration":  4.6374431
+                }
+}

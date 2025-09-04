@@ -1,0 +1,103 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: kbnt-application-logs
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kbnt-kafka-cluster
+spec:
+  partitions: 6
+  replicas: 3
+  config:
+    retention.ms: 604800000  # 7 days
+    retention.bytes: 2147483648  # 2GB per partition
+    segment.ms: 3600000  # 1 hour
+    compression.type: "snappy"
+    cleanup.policy: "delete"
+    max.message.bytes: 1048576  # 1MB
+    min.insync.replicas: 2
+    unclean.leader.election.enable: "false"
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: kbnt-error-logs
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kbnt-kafka-cluster
+spec:
+  partitions: 4
+  replicas: 3
+  config:
+    retention.ms: 2592000000  # 30 days
+    retention.bytes: 5368709120  # 5GB per partition
+    segment.ms: 1800000  # 30 minutes
+    compression.type: "lz4"
+    cleanup.policy: "delete"
+    max.message.bytes: 2097152  # 2MB
+    min.insync.replicas: 2
+    unclean.leader.election.enable: "false"
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: kbnt-audit-logs
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kbnt-kafka-cluster
+spec:
+  partitions: 3
+  replicas: 3
+  config:
+    retention.ms: 7776000000  # 90 days
+    retention.bytes: 10737418240  # 10GB per partition
+    segment.ms: 7200000  # 2 hours
+    compression.type: "gzip"
+    cleanup.policy: "delete"
+    max.message.bytes: 1048576  # 1MB
+    min.insync.replicas: 2
+    unclean.leader.election.enable: "false"
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: kbnt-financial-logs
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kbnt-kafka-cluster
+spec:
+  partitions: 8
+  replicas: 3
+  config:
+    retention.ms: 31536000000  # 365 days
+    retention.bytes: 21474836480  # 20GB per partition
+    segment.ms: 10800000  # 3 hours
+    compression.type: "lz4"
+    cleanup.policy: "delete"
+    max.message.bytes: 1048576  # 1MB
+    min.insync.replicas: 3  # Higher consistency for financial data
+    unclean.leader.election.enable: "false"
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: kbnt-dead-letter-queue
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kbnt-kafka-cluster
+spec:
+  partitions: 2
+  replicas: 3
+  config:
+    retention.ms: 604800000  # 7 days
+    retention.bytes: 1073741824  # 1GB per partition
+    segment.ms: 3600000  # 1 hour
+    compression.type: "snappy"
+    cleanup.policy: "delete"
+    max.message.bytes: 2097152  # 2MB
+    min.insync.replicas: 2
+    unclean.leader.election.enable: "false"
