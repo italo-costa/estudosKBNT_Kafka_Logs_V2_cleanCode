@@ -1,103 +1,103 @@
-# 🔄 SEQUÊNCIA DE DEPLOYMENT - KBNT Kafka Logs
+# SEQUÊNCIA DE DEPLOYMENT - KBNT Kafka Logs
 
-## 🎯 Fluxo Completo de Deployment
+## Fluxo Completo de Deployment
 
 ```mermaid
 sequenceDiagram
-    participant Dev as 👨‍💻 Developer
-    participant Git as 📚 GitHub Repo
-    participant Local as 💻 Local Env
-    participant Test as 🧪 Test Env
-    participant Staging as 🎭 Staging Env
-    participant Prod as 🏭 Production
-    participant Monitor as 📊 Monitoring
+    participant Dev as Developer
+    participant Git as GitHub Repo
+    participant Local as Local Env
+    participant Test as Test Env
+    participant Staging as Staging Env
+    participant Prod as Production
+    participant Monitor as Monitoring
     
     %% Desenvolvimento Local
-    Dev->>Git: 📝 git push feature/new-feature
-    Git->>Local: 🔄 Pull latest changes
-    Local->>Local: 🔨 docker-compose up -d
-    Local->>Local: ✅ Local testing
+    Dev->>Git: git push feature/new-feature
+    Git->>Local: Pull latest changes
+    Local->>Local: docker-compose up -d
+    Local->>Local: Local testing
     
     %% Ambiente de Teste
-    Dev->>Test: 🚀 Deploy to test
-    Test->>Test: 🔨 docker-compose.free-tier.yml up
-    Test->>Test: 🧪 Run integration tests
-    Test->>Dev: 📊 Test results
+    Dev->>Test: Deploy to test
+    Test->>Test: docker-compose.free-tier.yml up
+    Test->>Test: Run integration tests
+    Test->>Dev: Test results
     
     %% Merge e Staging
-    Dev->>Git: 🔀 Create pull request
-    Git->>Git: 👀 Code review
-    Git->>Git: ✅ Merge to develop
-    Git->>Staging: 🚀 Auto-deploy staging
-    Staging->>Staging: 🔨 docker-compose.scalable-simple.yml up
-    Staging->>Monitor: 📊 Health metrics
+    Dev->>Git: Create pull request
+    Git->>Git: Code review
+    Git->>Git: Merge to develop
+    Git->>Staging: Auto-deploy staging
+    Staging->>Staging: docker-compose.scalable-simple.yml up
+    Staging->>Monitor: Health metrics
     
     %% Deploy Produção
-    Dev->>Git: 🏷️ Create release tag
-    Git->>Prod: 🚀 Deploy production
-    Prod->>Prod: 🔨 docker-compose.scalable.yml up
-    Prod->>Prod: ⏳ Rolling deployment
-    Prod->>Monitor: 📊 Production metrics
-    Monitor->>Dev: 🎉 Deploy success notification
+    Dev->>Git: Create release tag
+    Git->>Prod: Deploy production
+    Prod->>Prod: docker-compose.scalable.yml up
+    Prod->>Prod: Rolling deployment
+    Prod->>Monitor: Production metrics
+    Monitor->>Dev: Deploy success notification
     
     %% Monitoramento Contínuo
     loop Continuous Monitoring
-        Monitor->>Prod: 🔍 Health checks
-        Monitor->>Monitor: 📈 Collect metrics
-        Monitor->>Dev: 🚨 Alert if issues
+        Monitor->>Prod: Health checks
+        Monitor->>Monitor: Collect metrics
+        Monitor->>Dev: Alert if issues
     end
 ```
 
 ---
 
-## 🏗️ Sequência de Inicialização por Ambiente
+## Sequência de Inicialização por Ambiente
 
-### 🧪 Ambiente Local (docker-compose.yml)
+### Ambiente Local (docker-compose.yml)
 
 ```mermaid
 sequenceDiagram
-    participant User as 👤 User
-    participant Docker as 🐳 Docker
-    participant PG as 🗄️ PostgreSQL
-    participant ZK as 🔧 ZooKeeper
-    participant Kafka as 📨 Kafka
-    participant VS as 💼 Virtual Stock
-    participant API as 🚪 API Gateway
+    participant User as User
+    participant Docker as Docker
+    participant PG as PostgreSQL
+    participant ZK as ZooKeeper
+    participant Kafka as Kafka
+    participant VS as Virtual Stock
+    participant API as API Gateway
     
     User->>Docker: docker-compose up -d
-    Docker->>PG: 🚀 Start PostgreSQL
-    PG->>PG: 📊 Initialize database
-    Docker->>ZK: 🚀 Start ZooKeeper
-    ZK->>ZK: 📊 Initialize cluster
-    Docker->>Kafka: 🚀 Start Kafka
-    Kafka->>ZK: 🔗 Connect to ZooKeeper
-    Kafka->>Kafka: 📊 Create topics
-    Docker->>VS: 🚀 Start Virtual Stock
-    VS->>PG: 🔗 Connect to database
-    VS->>Kafka: 🔗 Connect to Kafka
-    Docker->>API: 🚀 Start API Gateway
-    API->>VS: 🔗 Register routes
-    API->>User: ✅ Ready on :8080
+    Docker->>PG: Start PostgreSQL
+    PG->>PG: Initialize database
+    Docker->>ZK: Start ZooKeeper
+    ZK->>ZK: Initialize cluster
+    Docker->>Kafka: Start Kafka
+    Kafka->>ZK: Connect to ZooKeeper
+    Kafka->>Kafka: Create topics
+    Docker->>VS: Start Virtual Stock
+    VS->>PG: Connect to database
+    VS->>Kafka: Connect to Kafka
+    Docker->>API: Start API Gateway
+    API->>VS: Register routes
+    API->>User: Ready on :8080
 ```
 
-### 📈 Ambiente Escalável (docker-compose.scalable.yml)
+### Ambiente Escalável (docker-compose.scalable.yml)
 
 ```mermaid
 sequenceDiagram
-    participant User as 👤 User
-    participant Docker as 🐳 Docker
-    participant PG as 🗄️ PostgreSQL Cluster
-    participant ZK as 🔧 ZooKeeper Cluster
-    participant Kafka as 📨 Kafka Cluster
-    participant ES as 🔍 Elasticsearch
-    participant LB as ⚖️ Load Balancer
-    participant Mon as 📊 Monitoring
-    participant Apps as 🚀 Microservices
+    participant User as User
+    participant Docker as Docker
+    participant PG as PostgreSQL Cluster
+    participant ZK as ZooKeeper Cluster
+    participant Kafka as Kafka Cluster
+    participant ES as Elasticsearch
+    participant LB as Load Balancer
+    participant Mon as Monitoring
+    participant Apps as Microservices
     
     User->>Docker: docker-compose.scalable.yml up -d
     
     par Infrastructure Setup
-        Docker->>PG: 🚀 Start PG Master + Replica
+        Docker->>PG: Start PG Master + Replica
         Docker->>ZK: 🚀 Start ZK Ensemble (3 nodes)
         Docker->>ES: 🚀 Start ES Cluster (2 nodes)
         Docker->>Mon: 🚀 Start Prometheus + Grafana

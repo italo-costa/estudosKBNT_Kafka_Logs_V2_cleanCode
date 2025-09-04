@@ -1,55 +1,55 @@
-# 🚀 ESTRATÉGIAS DE DEPLOYMENT - KBNT Kafka Logs
+# ESTRATÉGIAS DE DEPLOYMENT - KBNT Kafka Logs
 
-## 📊 Visão Geral das Estratégias Implementadas
+## Visão Geral das Estratégias Implementadas
 
 Este documento apresenta todas as estratégias de deployment implementadas no projeto KBNT Kafka Logs, desde desenvolvimento local até produção enterprise com alta disponibilidade.
 
 ---
 
-## 🎯 Fluxograma Completo de Deployment
+## Fluxograma Completo de Deployment
 
 ```mermaid
 flowchart TD
-    A[🚀 Início Deploy] --> B{Escolha Estratégia}
+    A[Inicio Deploy] --> B{Escolha Estrategia}
     
     %% Desenvolvimento Local
-    B --> C[🧪 Desenvolvimento Local]
+    B --> C[Desenvolvimento Local]
     C --> C1[docker-compose.yml]
-    C1 --> C2[Serviços Básicos<br/>- PostgreSQL<br/>- Kafka Single<br/>- Microserviços]
-    C2 --> C3[✅ Ambiente Dev Pronto]
+    C1 --> C2[Servicos Basicos<br/>- PostgreSQL<br/>- Kafka Single<br/>- Microservicos]
+    C2 --> C3[Ambiente Dev Pronto]
     
     %% Teste Integrado
-    B --> D[🔧 Teste Integrado]
+    B --> D[Teste Integrado]
     D --> D1[docker-compose.free-tier.yml]
-    D1 --> D2[Recursos Limitados<br/>- 1 CPU por serviço<br/>- 512MB RAM<br/>- Single instances]
-    D2 --> D3[✅ Testes Executados]
+    D1 --> D2[Recursos Limitados<br/>- 1 CPU por servico<br/>- 512MB RAM<br/>- Single instances]
+    D2 --> D3[Testes Executados]
     
     %% Infraestrutura Básica
-    B --> E[🏗️ Infraestrutura Básica]
+    B --> E[Infraestrutura Basica]
     E --> E1[docker-compose.infrastructure-only.yml]
     E1 --> E2[Core Services<br/>- PostgreSQL<br/>- Kafka<br/>- Elasticsearch<br/>- ZooKeeper]
-    E2 --> E3[✅ Base Infraestrutura]
+    E2 --> E3[Base Infraestrutura]
     
     %% Escalabilidade Simples
-    B --> F[📈 Escalável Simples]
+    B --> F[Escalavel Simples]
     F --> F1[docker-compose.scalable-simple.yml]
-    F1 --> F2[Múltiplas Instâncias<br/>- 2x Virtual Stock<br/>- Kafka Cluster<br/>- Monitoring Básico]
-    F2 --> F3[✅ Sistema Escalável]
+    F1 --> F2[Multiplas Instancias<br/>- 2x Virtual Stock<br/>- Kafka Cluster<br/>- Monitoring Basico]
+    F2 --> F3[Sistema Escalavel]
     
     %% Enterprise Full
-    B --> G[🏢 Enterprise Full]
+    B --> G[Enterprise Full]
     G --> G1[docker-compose.scalable.yml]
-    G1 --> G2[36 Containers<br/>- HA Completa<br/>- Load Balancing<br/>- Monitoring Avançado]
-    G2 --> G3[✅ Produção Enterprise]
+    G1 --> G2[36 Containers<br/>- HA Completa<br/>- Load Balancing<br/>- Monitoring Avancado]
+    G2 --> G3[Producao Enterprise]
     
     %% Microserviços Específicos
-    B --> H[🔧 Microserviços Específicos]
+    B --> H[Microservicos Especificos]
     H --> H1[docker-compose-microservices.yml]
-    H1 --> H2[Apenas Aplicações<br/>- API Gateway<br/>- Virtual Stock<br/>- Producers/Consumers]
-    H2 --> H3[✅ Apps Deployadas]
+    H1 --> H2[Apenas Aplicacoes<br/>- API Gateway<br/>- Virtual Stock<br/>- Producers/Consumers]
+    H2 --> H3[Apps Deployadas]
     
     %% Verificações Pós-Deploy
-    C3 --> I[🔍 Health Checks]
+    C3 --> I[Health Checks]
     D3 --> I
     E3 --> I
     F3 --> I
@@ -57,35 +57,35 @@ flowchart TD
     H3 --> I
     
     I --> J{Todos Healthy?}
-    J -->|Sim| K[✅ Deploy Sucesso]
-    J -->|Não| L[❌ Diagnóstico]
-    L --> M[📋 Logs Analysis]
-    M --> N[🔧 Fix Issues]
+    J -->|Sim| K[Deploy Sucesso]
+    J -->|Nao| L[Diagnostico]
+    L --> M[Logs Analysis]
+    M --> N[Fix Issues]
     N --> B
     
-    K --> O[📊 Monitoramento Contínuo]
+    K --> O[Monitoramento Continuo]
     O --> P[Grafana Dashboard<br/>Prometheus Metrics<br/>Health Endpoints]
 ```
 
 ---
 
-## 📋 Matriz de Estratégias de Deployment
+## Matriz de Estratégias de Deployment
 
 ```mermaid
 graph TB
-    subgraph "🏠 DESENVOLVIMENTO"
-        A1[Local Development<br/>docker-compose.yml<br/>🔹 1 instância cada<br/>🔹 Recursos mínimos<br/>🔹 Debug habilitado]
-        A2[Integration Test<br/>docker-compose.free-tier.yml<br/>🔹 Recursos limitados<br/>🔹 Testes automatizados<br/>🔹 CI/CD ready]
+    subgraph "DESENVOLVIMENTO"
+        A1[Local Development<br/>docker-compose.yml<br/>- 1 instancia cada<br/>- Recursos minimos<br/>- Debug habilitado]
+        A2[Integration Test<br/>docker-compose.free-tier.yml<br/>- Recursos limitados<br/>- Testes automatizados<br/>- CI/CD ready]
     end
     
-    subgraph "🧪 STAGING"
-        B1[Infrastructure Only<br/>docker-compose.infrastructure-only.yml<br/>🔹 Core services<br/>🔹 DB + Messaging<br/>🔹 Base para testes]
-        B2[Microservices Only<br/>docker-compose-microservices.yml<br/>🔹 Apenas aplicações<br/>🔹 Infra externa<br/>🔹 Deploys independentes]
+    subgraph "STAGING"
+        B1[Infrastructure Only<br/>docker-compose.infrastructure-only.yml<br/>- Core services<br/>- DB + Messaging<br/>- Base para testes]
+        B2[Microservices Only<br/>docker-compose-microservices.yml<br/>- Apenas aplicacoes<br/>- Infra externa<br/>- Deploys independentes]
     end
     
-    subgraph "📈 PRODUÇÃO"
-        C1[Scalable Simple<br/>docker-compose.scalable-simple.yml<br/>🔹 2-3 instâncias<br/>🔹 Load balancing<br/>🔹 Monitoring básico]
-        C2[Enterprise Full<br/>docker-compose.scalable.yml<br/>🔹 36+ containers<br/>🔹 HA completa<br/>🔹 Monitoring avançado]
+    subgraph "PRODUCAO"
+        C1[Scalable Simple<br/>docker-compose.scalable-simple.yml<br/>- 2-3 instancias<br/>- Load balancing<br/>- Monitoring basico]
+        C2[Enterprise Full<br/>docker-compose.scalable.yml<br/>- 36+ containers<br/>- HA completa<br/>- Monitoring avancado]
     end
     
     A1 --> A2
@@ -104,57 +104,57 @@ graph TB
 
 ---
 
-## 🔄 Fluxo de CI/CD Implementado
+## Fluxo de CI/CD Implementado
 
 ```mermaid
 sequenceDiagram
-    participant Dev as 👨‍💻 Developer
-    participant Git as 🌐 GitHub
-    participant CI as 🔄 CI/CD
-    participant Test as 🧪 Test Env
-    participant Staging as 🎭 Staging
-    participant Prod as 🏭 Production
+    participant Dev as Developer
+    participant Git as GitHub
+    participant CI as CI/CD
+    participant Test as Test Env
+    participant Staging as Staging
+    participant Prod as Production
     
     Dev->>Git: git push origin feature/xxx
     Git->>CI: Trigger Pipeline
     
-    CI->>CI: 🔨 Build Images
+    CI->>CI: Build Images
     note over CI: docker build --target production
     
-    CI->>CI: 🧪 Unit Tests
+    CI->>CI: Unit Tests
     note over CI: mvn test
     
-    CI->>Test: 🚀 Deploy Test
+    CI->>Test: Deploy Test
     note over Test: docker-compose.free-tier.yml
     
-    Test->>CI: ✅ Test Results
+    Test->>CI: Test Results
     
-    CI->>Git: 🔀 Merge to develop
+    CI->>Git: Merge to develop
     Git->>CI: Trigger Staging Deploy
     
-    CI->>Staging: 🚀 Deploy Staging
+    CI->>Staging: Deploy Staging
     note over Staging: docker-compose.scalable-simple.yml
     
-    Staging->>CI: ✅ Integration Tests
+    Staging->>CI: Integration Tests
     
-    Dev->>Git: 🏷️ Create Release Tag
+    Dev->>Git: Create Release Tag
     Git->>CI: Trigger Production Deploy
     
-    CI->>Prod: 🚀 Deploy Production
+    CI->>Prod: Deploy Production
     note over Prod: docker-compose.scalable.yml
     
-    Prod->>CI: ✅ Health Checks
-    CI->>Dev: 📧 Deploy Success
+    Prod->>CI: Health Checks
+    CI->>Dev: Deploy Success
 ```
 
 ---
 
-## 🏗️ Arquitetura de Deployment por Ambiente
+## Arquitetura de Deployment por Ambiente
 
-### 🧪 Desenvolvimento Local
+### Desenvolvimento Local
 ```mermaid
 graph LR
-    subgraph "💻 Local Machine"
+    subgraph "Local Machine"
         A[API Gateway :8080] --> B[Virtual Stock :8081]
         B --> C[PostgreSQL :5432]
         B --> D[Kafka :9092]
@@ -172,31 +172,31 @@ graph LR
     style G fill:#f3e5f5
 ```
 
-### 📈 Produção Escalável
+### Producao Escalavel
 ```mermaid
 graph TB
-    subgraph "🌐 Load Balancer"
+    subgraph "Load Balancer"
         LB[HAProxy :80]
     end
     
-    subgraph "🚪 API Layer"
+    subgraph "API Layer"
         A1[API Gateway-1 :8080]
         A2[API Gateway-2 :8081]
     end
     
-    subgraph "💼 Business Layer"
+    subgraph "Business Layer"
         B1[Virtual Stock-1]
         B2[Virtual Stock-2]
         B3[Virtual Stock-3]
     end
     
-    subgraph "📨 Messaging Layer"
+    subgraph "Messaging Layer"
         C1[Kafka-1 :9092]
         C2[Kafka-2 :9093]
         C3[Kafka-3 :9094]
     end
     
-    subgraph "💾 Data Layer"
+    subgraph "Data Layer"
         D1[PostgreSQL Master]
         D2[PostgreSQL Replica]
         E1[Elasticsearch-1]
@@ -204,7 +204,7 @@ graph TB
         F1[Redis Cluster]
     end
     
-    subgraph "📊 Monitoring"
+    subgraph "Monitoring"
         G1[Prometheus :9090]
         G2[Grafana :3000]
     end
@@ -236,60 +236,60 @@ graph TB
 
 ---
 
-## 🛠️ Scripts de Deployment
+## Scripts de Deployment
 
-### 📝 Deploy Automatizado
+### Deploy Automatizado
 ```mermaid
 flowchart LR
-    A[🚀 Start Deploy] --> B{Environment?}
+    A[Start Deploy] --> B{Environment?}
     
-    B --> C[🧪 DEV]
+    B --> C[DEV]
     C --> C1[setup-dev.ps1]
     C1 --> C2[docker-compose.yml up]
     
-    B --> D[🔧 TEST]
+    B --> D[TEST]
     D --> D1[setup-test.ps1]
     D1 --> D2[docker-compose.free-tier.yml up]
     
-    B --> E[📈 STAGING]
+    B --> E[STAGING]
     E --> E1[setup-staging.ps1]
     E1 --> E2[docker-compose.scalable-simple.yml up]
     
-    B --> F[🏭 PROD]
+    B --> F[PROD]
     F --> F1[setup-production.ps1]
     F1 --> F2[docker-compose.scalable.yml up]
     
-    C2 --> G[✅ Health Check]
+    C2 --> G[Health Check]
     D2 --> G
     E2 --> G
     F2 --> G
     
     G --> H{All Healthy?}
-    H -->|✅ Yes| I[📊 Start Monitoring]
-    H -->|❌ No| J[🔧 Rollback]
+    H -->|Yes| I[Start Monitoring]
+    H -->|No| J[Rollback]
     
-    I --> K[🎉 Deploy Success]
-    J --> L[📋 Investigate]
+    I --> K[Deploy Success]
+    J --> L[Investigate]
 ```
 
 ---
 
-## 📊 Comparativo de Recursos por Estratégia
+## Comparativo de Recursos por Estratégia
 
 | Estratégia | Containers | CPU | RAM | Disk | HA | Monitoring | Load Balancer |
 |------------|-----------|-----|-----|------|----|-----------| -------------|
-| 🧪 **Local Dev** | 6 | 2 cores | 2GB | 10GB | ❌ | Basic | ❌ |
-| 🔧 **Free Tier** | 8 | 4 cores | 3GB | 15GB | ❌ | Basic | ❌ |
-| 🏗️ **Infrastructure** | 4 | 2 cores | 2GB | 20GB | ❌ | ❌ | ❌ |
-| 🔧 **Microservices** | 5 | 3 cores | 2.5GB | 5GB | ❌ | Basic | ❌ |
-| 📈 **Scalable Simple** | 15 | 8 cores | 6GB | 30GB | ✅ | Full | ✅ |
-| 🏢 **Enterprise Full** | 36+ | 16+ cores | 12GB+ | 50GB+ | ✅ | Advanced | ✅ |
+| **Local Dev** | 6 | 2 cores | 2GB | 10GB | No | Basic | No |
+| **Free Tier** | 8 | 4 cores | 3GB | 15GB | No | Basic | No |
+| **Infrastructure** | 4 | 2 cores | 2GB | 20GB | No | No | No |
+| **Microservices** | 5 | 3 cores | 2.5GB | 5GB | No | Basic | No |
+| **Scalable Simple** | 15 | 8 cores | 6GB | 30GB | Yes | Full | Yes |
+| **Enterprise Full** | 36+ | 16+ cores | 12GB+ | 50GB+ | Yes | Advanced | Yes |
 
 ---
 
-## 🎯 Comandos de Deployment
+## Comandos de Deployment
 
-### 🧪 Desenvolvimento Local
+### Desenvolvimento Local
 ```bash
 # Desenvolvimento básico
 docker-compose up -d
@@ -298,7 +298,7 @@ docker-compose up -d
 docker-compose up -d --build
 ```
 
-### 🔧 Teste e Validação
+### Teste e Validação
 ```bash
 # Ambiente de teste
 docker-compose -f docker-compose.free-tier.yml up -d
@@ -307,7 +307,7 @@ docker-compose -f docker-compose.free-tier.yml up -d
 docker-compose -f docker-compose.free-tier.yml exec api-gateway curl http://localhost:8080/actuator/health
 ```
 
-### 📈 Produção Escalável
+### Produção Escalável
 ```bash
 # Deploy simples escalável
 docker-compose -f docker-compose.scalable-simple.yml up -d
@@ -396,7 +396,7 @@ flowchart TD
 - **Issues:** GitHub Issues para reportar problemas
 - **Documentação:** README.md e arquivos MD específicos
 
-### 📊 Monitoring URLs
+### Monitoring URLs
 - **Grafana:** http://localhost:3000 (admin/admin)
 - **Prometheus:** http://localhost:9090
 - **API Gateway:** http://localhost:8080/actuator/health
