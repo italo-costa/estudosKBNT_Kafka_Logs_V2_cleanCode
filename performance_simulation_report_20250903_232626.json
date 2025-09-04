@@ -1,0 +1,212 @@
+{
+  "metadata": {
+    "timestamp": "2025-09-04T02:26:26.847710+00:00",
+    "test_type": "Performance Simulation",
+    "total_strategies": 4,
+    "generated_by": "KBNT Performance Simulator v1.0"
+  },
+  "test_parameters": {
+    "requests_per_strategy": 1000,
+    "duration_seconds": 10,
+    "concurrency_model": "Simulated Async"
+  },
+  "results": [
+    {
+      "rank": 1,
+      "strategy": "scalable-complete",
+      "name": "Scalable Complete Strategy",
+      "description": "Configuração completa para alta demanda",
+      "infrastructure": {
+        "containers": 25,
+        "cpu_cores": 8,
+        "memory_gb": 16,
+        "network_bandwidth": "10 Gbps",
+        "scaling_limit": 2000
+      },
+      "performance_metrics": {
+        "total_requests": 1000,
+        "successful_requests": 975,
+        "failed_requests": 25,
+        "success_rate_percent": 97.5,
+        "requests_per_second": 79.25,
+        "avg_response_time_ms": 26.26,
+        "min_response_time_ms": 11.48,
+        "max_response_time_ms": 37.48,
+        "throughput_mb_per_sec": 156.04
+      },
+      "resource_usage": {
+        "avg_cpu_percent": 75.87,
+        "avg_memory_percent": 69.46,
+        "total_network_io_mb": 1968.83
+      },
+      "cost_efficiency": {
+        "requests_per_container": 39.0,
+        "throughput_per_cpu_core": 9.91,
+        "efficiency_score": 30.91
+      }
+    },
+    {
+      "rank": 2,
+      "strategy": "enterprise",
+      "name": "Enterprise Strategy",
+      "description": "Configuração empresarial para produção crítica",
+      "infrastructure": {
+        "containers": 40,
+        "cpu_cores": 16,
+        "memory_gb": 32,
+        "network_bandwidth": "25 Gbps",
+        "scaling_limit": 10000
+      },
+      "performance_metrics": {
+        "total_requests": 1000,
+        "successful_requests": 985,
+        "failed_requests": 15,
+        "success_rate_percent": 98.5,
+        "requests_per_second": 76.3,
+        "avg_response_time_ms": 16.91,
+        "min_response_time_ms": 3.51,
+        "max_response_time_ms": 27.0,
+        "throughput_mb_per_sec": 150.4
+      },
+      "resource_usage": {
+        "avg_cpu_percent": 76.46,
+        "avg_memory_percent": 68.96,
+        "total_network_io_mb": 1971.16
+      },
+      "cost_efficiency": {
+        "requests_per_container": 24.62,
+        "throughput_per_cpu_core": 4.77,
+        "efficiency_score": 18.79
+      }
+    },
+    {
+      "rank": 3,
+      "strategy": "free-tier",
+      "name": "Free Tier Strategy",
+      "description": "Configuração mínima para recursos limitados",
+      "infrastructure": {
+        "containers": 8,
+        "cpu_cores": 2,
+        "memory_gb": 4,
+        "network_bandwidth": "100 Mbps",
+        "scaling_limit": 100
+      },
+      "performance_metrics": {
+        "total_requests": 1000,
+        "successful_requests": 858,
+        "failed_requests": 142,
+        "success_rate_percent": 85.8,
+        "requests_per_second": 75.75,
+        "avg_response_time_ms": 76.12,
+        "min_response_time_ms": 47.02,
+        "max_response_time_ms": 89.97,
+        "throughput_mb_per_sec": 151.18
+      },
+      "resource_usage": {
+        "avg_cpu_percent": 75.95,
+        "avg_memory_percent": 69.07,
+        "total_network_io_mb": 1995.8
+      },
+      "cost_efficiency": {
+        "requests_per_container": 107.25,
+        "throughput_per_cpu_core": 37.88,
+        "efficiency_score": 81.24
+      }
+    },
+    {
+      "rank": 4,
+      "strategy": "scalable-simple",
+      "name": "Scalable Simple Strategy",
+      "description": "Configuração balanceada para crescimento moderado",
+      "infrastructure": {
+        "containers": 15,
+        "cpu_cores": 4,
+        "memory_gb": 8,
+        "network_bandwidth": "1 Gbps",
+        "scaling_limit": 500
+      },
+      "performance_metrics": {
+        "total_requests": 1000,
+        "successful_requests": 921,
+        "failed_requests": 79,
+        "success_rate_percent": 92.1,
+        "requests_per_second": 75.29,
+        "avg_response_time_ms": 47.62,
+        "min_response_time_ms": 26.89,
+        "max_response_time_ms": 59.94,
+        "throughput_mb_per_sec": 150.74
+      },
+      "resource_usage": {
+        "avg_cpu_percent": 75.67,
+        "avg_memory_percent": 68.35,
+        "total_network_io_mb": 2002.09
+      },
+      "cost_efficiency": {
+        "requests_per_container": 61.4,
+        "throughput_per_cpu_core": 18.82,
+        "efficiency_score": 46.23
+      }
+    }
+  ],
+  "analysis": {
+    "best_strategy": {
+      "name": "Scalable Complete Strategy",
+      "strategy": "scalable-complete",
+      "requests_per_second": 79.25,
+      "success_rate": 97.5
+    },
+    "worst_strategy": {
+      "name": "Scalable Simple Strategy",
+      "strategy": "scalable-simple",
+      "requests_per_second": 75.29,
+      "success_rate": 92.1
+    },
+    "performance_gap": {
+      "rps_difference": 3.96,
+      "success_rate_difference": 5.4,
+      "performance_multiplier": 1.05
+    },
+    "recommendations": {
+      "production_ready": [
+        {
+          "strategy": "scalable-complete",
+          "reason": "Alta confiabilidade (97.5% de sucesso)"
+        },
+        {
+          "strategy": "enterprise",
+          "reason": "Alta confiabilidade (98.5% de sucesso)"
+        }
+      ],
+      "cost_optimization": [
+        {
+          "strategy": "free-tier",
+          "reason": "Melhor custo-benefício para projetos pequenos"
+        }
+      ],
+      "scalability": [
+        {
+          "strategy": "scalable-complete",
+          "reason": "Suporta até 2000 req/s"
+        },
+        {
+          "strategy": "enterprise",
+          "reason": "Suporta até 10000 req/s"
+        }
+      ],
+      "reliability": [
+        {
+          "strategy": "scalable-complete",
+          "reason": "Confiabilidade de 97.5%"
+        },
+        {
+          "strategy": "enterprise",
+          "reason": "Confiabilidade de 98.5%"
+        },
+        {
+          "strategy": "scalable-simple",
+          "reason": "Confiabilidade de 92.1%"
+        }
+      ]
+    }
+  }
+}

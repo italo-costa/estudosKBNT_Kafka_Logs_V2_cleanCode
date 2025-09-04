@@ -1,0 +1,211 @@
+{
+  "metadata": {
+    "timestamp": "2025-09-04T02:51:20.933212+00:00",
+    "test_type": "High Load Performance Test",
+    "total_requests": 400000,
+    "requests_per_strategy": 100000,
+    "strategies_tested": 4
+  },
+  "results": [
+    {
+      "strategy": "free-tier",
+      "name": "Free Tier Strategy",
+      "performance": {
+        "total_requests": 100000,
+        "successful_requests": 86003,
+        "success_rate_percent": 86.003,
+        "requests_per_second": 501.109288978721,
+        "avg_response_time_ms": 85.4371131737611,
+        "p95_response_time_ms": 170.38294489403773,
+        "p99_response_time_ms": 213.51192355931167
+      },
+      "system_resources": {
+        "avg_cpu_percent": 5.3247349823321555,
+        "peak_cpu_percent": 27.3,
+        "avg_memory_mb": 10071.02847559629,
+        "peak_memory_mb": 10424.2109375,
+        "total_network_io_mb": 0.21457481384277344
+      },
+      "technology_correlation": {
+        "kafka_messages": 86003,
+        "postgres_queries": 42813,
+        "elasticsearch_operations": 21624,
+        "redis_operations": 86003,
+        "api_gateway_requests": 86003
+      },
+      "traffic_attributes": {
+        "stock_operations": {
+          "TRANSFER": 21566,
+          "ADD": 21420,
+          "SET": 21624,
+          "REMOVE": 21393
+        },
+        "distribution_centers": {
+          "DC-PR01": 17061,
+          "DC-RS01": 17429,
+          "DC-SP01": 17021,
+          "DC-MG01": 17368,
+          "DC-RJ01": 17124
+        },
+        "product_categories": {
+          "MOUSE": 14382,
+          "TECLADO": 14496,
+          "MONITOR": 14305,
+          "NOTEBOOK": 14233,
+          "TABLET": 14479,
+          "SMARTPHONE": 14108
+        }
+      }
+    },
+    {
+      "strategy": "scalable-simple",
+      "name": "Scalable Simple Strategy",
+      "performance": {
+        "total_requests": 100000,
+        "successful_requests": 91915,
+        "success_rate_percent": 91.915,
+        "requests_per_second": 2308.51693755751,
+        "avg_response_time_ms": 48.74694869866128,
+        "p95_response_time_ms": 81.23279132415658,
+        "p99_response_time_ms": 125.00920285631483
+      },
+      "system_resources": {
+        "avg_cpu_percent": 4.818181818181818,
+        "peak_cpu_percent": 21.4,
+        "avg_memory_mb": 9952.480942234848,
+        "peak_memory_mb": 10022.578125,
+        "total_network_io_mb": 0.022131919860839844
+      },
+      "technology_correlation": {
+        "kafka_messages": 91915,
+        "postgres_queries": 45825,
+        "elasticsearch_operations": 23078,
+        "redis_operations": 91915,
+        "api_gateway_requests": 91915
+      },
+      "traffic_attributes": {
+        "stock_operations": {
+          "SET": 23078,
+          "ADD": 22940,
+          "TRANSFER": 23012,
+          "REMOVE": 22885
+        },
+        "distribution_centers": {
+          "DC-SP01": 18272,
+          "DC-PR01": 18618,
+          "DC-MG01": 18341,
+          "DC-RJ01": 18436,
+          "DC-RS01": 18248
+        },
+        "product_categories": {
+          "MOUSE": 15458,
+          "TABLET": 15244,
+          "NOTEBOOK": 15243,
+          "TECLADO": 15397,
+          "MONITOR": 15196,
+          "SMARTPHONE": 15377
+        }
+      }
+    },
+    {
+      "strategy": "scalable-complete",
+      "name": "Scalable Complete Strategy",
+      "performance": {
+        "total_requests": 100000,
+        "successful_requests": 97084,
+        "success_rate_percent": 97.084,
+        "requests_per_second": 10358.77553253022,
+        "avg_response_time_ms": 25.707424910102215,
+        "p95_response_time_ms": 36.77548606028898,
+        "p99_response_time_ms": 58.53466363170735
+      },
+      "system_resources": {
+        "avg_cpu_percent": 5.26875,
+        "peak_cpu_percent": 12.2,
+        "avg_memory_mb": 9989.64453125,
+        "peak_memory_mb": 10009.328125,
+        "total_network_io_mb": 0.000728607177734375
+      },
+      "technology_correlation": {
+        "kafka_messages": 97084,
+        "postgres_queries": 48749,
+        "elasticsearch_operations": 24062,
+        "redis_operations": 97084,
+        "api_gateway_requests": 97084
+      },
+      "traffic_attributes": {
+        "stock_operations": {
+          "ADD": 24253,
+          "TRANSFER": 24273,
+          "REMOVE": 24496,
+          "SET": 24062
+        },
+        "distribution_centers": {
+          "DC-MG01": 19699,
+          "DC-RS01": 19369,
+          "DC-SP01": 19272,
+          "DC-PR01": 19321,
+          "DC-RJ01": 19423
+        },
+        "product_categories": {
+          "TABLET": 16050,
+          "NOTEBOOK": 16191,
+          "MOUSE": 16283,
+          "SMARTPHONE": 16176,
+          "MONITOR": 16268,
+          "TECLADO": 16116
+        }
+      }
+    },
+    {
+      "strategy": "enterprise",
+      "name": "Enterprise Strategy",
+      "performance": {
+        "total_requests": 100000,
+        "successful_requests": 99004,
+        "success_rate_percent": 99.004,
+        "requests_per_second": 27364.042389096,
+        "avg_response_time_ms": 15.145747183476589,
+        "p95_response_time_ms": 21.847153480596276,
+        "p99_response_time_ms": 22.456552066334552
+      },
+      "system_resources": {
+        "avg_cpu_percent": 6.3,
+        "peak_cpu_percent": 11.0,
+        "avg_memory_mb": 9989.271484375,
+        "peak_memory_mb": 9996.515625,
+        "total_network_io_mb": 0.0001888275146484375
+      },
+      "technology_correlation": {
+        "kafka_messages": 99004,
+        "postgres_queries": 49617,
+        "elasticsearch_operations": 24748,
+        "redis_operations": 99004,
+        "api_gateway_requests": 99004
+      },
+      "traffic_attributes": {
+        "stock_operations": {
+          "SET": 24748,
+          "ADD": 24925,
+          "REMOVE": 24692,
+          "TRANSFER": 24639
+        },
+        "distribution_centers": {
+          "DC-SP01": 19856,
+          "DC-PR01": 19633,
+          "DC-MG01": 19944,
+          "DC-RJ01": 19642,
+          "DC-RS01": 19929
+        },
+        "product_categories": {
+          "TABLET": 16429,
+          "MOUSE": 16640,
+          "MONITOR": 16366,
+          "TECLADO": 16616,
+          "NOTEBOOK": 16423,
+          "SMARTPHONE": 16530
+        }
+      }
+    }
+  ]
+}

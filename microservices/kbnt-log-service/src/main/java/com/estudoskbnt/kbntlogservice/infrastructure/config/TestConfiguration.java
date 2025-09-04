@@ -5,7 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.SendResult;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Test Configuration for KBNT Log Service
@@ -20,19 +24,35 @@ import lombok.extern.slf4j.Slf4j;
 public class TestConfiguration {
 
     /**
+     * Mock ProducerFactory bean for test environment
+     */
+    @Bean
+    @Primary
+    public ProducerFactory<String, String> mockProducerFactory() {
+        return new ProducerFactory<String, String>() {
+            @Override
+            public org.apache.kafka.clients.producer.Producer<String, String> createProducer() {
+                return null; // We won't use this in our mock KafkaTemplate
+            }
+        };
+    }
+
+    /**
      * Mock KafkaTemplate bean for test environment
      * This prevents the application from failing when Kafka is not available
      */
     @Bean
     @Primary
-    @SuppressWarnings("unchecked")
-    public KafkaTemplate<String, String> mockKafkaTemplate() {
-        log.info("🧪 Creating stub KafkaTemplate for test environment");
-        // Create a stub implementation that does nothing
-        return new KafkaTemplate<String, String>(null) {
+    public KafkaTemplate<String, String> mockKafkaTemplate(ProducerFactory<String, String> producerFactory) {
+        log.info("🧪 Creating mock KafkaTemplate for test environment");
+        
+        return new KafkaTemplate<String, String>(producerFactory) {
             @Override
-            public void send(String topic, String data) {
+            public CompletableFuture<SendResult<String, String>> send(String topic, String data) {
                 log.debug("Test stub: Would send to topic '{}': {}", topic, data);
+                CompletableFuture<SendResult<String, String>> future = new CompletableFuture<>();
+                future.complete(null);
+                return future;
             }
         };
     }

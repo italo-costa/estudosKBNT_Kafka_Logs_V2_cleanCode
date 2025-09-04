@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Diagrama: Estrutura de Dados de Testes KBNT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .diagram-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 2px solid #e9ecef;
+        }
+
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .flow-stage {
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .flow-stage:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 2;
+        }
+
+        .stage-entrada {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .stage-processamento {
+            background: linear-gradient(135deg, #feca57, #ff9ff3);
+            color: white;
+        }
+
+        .stage-estrutura {
+            background: linear-gradient(135deg, #48dbfb, #0abde3);
+            color: white;
+        }
+
+        .stage-armazenamento {
+            background: linear-gradient(135deg, #1dd1a1, #10ac84);
+            color: white;
+        }
+
+        .stage-output {
+            background: linear-gradient(135deg, #a55eea, #8e44ad);
+            color: white;
+        }
+
+        .stage-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .stage-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            z-index: 2;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .architecture-diagram {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .structure-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #3498db;
+            position: relative;
+        }
+
+        .structure-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .structure-title {
+            color: #2c3e50;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .structure-description {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .structure-fields {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .interactive-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .btn {
+            background: white;
+            color: #2c3e50;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .performance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .performance-table th,
+        .performance-table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .performance-table th {
+            background: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+
+        .performance-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .performance-table tr:hover {
+            background: #e8f4f8;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slide {
+            animation: slideInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Estrutura de Dados de Testes KBNT</h1>
+            <p>Sistema Completo de Coleta, Processamento e Armazenamento de Dados de Performance</p>
+        </div>
+
+        <div class="content">
+            <!-- Fluxo Principal -->
+            <div class="diagram-container">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">🔄 Fluxo de Dados de Teste</h2>
+                <div class="flow-diagram">
+                    <div class="flow-stage stage-entrada" onclick="showDetails('entrada')">
+                        <div class="stage-icon">🔴</div>
+                        <div class="stage-title">ENTRADA</div>
+                        <div>5 Fontes de Dados</div>
+                    </div>
+                    <div class="flow-stage stage-processamento" onclick="showDetails('processamento')">
+                        <div class="stage-icon">🟡</div>
+                        <div class="stage-title">PROCESSAMENTO</div>
+                        <div>4 Estratégias</div>
+                    </div>
+                    <div class="flow-stage stage-estrutura" onclick="showDetails('estrutura')">
+                        <div class="stage-icon">🔵</div>
+                        <div class="stage-title">ESTRUTURA</div>
+                        <div>8 Componentes</div>
+                    </div>
+                    <div class="flow-stage stage-armazenamento" onclick="showDetails('armazenamento')">
+                        <div class="stage-icon">🟢</div>
+                        <div class="stage-title">ARMAZENAMENTO</div>
+                        <div>3 Formatos</div>
+                    </div>
+                    <div class="flow-stage stage-output" onclick="showDetails('output')">
+                        <div class="stage-icon">🟣</div>
+                        <div class="stage-title">OUTPUT</div>
+                        <div>Relatórios & Gráficos</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arquitetura do Sistema -->
+            <div class="diagram-container">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">🏗️ Arquitetura do Sistema</h2>
+                <div class="architecture-diagram">
+                    <svg viewBox="0 0 900 400" style="width: 100%; height: auto;">
+                        <!-- Definir marcadores de seta -->
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#7f8c8d" />
+                            </marker>
+                        </defs>
+
+                        <!-- Microservices Layer -->
+                        <rect x="50" y="50" width="150" height="60" rx="10" fill="#3498db" opacity="0.8" />
+                        <text x="125" y="85" font-size="12" font-weight="bold" fill="white" text-anchor="middle">API Gateway</text>
+                        
+                        <rect x="250" y="50" width="150" height="60" rx="10" fill="#3498db" opacity="0.8" />
+                        <text x="325" y="85" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Virtual Stock Service</text>
+                        
+                        <rect x="450" y="50" width="150" height="60" rx="10" fill="#3498db" opacity="0.8" />
+                        <text x="525" y="85" font-size="12" font-weight="bold" fill="white" text-anchor="middle">KBNT Log Service</text>
+
+                        <!-- Middleware Layer -->
+                        <rect x="150" y="150" width="150" height="60" rx="10" fill="#e67e22" opacity="0.8" />
+                        <text x="225" y="185" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Apache Kafka</text>
+                        
+                        <rect x="350" y="150" width="150" height="60" rx="10" fill="#e67e22" opacity="0.8" />
+                        <text x="425" y="185" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Redis Cache</text>
+
+                        <!-- Database Layer -->
+                        <rect x="50" y="250" width="150" height="60" rx="10" fill="#27ae60" opacity="0.8" />
+                        <text x="125" y="285" font-size="12" font-weight="bold" fill="white" text-anchor="middle">PostgreSQL</text>
+                        
+                        <rect x="250" y="250" width="150" height="60" rx="10" fill="#27ae60" opacity="0.8" />
+                        <text x="325" y="285" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Elasticsearch</text>
+                        
+                        <rect x="450" y="250" width="150" height="60" rx="10" fill="#27ae60" opacity="0.8" />
+                        <text x="525" y="285" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Redis Logs</text>
+
+                        <!-- Monitoring Layer -->
+                        <rect x="650" y="150" width="150" height="60" rx="10" fill="#9b59b6" opacity="0.8" />
+                        <text x="725" y="185" font-size="12" font-weight="bold" fill="white" text-anchor="middle">Performance Monitor</text>
+                        
+                        <rect x="650" y="250" width="150" height="60" rx="10" fill="#9b59b6" opacity="0.8" />
+                        <text x="725" y="285" font-size="12" font-weight="bold" fill="white" text-anchor="middle">System Metrics</text>
+
+                        <!-- Conexões -->
+                        <line x1="125" y1="110" x2="225" y2="150" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrowhead)" />
+                        <line x1="325" y1="110" x2="425" y2="150" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrowhead)" />
+                        <line x1="525" y1="110" x2="225" y2="150" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrowhead)" />
+
+                        <line x1="125" y1="250" x2="125" y2="320" stroke="#7f8c8d" stroke-width="2" />
+                        <line x1="325" y1="250" x2="325" y2="320" stroke="#7f8c8d" stroke-width="2" />
+                        <line x1="525" y1="250" x2="525" y2="320" stroke="#7f8c8d" stroke-width="2" />
+
+                        <line x1="600" y1="80" x2="650" y2="180" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrowhead)" />
+                        <line x1="725" y1="210" x2="725" y2="250" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrowhead)" />
+
+                        <!-- Labels das camadas -->
+                        <text x="850" y="80" font-size="14" font-weight="bold" fill="#2c3e50">Microserviços</text>
+                        <text x="850" y="180" font-size="14" font-weight="bold" fill="#2c3e50">Middleware</text>
+                        <text x="850" y="280" font-size="14" font-weight="bold" fill="#2c3e50">Persistência</text>
+                        <text x="850" y="350" font-size="14" font-weight="bold" fill="#2c3e50">Monitoramento</text>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Estatísticas dos Testes Atuais -->
+            <div class="diagram-container">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">📊 Estatísticas dos Testes Realizados</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card pulse">
+                        <div class="metric-value">400,000</div>
+                        <div class="metric-label">Total Requests (100K Test)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">93.5%</div>
+                        <div class="metric-label">Avg Success Rate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">27,364</div>
+                        <div class="metric-label">Peak Req/s (Enterprise)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">21.8ms</div>
+                        <div class="metric-label">Min P95 Latency</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">88</div>
+                        <div class="metric-label">Max Containers</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">10.0GB</div>
+                        <div class="metric-label">Peak Memory Usage</div>
+                    </div>
+                </div>
+
+                <!-- Gráfico de Performance por Estratégia -->
+                <div style="background: white; margin-top: 30px; padding: 25px; border-radius: 15px;">
+                    <h3 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">📈 Performance por Estratégia (Teste 100K)</h3>
+                    <div id="performance-chart" style="position: relative;">
+                        <canvas id="strategyChart" width="800" height="300"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tabela Comparativa Detalhada -->
+                <div style="background: white; margin-top: 30px; padding: 25px; border-radius: 15px; overflow-x: auto;">
+                    <h3 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">📋 Comparação Detalhada - Teste 100K</h3>
+                    <table class="performance-table">
+                        <thead>
+                            <tr>
+                                <th>Estratégia</th>
+                                <th>RPS</th>
+                                <th>Sucesso (%)</th>
+                                <th>P95 Latência (ms)</th>
+                                <th>Containers</th>
+                                <th>CPU Pico (%)</th>
+                                <th>Memória Pico (GB)</th>
+                                <th>Eficiência (RPS/CPU%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: #e8f8f5;">
+                                <td style="font-weight: bold;">🏆 Enterprise</td>
+                                <td>27,364.0</td>
+                                <td>99.0%</td>
+                                <td>21.8</td>
+                                <td>40</td>
+                                <td>11.0%</td>
+                                <td>10.0</td>
+                                <td>2,487.6</td>
+                            </tr>
+                            <tr style="background: #ebf3fd;">
+                                <td style="font-weight: bold;">🥈 Scalable Complete</td>
+                                <td>10,358.8</td>
+                                <td>97.1%</td>
+                                <td>36.8</td>
+                                <td>25</td>
+                                <td>12.2%</td>
+                                <td>10.0</td>
+                                <td>849.1</td>
+                            </tr>
+                            <tr style="background: #fff3cd;">
+                                <td style="font-weight: bold;">🥉 Scalable Simple</td>
+                                <td>2,308.5</td>
+                                <td>91.9%</td>
+                                <td>81.2</td>
+                                <td>15</td>
+                                <td>21.4%</td>
+                                <td>10.0</td>
+                                <td>107.9</td>
+                            </tr>
+                            <tr style="background: #f8d7da;">
+                                <td style="font-weight: bold;">🔰 Free Tier</td>
+                                <td>501.1</td>
+                                <td>86.0%</td>
+                                <td>170.4</td>
+                                <td>8</td>
+                                <td>27.3%</td>
+                                <td>10.4</td>
+                                <td>18.4</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Estrutura de Dados -->
+            <div class="diagram-container">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">🏗️ Estrutura de Dados de Testes</h2>
+                
+                <div class="structure-card animate-slide">
+                    <div class="structure-title">📊 PerformanceResult</div>
+                    <div class="structure-description">Estrutura principal que armazena os resultados de cada teste de performance</div>
+                    <div class="structure-fields">
+                        strategy: str<br>
+                        total_requests: int<br>
+                        successful_requests: int<br>
+                        success_rate_percent: float<br>
+                        requests_per_second: float<br>
+                        avg_response_time_ms: float<br>
+                        p95_response_time_ms: float<br>
+                        p99_response_time_ms: float
+                    </div>
+                </div>
+
+                <div class="structure-card animate-slide">
+                    <div class="structure-title">💾 SystemMetrics</div>
+                    <div class="structure-description">Métricas de recursos computacionais coletadas durante os testes</div>
+                    <div class="structure-fields">
+                        avg_cpu_percent: float<br>
+                        peak_cpu_percent: float<br>
+                        avg_memory_mb: float<br>
+                        peak_memory_mb: float<br>
+                        total_network_io_mb: float<br>
+                        timestamp: datetime
+                    </div>
+                </div>
+
+                <div class="structure-card animate-slide">
+                    <div class="structure-title">🔧 TechnologyCorrelation</div>
+                    <div class="structure-description">Correlações entre tecnologias e volume de operações</div>
+                    <div class="structure-fields">
+                        kafka_messages: int<br>
+                        postgres_queries: int<br>
+                        elasticsearch_operations: int<br>
+                        redis_operations: int<br>
+                        api_gateway_requests: int
+                    </div>
+                </div>
+
+                <div class="structure-card animate-slide">
+                    <div class="structure-title">📈 TrafficAttributes</div>
+                    <div class="structure-description">Distribuição de tráfego por atributos de negócio</div>
+                    <div class="structure-fields">
+                        stock_operations: Dict[str, int]<br>
+                        distribution_centers: Dict[str, int]<br>
+                        product_categories: Dict[str, int]<br>
+                        geographic_distribution: Dict[str, float]
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Interativa -->
+            <div class="interactive-section">
+                <h2>🚀 Ações Disponíveis</h2>
+                <p>Execute novas simulações ou visualize relatórios detalhados</p>
+                <button class="btn" onclick="runSimulation()">▶️ Nova Simulação</button>
+                <button class="btn" onclick="viewReports()">📊 Ver Relatórios</button>
+                <button class="btn" onclick="exportData()">💾 Exportar Dados</button>
+                <button class="btn" onclick="showArchitecture()">🏗️ Arquitetura Completa</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para mostrar detalhes das etapas
+        function showDetails(stage) {
+            const details = {
+                entrada: 'ENTRADA: Dados coletados de 5 fontes principais:\n- Requisições HTTP\n- Logs de sistema\n- Métricas de performance\n- Status dos containers\n- Dados de negócio',
+                processamento: 'PROCESSAMENTO: 4 estratégias de deployment:\n- Free Tier (8 containers)\n- Scalable Simple (15 containers)\n- Scalable Complete (25 containers)\n- Enterprise (40 containers)',
+                estrutura: 'ESTRUTURA: 8 componentes principais:\n- PerformanceResult\n- SystemMetrics\n- TechnologyCorrelation\n- TrafficAttributes\n- DeploymentStrategy\n- TestMetadata\n- ResourceUsage\n- AnalysisReport',
+                armazenamento: 'ARMAZENAMENTO: 3 formatos de saída:\n- JSON (relatórios detalhados)\n- PNG (gráficos e visualizações)\n- MD (documentação e análises)',
+                output: 'OUTPUT: Relatórios e visualizações:\n- Gráficos de performance\n- Tabelas comparativas\n- Análises estatísticas\n- Recomendações estratégicas'
+            };
+            alert(details[stage]);
+        }
+
+        // Função para executar simulação
+        function runSimulation() {
+            alert('⚡ Executando nova simulação...\n\n' +
+                  'Comando: python performance-test-high-load.py\n' +
+                  'Parâmetros: 100,000 req/estratégia\n' +
+                  'Estratégias: 4 (Free Tier, Simple, Complete, Enterprise)\n' +
+                  'Tempo estimado: ~15 minutos\n' +
+                  'Total de requisições: 400,000');
+        }
+
+        // Função para ver relatórios
+        function viewReports() {
+            const reports = [
+                'high_load_performance_report_20250903_235120.json',
+                'performance_comparison_chart_20250903_235122.png',
+                'resources_comparison_chart_20250903_235758.png',
+                'RELATORIO_FINAL_100K_REQUISICOES.md',
+                'comparativo_1k_vs_100k_performance.md'
+            ];
+            alert('📊 Relatórios disponíveis:\n\n' + reports.join('\n'));
+        }
+
+        // Função para exportar dados
+        function exportData() {
+            alert('💾 Exportação de dados disponível em:\n\n' +
+                  '• JSON: Dados estruturados completos\n' +
+                  '• CSV: Tabelas para análise\n' +
+                  '• PNG: Gráficos e visualizações\n' +
+                  '• PDF: Relatórios executivos');
+        }
+
+        // Função para mostrar arquitetura
+        function showArchitecture() {
+            alert('🏗️ Arquitetura KBNT Kafka Logs:\n\n' +
+                  '• API Gateway (:8080)\n' +
+                  '• Virtual Stock Service (:8081)\n' +
+                  '• KBNT Log Service (:8082)\n' +
+                  '• Apache Kafka (:9092)\n' +
+                  '• PostgreSQL (:5432)\n' +
+                  '• Elasticsearch (:9200)\n' +
+                  '• Redis Cache (:6379)\n' +
+                  '• Performance Monitor');
+        }
+
+        // Renderizar gráfico de performance
+        function renderPerformanceChart() {
+            const canvas = document.getElementById('strategyChart');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // Dados atualizados do teste 100K
+            const strategies = [
+                { name: 'Enterprise', rps: 27364.0, success: 99.0, latency: 21.8, color: '#9b59b6' },
+                { name: 'Scalable Complete', rps: 10358.8, success: 97.1, latency: 36.8, color: '#2ecc71' },
+                { name: 'Scalable Simple', rps: 2308.5, success: 91.9, latency: 81.2, color: '#3498db' },
+                { name: 'Free Tier', rps: 501.1, success: 86.0, latency: 170.4, color: '#e74c3c' }
+            ];
+
+            // Limpar canvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Configurações com melhor espaçamento
+            const margin = 80;
+            const chartWidth = width - 2 * margin;
+            const chartHeight = height - 2 * margin;
+            const barWidth = chartWidth / (strategies.length * 2);
+
+            // Encontrar valores máximos
+            const maxRps = Math.max(...strategies.map(s => s.rps));
+            const maxSuccess = 100;
+            const maxLatency = Math.max(...strategies.map(s => s.latency));
+
+            // Desenhar eixos
+            ctx.strokeStyle = '#34495e';
+            ctx.lineWidth = 2;
+
+            // Eixo Y esquerdo (RPS)
+            ctx.beginPath();
+            ctx.moveTo(margin, margin);
+            ctx.lineTo(margin, height - margin);
+            ctx.stroke();
+
+            // Eixo X
+            ctx.beginPath();
+            ctx.moveTo(margin, height - margin);
+            ctx.lineTo(width - margin, height - margin);
+            ctx.stroke();
+
+            // Eixo Y direito (Success Rate)
+            ctx.beginPath();
+            ctx.moveTo(width - margin, margin);
+            ctx.lineTo(width - margin, height - margin);
+            ctx.stroke();
+
+            // Labels dos eixos
+            ctx.fillStyle = '#34495e';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+
+            // Label X
+            ctx.fillText('Estratégias de Deployment', width / 2, height - 15);
+
+            // Label Y esquerdo
+            ctx.save();
+            ctx.translate(20, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('Requests per Second (RPS)', 0, 0);
+            ctx.restore();
+
+            // Label Y direito
+            ctx.save();
+            ctx.translate(width - 20, height / 2);
+            ctx.rotate(Math.PI / 2);
+            ctx.fillText('Success Rate (%)', 0, 0);
+            ctx.restore();
+
+            // Desenhar barras e dados com melhor espaçamento
+            strategies.forEach((strategy, index) => {
+                const x = margin + (index + 0.5) * (chartWidth / strategies.length);
+
+                // Barra RPS (mais espessa)
+                const rpsHeight = (strategy.rps / maxRps) * (chartHeight * 0.75);
+                ctx.fillStyle = strategy.color;
+                ctx.fillRect(x - barWidth/2, height - margin - rpsHeight, barWidth * 0.5, rpsHeight);
+
+                // Barra Success Rate (mais espessa, ao lado)
+                const successHeight = (strategy.success / maxSuccess) * (chartHeight * 0.75);
+                ctx.fillStyle = strategy.color + 'AA'; // Semi-transparente
+                ctx.fillRect(x + barWidth/2 - barWidth * 0.25, height - margin - successHeight, barWidth * 0.5, successHeight);
+
+                // Labels das estratégias (com quebra de linha se necessário)
+                ctx.fillStyle = '#34495e';
+                ctx.font = '11px Arial';
+                ctx.textAlign = 'center';
+                const nameLines = strategy.name.split(' ');
+                nameLines.forEach((line, lineIndex) => {
+                    ctx.fillText(line, x, height - margin + 20 + (lineIndex * 12));
+                });
+
+                // Valores RPS (acima da barra)
+                ctx.fillStyle = strategy.color;
+                ctx.font = 'bold 11px Arial';
+                const rpsText = strategy.rps >= 1000 ? (strategy.rps / 1000).toFixed(1) + 'K' : strategy.rps.toFixed(0);
+                ctx.fillText(rpsText, x - barWidth/4, height - margin - rpsHeight - 10);
+
+                // Valores Success Rate (acima da barra)
+                ctx.fillStyle = strategy.color;
+                ctx.fillText(strategy.success.toFixed(1) + '%', x + barWidth/4, height - margin - successHeight - 10);
+
+                // Latência como ponto (melhor posicionado)
+                const latencyY = margin + (1 - strategy.latency / maxLatency) * (chartHeight * 0.75);
+                ctx.beginPath();
+                ctx.fillStyle = '#f39c12';
+                ctx.arc(x, latencyY, 5, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // Valor de latência (ao lado do ponto)
+                ctx.fillStyle = '#f39c12';
+                ctx.font = 'bold 10px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText(strategy.latency.toFixed(1) + 'ms', x + 10, latencyY + 3);
+            });
+
+            // Legenda melhorada
+            const legendY = margin - 40;
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'left';
+
+            // RPS Legend
+            ctx.fillStyle = strategies[0].color;
+            ctx.fillRect(margin, legendY, 20, 12);
+            ctx.fillStyle = '#34495e';
+            ctx.fillText('RPS', margin + 25, legendY + 10);
+
+            // Success Rate Legend
+            ctx.fillStyle = strategies[0].color + 'AA';
+            ctx.fillRect(margin + 80, legendY, 20, 12);
+            ctx.fillStyle = '#34495e';
+            ctx.fillText('Success %', margin + 105, legendY + 10);
+
+            // Latency Legend
+            ctx.beginPath();
+            ctx.fillStyle = '#f39c12';
+            ctx.arc(margin + 200, legendY + 6, 5, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillStyle = '#34495e';
+            ctx.fillText('Latência (ms)', margin + 210, legendY + 10);
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function () {
+            // Renderizar gráfico
+            renderPerformanceChart();
+
+            // Animar cards
+            setTimeout(() => {
+                const cards = document.querySelectorAll('.structure-card');
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('animate-slide');
+                    }, index * 200);
+                });
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>
