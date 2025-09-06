@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-09-06T20:32:10.723298",
+  "environment": "WSL Ubuntu Linux",
+  "statistics": {
+    "total_changes": 1164,
+    "added": 655,
+    "modified": 0,
+    "deleted": 46,
+    "renamed": 463,
+    "clean_architecture_files": 596
+  },
+  "clean_architecture": {
+    "layers_present": 4,
+    "total_layers": 10,
+    "compliance_score": 40.0,
+    "current_layers": [
+      "01-presentation-layer",
+      "02-application-layer",
+      "03-domain-layer",
+      "04-infrastructure-layer"
+    ]
+  },
+  "testing": {
+    "test_files_count": 20
+  },
+  "docker": {
+    "docker_files_count": 20
+  },
+  "positive_indicators": 2,
+  "recommendation": "USAR BRANCH REFACTORING"
+}

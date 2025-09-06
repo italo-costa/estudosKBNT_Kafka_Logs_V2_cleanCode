@@ -16,8 +16,11 @@ import com.estudoskbnt.consumer.repository.ConsumptionLogRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@RestController
+@RequestMapping("/api/monitoring")
+@RequiredArgsConstructor
+@Slf4j
 public class MonitoringController {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(MonitoringController.class);
     
     private final ConsumptionLogRepository consumptionLogRepository;
     

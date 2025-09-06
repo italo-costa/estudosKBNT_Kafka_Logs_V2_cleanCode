@@ -29,11 +29,14 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.MDC;
 import reactor.core.publisher.Mono;
 
+@Service
+@Transactional
+@RequiredArgsConstructor
+@Slf4j
 public class KafkaConsumerService {
     // Declare consumptionLog variable
     private ConsumptionLog consumptionLog;
-    // Logger instance
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(KafkaConsumerService.class);
+    
     // Utility to generate a unique message ID from Kafka record
     private String generateMessageId(org.apache.kafka.clients.consumer.ConsumerRecord<String, String> record) {
         return record.topic() + "-" + record.partition() + "-" + record.offset();

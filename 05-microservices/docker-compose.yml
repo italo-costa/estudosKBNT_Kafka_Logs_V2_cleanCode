@@ -1,5 +1,22 @@
 version: '3.8'
 
+# MAPEAMENTO PADRONIZADO DE PORTAS
+# =====================================
+# Infraestrutura:
+#   - PostgreSQL: 5432:5432
+#   - Redis: 6379:6379
+#   - Zookeeper: 2181:2181
+#   - Kafka: 9092:9092, 29092:29092
+#
+# Microserviços (Padrão: 80XX:8080 para app, 90XX:9090 para management):
+#   - API Gateway: 8080:8080, 9080:9090
+#   - Log Producer: 8081:8080, 9081:9090
+#   - Log Consumer: 8082:8080, 9082:9090
+#   - Log Analytics: 8083:8080, 9083:9090
+#   - Virtual Stock: 8084:8080, 9084:9090
+#   - KBNT Consumer: 8085:8080, 9085:9090
+# =====================================
+
 services:
   # Database for analytics service
   postgres:
@@ -10,7 +27,7 @@ services:
       POSTGRES_USER: loguser
       POSTGRES_PASSWORD: logpass123
     ports:
-      - "5432:5432"
+      - "5432:5432"  # PostgreSQL porta padrão
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
@@ -24,7 +41,7 @@ services:
     image: redis:7-alpine
     container_name: redis-logs
     ports:
-      - "6379:6379"
+      - "6379:6379"  # Redis porta padrão
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
@@ -38,15 +55,17 @@ services:
       dockerfile: Dockerfile
     container_name: log-producer-service
     ports:
-      - "8081:8081"
-      - "9081:9081"  # Management port
+      - "8081:8080"  # Aplicação na porta padrão 8080 interna
+      - "9081:9090"  # Management/Actuator na porta padrão 9090 interna
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - SERVER_PORT=8080
+      - MANAGEMENT_SERVER_PORT=9090
     depends_on:
       - kafka
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -59,21 +78,23 @@ services:
       dockerfile: Dockerfile
     container_name: log-consumer-service
     ports:
-      - "8082:8082"
-      - "9082:9082"  # Management port
+      - "8082:8080"  # Aplicação na porta padrão 8080 interna
+      - "9082:9090"  # Management/Actuator na porta padrão 9090 interna
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
       - DATABASE_URL=jdbc:postgresql://postgres:5432/loganalytics
       - DATABASE_USERNAME=loguser
       - DATABASE_PASSWORD=logpass123
+      - SERVER_PORT=8080
+      - MANAGEMENT_SERVER_PORT=9090
     depends_on:
       postgres:
         condition: service_healthy
       kafka:
         condition: service_started
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -86,8 +107,8 @@ services:
       dockerfile: Dockerfile
     container_name: log-analytics-service
     ports:
-      - "8083:8083"
-      - "9083:9083"  # Management port
+      - "8083:8080"  # Aplicação na porta padrão 8080 interna
+      - "9083:9090"  # Management/Actuator na porta padrão 9090 interna
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - DATABASE_URL=jdbc:postgresql://postgres:5432/loganalytics
@@ -95,13 +116,15 @@ services:
       - DATABASE_PASSWORD=logpass123
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - SERVER_PORT=8080
+      - MANAGEMENT_SERVER_PORT=9090
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -114,12 +137,14 @@ services:
       dockerfile: Dockerfile
     container_name: api-gateway
     ports:
-      - "8080:8080"
-      - "9080:9080"  # Management port
+      - "8080:8080"  # Aplicação na porta padrão 8080 (externa e interna iguais para gateway)
+      - "9080:9090"  # Management/Actuator na porta padrão 9090 interna
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - LOG_PRODUCER_URL=http://log-producer-service:8081
-      - LOG_ANALYTICS_URL=http://log-analytics-service:8083
+      - LOG_PRODUCER_URL=http://log-producer-service:8080
+      - LOG_ANALYTICS_URL=http://log-analytics-service:8080
+      - SERVER_PORT=8080
+      - MANAGEMENT_SERVER_PORT=9090
     depends_on:
       - log-producer-service
       - log-analytics-service
@@ -130,17 +155,20 @@ services:
       retries: 5
     restart: unless-stopped
 
+  # Virtual Stock Service
   virtual-stock-service:
     build:
       context: ./virtual-stock-service
       dockerfile: Dockerfile
     container_name: virtual-stock-service
     ports:
-      - "8084:8080"
-      - "9084:9080"  # Management port
+      - "8084:8080"  # Aplicação na porta padrão 8080 interna
+      - "9084:9090"  # Management/Actuator na porta padrão 9090 interna
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - SERVER_PORT=8080
+      - MANAGEMENT_SERVER_PORT=9090
     depends_on:
       - kafka
     healthcheck:
@@ -150,39 +178,42 @@ services:
       retries: 5
     restart: unless-stopped
 
+  # KBNT Stock Consumer Service
   kbnt-stock-consumer-service:
     build:
       context: ./kbnt-stock-consumer-service
       dockerfile: Dockerfile
     container_name: kbnt-stock-consumer-service
     ports:
-      - "8085:8081"
-      - "9085:9081"  # Management port
+      - "8085:8080"  # Aplicação na porta padrão 8080 interna
+      - "9085:9090"  # Management/Actuator na porta padrão 9090 interna
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
       - DATABASE_URL=jdbc:postgresql://postgres:5432/loganalytics
       - DATABASE_USERNAME=loguser
       - DATABASE_PASSWORD=logpass123
+      - SERVER_PORT=8080
+      - MANAGEMENT_SERVER_PORT=9090
     depends_on:
       postgres:
         condition: service_healthy
       kafka:
         condition: service_started
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 5
     restart: unless-stopped
 
-  # Inherit Kafka from parent docker-compose
+  # Kafka Message Broker
   kafka:
     image: bitnami/kafka:latest
     container_name: kafka
     ports:
-      - "9092:9092"
-      - "29092:29092"
+      - "9092:9092"   # Kafka porta externa padrão
+      - "29092:29092" # Kafka porta interna para containers
     environment:
       - KAFKA_BROKER_ID=1
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
@@ -193,11 +224,12 @@ services:
     depends_on:
       - zookeeper
 
+  # Zookeeper for Kafka coordination
   zookeeper:
     image: bitnami/zookeeper:latest
     container_name: zookeeper
     ports:
-      - "2181:2181"
+      - "2181:2181"  # Zookeeper porta padrão
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     volumes:

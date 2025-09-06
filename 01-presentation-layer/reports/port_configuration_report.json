@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-09-06T16:29:19.915675",
+  "port_configuration": {
+    "api-gateway": 8080,
+    "virtual-stock-service": 8081,
+    "log-producer-service": 8082,
+    "kbnt-log-service": 8083,
+    "log-consumer-service": 8084,
+    "log-analytics-service": 8085,
+    "kbnt-stock-consumer-service": 8086
+  },
+  "health_checks": {},
+  "running_services": {}
+}

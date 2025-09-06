@@ -1,7 +1,7 @@
 # Configurações do Log Producer Service
 
 server:
-  port: 8081
+  port: 8080
   servlet:
     context-path: /log-producer
 

@@ -1,0 +1,192 @@
+{
+  "port_configuration_final": {
+    "timestamp": "2025-09-06T19:50:00Z",
+    "environment": "docker_wsl_ubuntu",
+    "configuration_type": "standardized_fixed_ports",
+    "infrastructure": {
+      "postgres": {
+        "external_port": 5432,
+        "internal_port": 5432,
+        "protocol": "TCP",
+        "service_name": "postgres-logs",
+        "description": "PostgreSQL Database for Log Analytics"
+      },
+      "redis": {
+        "external_port": 6379,
+        "internal_port": 6379,
+        "protocol": "TCP",
+        "service_name": "redis-logs",
+        "description": "Redis Cache and Session Store"
+      },
+      "zookeeper": {
+        "external_port": 2181,
+        "internal_port": 2181,
+        "protocol": "TCP",
+        "service_name": "zookeeper",
+        "description": "Kafka Coordination Service"
+      },
+      "kafka": {
+        "external_ports": [
+          9092,
+          29092
+        ],
+        "internal_ports": [
+          9092,
+          29092
+        ],
+        "protocol": "TCP",
+        "service_name": "kafka",
+        "description": "Message Broker"
+      }
+    },
+    "microservices": {
+      "api-gateway": {
+        "application": {
+          "external_port": 8080,
+          "internal_port": 8080,
+          "url": "http://localhost:8080",
+          "health_check": "http://localhost:8080/actuator/health"
+        },
+        "management": {
+          "external_port": 9080,
+          "internal_port": 9090,
+          "url": "http://localhost:9080/actuator"
+        },
+        "container_name": "api-gateway",
+        "service_name": "api-gateway",
+        "description": "Main API Gateway - Entry Point"
+      },
+      "log-producer-service": {
+        "application": {
+          "external_port": 8081,
+          "internal_port": 8080,
+          "url": "http://localhost:8081",
+          "health_check": "http://localhost:8081/actuator/health"
+        },
+        "management": {
+          "external_port": 9081,
+          "internal_port": 9090,
+          "url": "http://localhost:9081/actuator"
+        },
+        "container_name": "log-producer-service",
+        "service_name": "log-producer-service",
+        "description": "Log Message Producer"
+      },
+      "log-consumer-service": {
+        "application": {
+          "external_port": 8082,
+          "internal_port": 8080,
+          "url": "http://localhost:8082",
+          "health_check": "http://localhost:8082/actuator/health"
+        },
+        "management": {
+          "external_port": 9082,
+          "internal_port": 9090,
+          "url": "http://localhost:9082/actuator"
+        },
+        "container_name": "log-consumer-service",
+        "service_name": "log-consumer-service",
+        "description": "Log Message Consumer"
+      },
+      "log-analytics-service": {
+        "application": {
+          "external_port": 8083,
+          "internal_port": 8080,
+          "url": "http://localhost:8083",
+          "health_check": "http://localhost:8083/actuator/health"
+        },
+        "management": {
+          "external_port": 9083,
+          "internal_port": 9090,
+          "url": "http://localhost:9083/actuator"
+        },
+        "container_name": "log-analytics-service",
+        "service_name": "log-analytics-service",
+        "description": "Log Analytics and Processing"
+      },
+      "virtual-stock-service": {
+        "application": {
+          "external_port": 8084,
+          "internal_port": 8080,
+          "url": "http://localhost:8084",
+          "health_check": "http://localhost:8084/actuator/health"
+        },
+        "management": {
+          "external_port": 9084,
+          "internal_port": 9090,
+          "url": "http://localhost:9084/actuator"
+        },
+        "container_name": "virtual-stock-service",
+        "service_name": "virtual-stock-service",
+        "description": "Virtual Stock Management"
+      },
+      "kbnt-stock-consumer-service": {
+        "application": {
+          "external_port": 8085,
+          "internal_port": 8080,
+          "url": "http://localhost:8085",
+          "health_check": "http://localhost:8085/actuator/health"
+        },
+        "management": {
+          "external_port": 9085,
+          "internal_port": 9090,
+          "url": "http://localhost:9085/actuator"
+        },
+        "container_name": "kbnt-stock-consumer-service",
+        "service_name": "kbnt-stock-consumer-service",
+        "description": "KBNT Stock Consumer"
+      }
+    },
+    "port_allocation_strategy": {
+      "pattern": "80XX:8080 for applications, 90XX:9090 for management",
+      "benefits": [
+        "No random port allocation",
+        "Predictable port mapping",
+        "Easy debugging and testing",
+        "Clear separation between app and management",
+        "No port conflicts between services"
+      ],
+      "conventions": {
+        "infrastructure_ports": "Standard ports for each service",
+        "application_ports": "Sequential 80XX mapping (8080, 8081, 8082, etc.)",
+        "management_ports": "Sequential 90XX mapping (9080, 9081, 9082, etc.)",
+        "internal_standardization": "All apps use 8080, all management use 9090"
+      }
+    },
+    "docker_compose_environment_variables": {
+      "SERVER_PORT": 8080,
+      "MANAGEMENT_SERVER_PORT": 9090,
+      "KAFKA_BOOTSTRAP_SERVERS": "kafka:29092",
+      "DATABASE_URL": "jdbc:postgresql://postgres:5432/loganalytics",
+      "REDIS_HOST": "redis",
+      "REDIS_PORT": 6379
+    },
+    "network_configuration": {
+      "network_name": "kafka-microservices",
+      "communication_pattern": "Container-to-container via service names",
+      "external_access": "Via mapped ports on localhost"
+    },
+    "health_check_endpoints": [
+      "http://localhost:8080/actuator/health",
+      "http://localhost:8081/actuator/health",
+      "http://localhost:8082/actuator/health",
+      "http://localhost:8083/actuator/health",
+      "http://localhost:8084/actuator/health",
+      "http://localhost:8085/actuator/health"
+    ],
+    "management_endpoints": [
+      "http://localhost:9080/actuator",
+      "http://localhost:9081/actuator",
+      "http://localhost:9082/actuator",
+      "http://localhost:9083/actuator",
+      "http://localhost:9084/actuator",
+      "http://localhost:9085/actuator"
+    ],
+    "verification_commands": {
+      "check_port_usage": "netstat -an | findstr :8080",
+      "check_containers": "docker-compose ps",
+      "check_container_ports": "docker port <container_name>",
+      "health_check_all": "curl -s http://localhost:8080/actuator/health"
+    }
+  }
+}

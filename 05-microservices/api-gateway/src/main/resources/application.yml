@@ -16,13 +16,13 @@ spring:
           filters:
             - StripPrefix=0
         - id: log-producer-service
-          uri: http://log-producer-service:8080
+          uri: http://virtual-stock-service:8080
           predicates:
             - Path=/api/v1/logs/**
           filters:
             - StripPrefix=0
         - id: kbnt-log-service
-          uri: http://kbnt-log-service:8081
+          uri: http://virtual-stock-service:8080
           predicates:
             - Path=/api/v1/kbnt-logs/**
           filters:
@@ -70,13 +70,13 @@ spring:
           filters:
             - StripPrefix=0
         - id: log-producer-service
-          uri: http://log-producer-service:8080
+          uri: http://virtual-stock-service:8080
           predicates:
             - Path=/api/v1/logs/**
           filters:
             - StripPrefix=0
         - id: kbnt-log-service
-          uri: http://kbnt-log-service:8081
+          uri: http://virtual-stock-service:8080
           predicates:
             - Path=/api/v1/kbnt-logs/**
           filters:

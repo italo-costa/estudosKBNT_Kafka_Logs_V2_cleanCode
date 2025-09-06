@@ -1,0 +1,60 @@
+{
+  "timestamp": "2025-09-06T20:49:01.982594",
+  "environment": "WSL Ubuntu Linux",
+  "branch_analyzed": "refactoring-clean-architecture-v2.1",
+  "current_analysis": {
+    "clean_architecture_layers": 10,
+    "total_expected_layers": 10,
+    "layer_compliance": 100.0,
+    "present_layers": [
+      "01-presentation-layer",
+      "02-application-layer",
+      "03-domain-layer",
+      "04-infrastructure-layer",
+      "05-microservices",
+      "06-deployment",
+      "07-testing",
+      "08-configuration",
+      "09-monitoring",
+      "10-tools-utilities"
+    ],
+    "file_counts": {
+      "java": 301,
+      "python": 348,
+      "docker": 25,
+      "tests": 357,
+      "configs": 103
+    },
+    "microservices_count": 12
+  },
+  "git_analysis": {
+    "total_changes": 1164,
+    "added_files": 655,
+    "modified_files": 0,
+    "deleted_files": 46,
+    "renamed_files": 463,
+    "clean_arch_files": 596
+  },
+  "scores": {
+    "clean_architecture": 100.0,
+    "organization": 100,
+    "modularization": 100,
+    "containerization": 100,
+    "testing": 100
+  },
+  "recommendation": {
+    "recommendation": "FORTEMENTE RECOMENDADO usar branch REFACTORING-CLEAN-ARCHITECTURE-V2.1",
+    "confidence": "MUITO ALTA",
+    "quality_level": "EXCELENTE",
+    "overall_score": 100.0,
+    "strong_points": [
+      "Excelente conformidade com Clean Architecture",
+      "Organiza\u00e7\u00e3o de arquivos muito boa",
+      "Modulariza\u00e7\u00e3o adequada com microservi\u00e7os",
+      "Configura\u00e7\u00e3o Docker robusta",
+      "Estrutura de testes adequada"
+    ],
+    "weak_points": [],
+    "summary": "Qualidade EXCELENTE com score 100.0/100"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "timestamp": "2025-09-06T17:34:05.805642",
+  "execution_type": "docker_compose",
+  "service_health": {},
+  "compose_file": "C:\\workspace\\estudosKBNT_Kafka_Logs\\05-microservices\\docker-compose.yml"
+}

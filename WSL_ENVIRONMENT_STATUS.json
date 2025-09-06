@@ -1,0 +1,24 @@
+{
+  "timestamp": "2025-09-06T20:36:17.388933",
+  "environment": "WSL Ubuntu Linux + Docker",
+  "status": "FUNCIONANDO",
+  "infrastructure_services": {
+    "postgresql": "\u2705 Ativo",
+    "redis": "\u2705 Ativo",
+    "zookeeper": "\u2705 Ativo",
+    "kafka": "\u274c Erro de configura\u00e7\u00e3o"
+  },
+  "microservices": {
+    "api_gateway": "\u2705 Ativo",
+    "log_analytics": "\u2705 Ativo",
+    "log_consumer": "\u2705 Ativo",
+    "log_producer": "\u26a0\ufe0f Reiniciando",
+    "virtual_stock": "\u26a0\ufe0f Reiniciando",
+    "kbnt_consumer": "\u26a0\ufe0f Reiniciando"
+  },
+  "recommendations": [
+    "Corrigir configura\u00e7\u00e3o do Kafka",
+    "Aguardar estabiliza\u00e7\u00e3o dos microservi\u00e7os",
+    "Implementar monitoramento cont\u00ednuo"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "timestamp": "20250904_114018",
+  "services": {
+    "api-gateway": {
+      "status": "failed",
+      "port": 8080,
+      "health": "failed"
+    },
+    "virtual-stock-service": {
+      "status": "failed",
+      "port": 8081,
+      "health": "failed"
+    },
+    "log-producer-service": {
+      "status": "failed",
+      "port": 8082,
+      "health": "failed"
+    },
+    "kbnt-log-service": {
+      "status": "failed",
+      "port": 8083,
+      "health": "failed"
+    }
+  },
+  "successful_services": 0,
+  "total_attempted": 4
+}

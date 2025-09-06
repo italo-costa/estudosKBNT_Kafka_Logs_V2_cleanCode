@@ -20,6 +20,8 @@ import org.apache.kafka.clients.admin.CreateTopicsResult;
 import org.apache.kafka.clients.admin.ListTopicsResult;
 import org.apache.kafka.clients.admin.NewTopic;
 
+@Slf4j
+@Component
 public class IndependentTopicConfiguration implements ApplicationRunner {
 
     private final KafkaAdmin kafkaAdmin;

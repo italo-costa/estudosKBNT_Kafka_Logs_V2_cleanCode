@@ -1,0 +1,226 @@
+{
+  "refactoring_metadata": {
+    "timestamp": "2025-09-06T20:05:53.594606",
+    "workspace_path": "C:\\workspace\\estudosKBNT_Kafka_Logs",
+    "refactoring_type": "clean_architecture_organization"
+  },
+  "architecture_layers": {
+    "01-presentation-layer": {
+      "description": "Interfaces de apresentação, documentação e relatórios",
+      "subdirs": [
+        "docs",
+        "reports",
+        "dashboards"
+      ],
+      "file_patterns": [
+        "*.md",
+        "*report*",
+        "*relatorio*",
+        "*README*",
+        "*dashboard*"
+      ]
+    },
+    "02-application-layer": {
+      "description": "Casos de uso, serviços de aplicação e orquestração",
+      "subdirs": [
+        "services",
+        "use-cases",
+        "orchestration"
+      ],
+      "file_patterns": [
+        "*application*",
+        "*service*",
+        "*orchestration*",
+        "*use-case*"
+      ]
+    },
+    "03-domain-layer": {
+      "description": "Entidades, regras de negócio e modelos de domínio",
+      "subdirs": [
+        "entities",
+        "value-objects",
+        "domain-services"
+      ],
+      "file_patterns": [
+        "*domain*",
+        "*entity*",
+        "*model*",
+        "*business*"
+      ]
+    },
+    "04-infrastructure-layer": {
+      "description": "Infraestrutura, configurações e integrações externas",
+      "subdirs": [
+        "docker",
+        "kubernetes",
+        "config",
+        "databases"
+      ],
+      "file_patterns": [
+        "docker*",
+        "kubernetes*",
+        "*.yml",
+        "*.yaml",
+        "*config*",
+        "*infrastructure*"
+      ]
+    },
+    "05-microservices": {
+      "description": "Implementação dos microserviços",
+      "subdirs": [
+        "api-gateway",
+        "log-services",
+        "stock-services",
+        "shared"
+      ],
+      "file_patterns": [
+        "*microservice*",
+        "*gateway*",
+        "*producer*",
+        "*consumer*"
+      ]
+    },
+    "06-deployment": {
+      "description": "Scripts de deployment e DevOps",
+      "subdirs": [
+        "scripts",
+        "automation",
+        "ci-cd"
+      ],
+      "file_patterns": [
+        "*deploy*",
+        "*startup*",
+        "*build*",
+        "*automation*"
+      ]
+    },
+    "07-testing": {
+      "description": "Testes, performance e qualidade",
+      "subdirs": [
+        "unit-tests",
+        "integration-tests",
+        "performance-tests",
+        "stress-tests"
+      ],
+      "file_patterns": [
+        "*test*",
+        "*performance*",
+        "*stress*",
+        "*mock*"
+      ]
+    },
+    "08-configuration": {
+      "description": "Configurações globais e ambiente",
+      "subdirs": [
+        "properties",
+        "ports",
+        "environment"
+      ],
+      "file_patterns": [
+        "*.properties",
+        "*config*",
+        "*port*",
+        "*environment*"
+      ]
+    },
+    "09-monitoring": {
+      "description": "Monitoramento, métricas e observabilidade",
+      "subdirs": [
+        "metrics",
+        "logs",
+        "prometheus",
+        "grafana"
+      ],
+      "file_patterns": [
+        "*metric*",
+        "*prometheus*",
+        "*monitoring*",
+        "*observability*"
+      ]
+    },
+    "10-tools-utilities": {
+      "description": "Ferramentas, utilitários e scripts auxiliares",
+      "subdirs": [
+        "scripts",
+        "generators",
+        "analyzers",
+        "cleaners"
+      ],
+      "file_patterns": [
+        "*.py",
+        "*.ps1",
+        "*tool*",
+        "*utility*",
+        "*helper*",
+        "*generator*"
+      ]
+    }
+  },
+  "moved_files": {
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\ANALISE_COMPARATIVA_EMPRESAS_ESCALABILIDADE.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\ANALISE_COMPARATIVA_EMPRESAS_ESCALABILIDADE.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\application-test.properties": "C:\\workspace\\estudosKBNT_Kafka_Logs\\07-testing\\unit-tests\\application-test.properties",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\comparativo_1k_vs_100k_performance.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\comparativo_1k_vs_100k_performance.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\configure-ports-and-run.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\08-configuration\\ports\\configure-ports-and-run.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\configure-standard-ports.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\08-configuration\\ports\\configure-standard-ports.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\CORRECOES_DIAGRAMA_RELATORIO.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\CORRECOES_DIAGRAMA_RELATORIO.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\DEPLOYMENT_ARCHITECTURE.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\DEPLOYMENT_ARCHITECTURE.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\DEPLOYMENT_SEQUENCE.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\DEPLOYMENT_SEQUENCE.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\DEPLOYMENT_STRATEGIES.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\DEPLOYMENT_STRATEGIES.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\docker-compose-application.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\02-application-layer\\services\\docker-compose-application.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\docker-compose.free-tier.yml": "C:\\workspace\\estudosKBNT_Kafka_Logs\\04-infrastructure-layer\\docker\\docker-compose.free-tier.yml",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\docker-compose.infrastructure-only.yml": "C:\\workspace\\estudosKBNT_Kafka_Logs\\04-infrastructure-layer\\docker\\docker-compose.infrastructure-only.yml",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\docker-compose.scalable-simple.yml": "C:\\workspace\\estudosKBNT_Kafka_Logs\\04-infrastructure-layer\\docker\\docker-compose.scalable-simple.yml",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\docker-compose.scalable.yml": "C:\\workspace\\estudosKBNT_Kafka_Logs\\04-infrastructure-layer\\docker\\docker-compose.scalable.yml",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\docker_execution_report_20250906_164608.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\reports\\docker_execution_report_20250906_164608.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\docker_execution_report_20250906_164856.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\reports\\docker_execution_report_20250906_164856.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\docker_execution_report_20250906_173047.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\reports\\docker_execution_report_20250906_173047.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\docker_execution_report_20250906_173405.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\reports\\docker_execution_report_20250906_173405.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\docker_execution_report_20250906_173556.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\reports\\docker_execution_report_20250906_173556.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\docker_execution_report_20250906_174056.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\reports\\docker_execution_report_20250906_174056.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\docker_execution_report_20250906_175722.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\reports\\docker_execution_report_20250906_175722.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\docker_execution_report_20250906_181244.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\reports\\docker_execution_report_20250906_181244.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\docker_execution_report_20250906_182850.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\reports\\docker_execution_report_20250906_182850.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\execution_report_20250906_163056.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\reports\\execution_report_20250906_163056.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\final_cleanup.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\10-tools-utilities\\scripts\\final_cleanup.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\FINAL_PORT_CONFIGURATION.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\08-configuration\\ports\\FINAL_PORT_CONFIGURATION.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\FINAL_PORT_CONFIGURATION_SUMMARY.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\FINAL_PORT_CONFIGURATION_SUMMARY.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\final_refactoring_report.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\reports\\final_refactoring_report.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\import_checker.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\08-configuration\\ports\\import_checker.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\layered-build-startup.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\02-application-layer\\orchestration\\layered-build-startup.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\LAYERED_BUILD_FINAL_REPORT.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\LAYERED_BUILD_FINAL_REPORT.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\layered_build_report_20250904_114018.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\reports\\layered_build_report_20250904_114018.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\mock-services-test.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\07-testing\\unit-tests\\mock-services-test.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\performance-test-1000-requests.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\07-testing\\performance-tests\\performance-test-1000-requests.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\performance-test-powershell.ps1": "C:\\workspace\\estudosKBNT_Kafka_Logs\\07-testing\\performance-tests\\performance-test-powershell.ps1",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\port_configuration_report.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\reports\\port_configuration_report.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\port_configuration_report.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\port_configuration_report.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\PORT_REFERENCE.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\PORT_REFERENCE.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\prometheus-metrics-export.txt": "C:\\workspace\\estudosKBNT_Kafka_Logs\\04-infrastructure-layer\\docker\\prometheus-metrics-export.txt",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\README.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\README.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\REFACTORING_ARCHITECTURE_LAYERS.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\REFACTORING_ARCHITECTURE_LAYERS.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\REFACTORING_COMPLETE_FINAL_STATUS.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\REFACTORING_COMPLETE_FINAL_STATUS.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\RELATORIO-ESCALABILIDADE-COMPLETO.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\RELATORIO-ESCALABILIDADE-COMPLETO.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\RELATORIO_FINAL_100K_REQUISICOES.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\RELATORIO_FINAL_100K_REQUISICOES.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\RELATORIO_STRESS_TEST_VISUAL.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\RELATORIO_STRESS_TEST_VISUAL.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\resources_comparison_chart_20250903_235758.png": "C:\\workspace\\estudosKBNT_Kafka_Logs\\10-tools-utilities\\scripts\\resources_comparison_chart_20250903_235758.png",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\run-10k-test.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\07-testing\\unit-tests\\run-10k-test.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\setup-development-environment.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\02-application-layer\\services\\setup-development-environment.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\simple-app-test.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\07-testing\\unit-tests\\simple-app-test.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\simplified-stress-test.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\07-testing\\performance-tests\\simplified-stress-test.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\start-real-application.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\02-application-layer\\services\\start-real-application.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\startup-microservices.ps1": "C:\\workspace\\estudosKBNT_Kafka_Logs\\10-tools-utilities\\scripts\\startup-microservices.ps1",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\stress-test-with-graphics.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\07-testing\\performance-tests\\stress-test-with-graphics.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\stress_test_comprehensive_report_20250906_194920.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\reports\\stress_test_comprehensive_report_20250906_194920.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\temp_stock.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\03-domain-layer\\entities\\temp_stock.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\view-stress-test-results.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\07-testing\\performance-tests\\view-stress-test-results.py",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\WORKFLOW_COMPLETO_TIMING_ANALYSIS.md": "C:\\workspace\\estudosKBNT_Kafka_Logs\\01-presentation-layer\\docs\\WORKFLOW_COMPLETO_TIMING_ANALYSIS.md",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\workspace_organization_index.json": "C:\\workspace\\estudosKBNT_Kafka_Logs\\10-tools-utilities\\scripts\\workspace_organization_index.json",
+    "C:\\workspace\\estudosKBNT_Kafka_Logs\\workspace_refactorer.py": "C:\\workspace\\estudosKBNT_Kafka_Logs\\10-tools-utilities\\scripts\\workspace_refactorer.py"
+  },
+  "errors": [],
+  "statistics": {
+    "total_files_moved": 59,
+    "errors_count": 0,
+    "layers_created": 10
+  }
+}
