@@ -1,7 +1,10 @@
 {
   "timestamp": "2024-12-19T21:30:00",
   "analysis_type": "Comprehensive Architecture Comparison",
-  "branches_compared": ["master", "refactoring-clean-architecture-v2.1"],
+  "branches_compared": [
+    "master",
+    "refactoring-clean-architecture-v2.1"
+  ],
   "comparison_results": {
     "architectural_structure": {
       "category": "Estrutura Arquitetural",
