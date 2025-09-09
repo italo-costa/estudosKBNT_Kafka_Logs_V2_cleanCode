@@ -4,36 +4,24 @@
 
 ```mermaid
 flowchart TD
-    %% Estilos
-    classDef frontend fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
-    classDef api fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
-    classDef business fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
-    classDef data fill:#fce4ec,stroke:#ad1457,stroke-width:2px
-    classDef messaging fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
-    classDef infrastructure fill:#e0f2f1,stroke:#00695c,stroke-width:2px
-
-    %% Cliente e Interface
     subgraph CLIENT ["👤 Client Layer"]
         POSTMAN["📱 Postman Client<br/>HTTP Testing Tool<br/>172.30.221.62:8084"]
         SWAGGER_UI["📚 Swagger UI<br/>API Documentation<br/>/swagger-ui.html"]
         FUTURE_WEB["🌐 Future Web App<br/>React/Angular/Vue"]
     end
 
-    %% API Gateway e Controllers
     subgraph API_LAYER ["🌐 API Layer - Spring Boot"]
         REST_CONTROLLER["🎯 Virtual Stock Controller<br/>@RestController<br/>@RequestMapping('/api/v1/virtual-stock')<br/>Port: 8084"]
         EXCEPTION_HANDLER["⚠️ Global Exception Handler<br/>@ControllerAdvice<br/>Error Response Standard"]
         VALIDATION["✅ Bean Validation<br/>@Valid, @NotNull<br/>DTO Validation"]
     end
 
-    %% Camada de Aplicação
     subgraph APPLICATION_LAYER ["⚙️ Application Layer"]
         STOCK_APP_SERVICE["📦 StockApplicationService<br/>@Service<br/>Use Case Implementation"]
         DTO_MAPPING["🔄 DTO Mapping<br/>Request → Domain<br/>Domain → Response"]
         TRANSACTION_MGMT["🔄 Transaction Management<br/>@Transactional<br/>ACID Properties"]
     end
 
-    %% Camada de Domínio
     subgraph DOMAIN_LAYER ["🏛️ Domain Layer - Core Business"]
         STOCK_ENTITY["📋 Stock Entity<br/>@Entity<br/>Domain Model<br/>Business Logic"]
         STOCK_REPOSITORY_INTERFACE["📚 StockRepository<br/>Interface<br/>Domain Contract"]
@@ -41,7 +29,6 @@ flowchart TD
         DOMAIN_SERVICES["⚖️ Domain Services<br/>Complex Business Rules<br/>Multi-Entity Operations"]
     end
 
-    %% Camada de Infraestrutura
     subgraph INFRASTRUCTURE_LAYER ["🔧 Infrastructure Layer"]
         JPA_REPOSITORY["🗄️ JPA Repository Impl<br/>@Repository<br/>Spring Data JPA<br/>CRUD Operations"]
         DATABASE_CONFIG["⚙️ Database Configuration<br/>@Configuration<br/>DataSource, EntityManager"]
@@ -49,14 +36,12 @@ flowchart TD
         KAFKA_CONSUMER_IMPL["📥 Kafka Consumer<br/>@KafkaListener<br/>Event Processing"]
     end
 
-    %% Dados e Persistência
     subgraph DATA_LAYER ["🗄️ Data Layer"]
         POSTGRESQL["🐘 PostgreSQL 15<br/>Database: virtualstock<br/>Port: 5432<br/>ACID Compliance"]
         JPA_HIBERNATE["🗃️ JPA/Hibernate<br/>ORM Framework<br/>Entity Mapping<br/>Query Generation"]
         CONNECTION_POOL["🏊 Connection Pool<br/>HikariCP<br/>Performance Optimization"]
     end
 
-    %% Mensageria
     subgraph MESSAGING_LAYER ["📨 Messaging Layer"]
         KAFKA_CLUSTER["🔄 Apache Kafka<br/>Message Broker<br/>Port: 9092<br/>Event Streaming"]
         ZOOKEEPER["🏗️ Apache Zookeeper<br/>Cluster Coordination<br/>Port: 2181<br/>Metadata Management"]
@@ -64,7 +49,6 @@ flowchart TD
         KAFKA_UI_TOOL["🎛️ Kafka UI<br/>Management Interface<br/>Port: 8090<br/>Topic Monitoring"]
     end
 
-    %% Infraestrutura Docker
     subgraph DOCKER_INFRASTRUCTURE ["🐳 Docker Infrastructure"]
         DOCKER_COMPOSE["📋 Docker Compose<br/>docker-compose.simple.yml<br/>Service Orchestration"]
         DOCKER_NETWORK["🌐 Docker Network<br/>kbnt-network<br/>Container Communication"]
@@ -72,7 +56,6 @@ flowchart TD
         VOLUME_MOUNTS["💾 Volume Mounts<br/>Data Persistence<br/>Configuration Files"]
     end
 
-    %% Fluxo de dados principais
     POSTMAN -->|HTTP POST/GET/PUT| REST_CONTROLLER
     REST_CONTROLLER -->|DTO Validation| VALIDATION
     VALIDATION -->|Validated Data| STOCK_APP_SERVICE
@@ -82,29 +65,18 @@ flowchart TD
     JPA_REPOSITORY -->|SQL Operations| JPA_HIBERNATE
     JPA_HIBERNATE -->|JDBC| POSTGRESQL
 
-    %% Fluxo de eventos
     STOCK_APP_SERVICE -->|Domain Events| KAFKA_PRODUCER_IMPL
     KAFKA_PRODUCER_IMPL -->|Publish Messages| KAFKA_CLUSTER
     KAFKA_CLUSTER -->|Consume Messages| KAFKA_CONSUMER_IMPL
     KAFKA_CONSUMER_IMPL -->|Process Events| STOCK_APP_SERVICE
 
-    %% Fluxo de configuração
     DOCKER_COMPOSE -->|Orchestrates| POSTGRESQL
     DOCKER_COMPOSE -->|Orchestrates| KAFKA_CLUSTER
     DOCKER_COMPOSE -->|Orchestrates| REST_CONTROLLER
     WSL2_BRIDGE -->|Network Bridge| DOCKER_NETWORK
 
-    %% Monitoramento e Documentação
     REST_CONTROLLER -->|API Docs| SWAGGER_UI
     KAFKA_CLUSTER -->|Management| KAFKA_UI_TOOL
-
-    %% Aplicação de estilos
-    class CLIENT frontend
-    class API_LAYER api
-    class APPLICATION_LAYER,DOMAIN_LAYER business
-    class INFRASTRUCTURE_LAYER,DATA_LAYER data
-    class MESSAGING_LAYER messaging
-    class DOCKER_INFRASTRUCTURE infrastructure
 ```
 
 ## 🏗️ Stack Tecnológico Detalhado
@@ -188,11 +160,6 @@ journey
 
 ```mermaid
 graph LR
-    %% Estilos
-    classDef syncStyle fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
-    classDef asyncStyle fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
-    classDef eventStyle fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
-
     subgraph SYNC_INTEGRATION ["🔄 Synchronous Integration"]
         HTTP_API["🌐 HTTP REST API<br/>Request-Response<br/>Immediate Feedback"]
         DATABASE_CALL["🗄️ Database Calls<br/>JPA Repository<br/>ACID Transactions"]
@@ -211,16 +178,10 @@ graph LR
         AUDIT_EVENTS["📋 Audit Events<br/>Change Tracking<br/>Compliance Logging"]
     end
 
-    %% Fluxos
     HTTP_API -->|Triggers| DOMAIN_EVENTS
     DATABASE_CALL -->|Success| KAFKA_EVENTS
     DOMAIN_EVENTS -->|Publishes| INTEGRATION_EVENTS
     INTEGRATION_EVENTS -->|Archives| AUDIT_EVENTS
-
-    %% Estilos
-    class SYNC_INTEGRATION syncStyle
-    class ASYNC_INTEGRATION asyncStyle
-    class EVENT_PATTERNS eventStyle
 ```
 
 ## 📋 Configurações de Ambiente
