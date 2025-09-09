@@ -1,3 +1,6 @@
+# =============================================================================
+# API GATEWAY CONFIGURATION - DEFAULT/DOCKER ENVIRONMENT
+# =============================================================================
 server:
   port: 8080
 
@@ -9,34 +12,49 @@ spring:
   cloud:
     gateway:
       routes:
+        # Virtual Stock Service Route
         - id: virtual-stock-service
           uri: http://virtual-stock-service:8080
           predicates:
             - Path=/api/v1/virtual-stock/**
           filters:
             - StripPrefix=0
+            - AddRequestHeader=X-Gateway-Source, api-gateway
+            - AddRequestHeader=X-Environment, docker
+            
+        # Log Producer Service Route
         - id: log-producer-service
           uri: http://log-producer-service:8080
           predicates:
             - Path=/api/v1/logs/**
           filters:
             - StripPrefix=0
+            - AddRequestHeader=X-Gateway-Source, api-gateway
+            - AddRequestHeader=X-Environment, docker
+            
+        # KBNT Log Service Route
         - id: kbnt-log-service
           uri: http://kbnt-log-service:8081
           predicates:
             - Path=/api/v1/kbnt-logs/**
           filters:
             - StripPrefix=0
+            - AddRequestHeader=X-Gateway-Source, api-gateway
+            - AddRequestHeader=X-Environment, docker
+            
+      # Global CORS Configuration
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "*"
+            allowedOrigins: 
+              - "*"
             allowedMethods:
               - GET
               - POST
               - PUT
               - DELETE
               - OPTIONS
+              - PATCH
             allowedHeaders: "*"
             allowCredentials: false
 
