@@ -31,6 +31,14 @@ Sistema de microserviços para gerenciamento de estoque virtual com **arquitetur
 - 🏗️ [`DEPLOYMENT_ARCHITECTURE.md`](DEPLOYMENT_ARCHITECTURE.md) - Arquitetura enterprise detalhada
 - 📈 [`RELATORIO-ESCALABILIDADE-COMPLETO.md`](RELATORIO-ESCALABILIDADE-COMPLETO.md) - Relatório executivo
 
+## 🎨 **DIAGRAMAS DE ARQUITETURA**
+
+📊 **Visualizações Técnicas Detalhadas:**
+- 🏗️ [`ARCHITECTURE_DIAGRAM.md`](ARCHITECTURE_DIAGRAM.md) - **Clean Architecture & Hexagonal** com fluxos completos
+- 🔄 [`TECHNOLOGY_FLOW_DIAGRAM.md`](TECHNOLOGY_FLOW_DIAGRAM.md) - **Stack Tecnológico** e padrões de integração
+- 🌐 **Diagramas Mermaid** renderizados diretamente no GitHub
+- 📋 **Sequências de dados**, **infraestrutura Docker** e **monitoramento**
+
 ---
 
 ## 🚀 **QUICK START - ESCOLHA SUA ESTRATÉGIA**
