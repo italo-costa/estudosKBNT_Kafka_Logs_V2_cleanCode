@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>KBNT Stock API Mock</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        .endpoint {
+            background: #f5f5f5;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>KBNT Stock Service - Test Mock</h1>
+    <p><strong>Status:</strong> ✅ Running</p>
+    <p><strong>Timestamp:</strong> <span id="timestamp"></span></p>
+
+    <h2>Available Endpoints:</h2>
+    <div class="endpoint">
+        <strong>GET /api/stocks</strong> - List all stocks
+    </div>
+    <div class="endpoint">
+        <strong>GET /api/stocks/{id}</strong> - Get stock by ID
+    </div>
+    <div class="endpoint">
+        <strong>POST /api/stocks</strong> - Create new stock
+    </div>
+
+    <script>
+        document.getElementById('timestamp').textContent = new Date().toISOString();
+
+        // Simulate API responses
+        if (window.location.pathname.includes('/api/stocks')) {
+            document.body.innerHTML = JSON.stringify({
+                "stocks": [
+                    { "id": 1, "symbol": "KBNT", "price": 150.00, "timestamp": new Date().toISOString() },
+                    { "id": 2, "symbol": "TEST", "price": 75.50, "timestamp": new Date().toISOString() }
+                ]
+            }, null, 2);
+        }
+    </script>
+</body>
+
+</html>
