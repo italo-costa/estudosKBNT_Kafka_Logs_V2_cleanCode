@@ -1,0 +1,84 @@
+{
+  "test_timestamp": "2025-09-10T22:01:03.240888",
+  "environment": {
+    "base_url": "http://172.30.221.62:8084",
+    "test_suite_version": "2.0.0-100K",
+    "system_info": {
+      "cpu_count": 32,
+      "memory_total_gb": 15.63,
+      "python_version": "3.13.3"
+    }
+  },
+  "tests": {
+    "load_test_100k": {
+      "test_type": "high_load_test_100k",
+      "configuration": {
+        "total_requests": 100000,
+        "concurrent_limit": 200,
+        "batch_size": 1000
+      },
+      "execution": {
+        "total_duration": 65.607,
+        "requests_per_second": 1524.23
+      },
+      "results": {
+        "total_requests": 100000,
+        "successful_requests": 100000,
+        "failed_requests": 0,
+        "success_rate": 100.0
+      },
+      "performance_metrics": {
+        "avg_response_time": "N/A (batch processing)",
+        "total_throughput": 1524.23,
+        "memory_efficient": true
+      }
+    },
+    "progressive_stress_test": {
+      "test_type": "progressive_stress_test",
+      "configuration": {
+        "max_users_tested": 500,
+        "step_size": 25,
+        "duration_per_step": 20
+      },
+      "stress_levels": [
+        {
+          "concurrent_users": 25,
+          "duration": 20.01,
+          "total_requests": 11175,
+          "successful_requests": 0,
+          "failed_requests": 11175,
+          "success_rate": 0.0,
+          "requests_per_second": 558.4
+        }
+      ],
+      "breaking_point": {
+        "users": 25,
+        "success_rate": 0.0,
+        "requests_per_second": 558.3991819180793
+      }
+    },
+    "extreme_spike_test": {
+      "test_type": "high_load_test_100k",
+      "configuration": {
+        "total_requests": 50000,
+        "concurrent_limit": 500,
+        "batch_size": 2000
+      },
+      "execution": {
+        "total_duration": 29.134,
+        "requests_per_second": 1716.23
+      },
+      "results": {
+        "total_requests": 50000,
+        "successful_requests": 0,
+        "failed_requests": 50000,
+        "success_rate": 0.0
+      },
+      "performance_metrics": {
+        "avg_response_time": "N/A (batch processing)",
+        "total_throughput": 1716.23,
+        "memory_efficient": true
+      }
+    }
+  }
+}
