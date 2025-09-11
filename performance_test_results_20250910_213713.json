@@ -1,0 +1,164 @@
+{
+  "test_timestamp": "2025-09-10T21:36:32.332541",
+  "environment": {
+    "base_url": "http://172.30.221.62:8084",
+    "test_suite_version": "1.0.0"
+  },
+  "tests": {
+    "load_test": {
+      "test_type": "load_test",
+      "configuration": {
+        "concurrent_users": 20,
+        "requests_per_user": 10,
+        "total_requests": 200
+      },
+      "execution": {
+        "test_duration": 0.292,
+        "requests_per_second": 684.18
+      },
+      "results": {
+        "total_requests": 200,
+        "successful_requests": 200,
+        "failed_requests": 0,
+        "error_requests": 0,
+        "success_rate": 100.0
+      },
+      "performance_metrics": {
+        "avg_response_time": 0.185,
+        "min_response_time": 0.033,
+        "max_response_time": 0.279,
+        "p50_response_time": 0.195,
+        "p95_response_time": 0.275,
+        "p99_response_time": 0.277
+      }
+    },
+    "stress_test": {
+      "test_type": "stress_test",
+      "configuration": {
+        "max_users_tested": 50,
+        "ramp_up_time": 30
+      },
+      "stress_levels": [
+        {
+          "concurrent_users": 5,
+          "success_rate": 100.0,
+          "avg_response_time": 0.021,
+          "requests_per_second": 934.97
+        },
+        {
+          "concurrent_users": 10,
+          "success_rate": 100.0,
+          "avg_response_time": 0.038,
+          "requests_per_second": 943.41
+        },
+        {
+          "concurrent_users": 15,
+          "success_rate": 100.0,
+          "avg_response_time": 0.048,
+          "requests_per_second": 1061.25
+        },
+        {
+          "concurrent_users": 20,
+          "success_rate": 100.0,
+          "avg_response_time": 0.06,
+          "requests_per_second": 1054.26
+        },
+        {
+          "concurrent_users": 25,
+          "success_rate": 100.0,
+          "avg_response_time": 0.07,
+          "requests_per_second": 1081.39
+        },
+        {
+          "concurrent_users": 30,
+          "success_rate": 100.0,
+          "avg_response_time": 0.071,
+          "requests_per_second": 1274.58
+        },
+        {
+          "concurrent_users": 35,
+          "success_rate": 100.0,
+          "avg_response_time": 0.08,
+          "requests_per_second": 1295.29
+        },
+        {
+          "concurrent_users": 40,
+          "success_rate": 100.0,
+          "avg_response_time": 0.083,
+          "requests_per_second": 1428.71
+        },
+        {
+          "concurrent_users": 45,
+          "success_rate": 100.0,
+          "avg_response_time": 0.078,
+          "requests_per_second": 1629.27
+        },
+        {
+          "concurrent_users": 50,
+          "success_rate": 100.0,
+          "avg_response_time": 0.095,
+          "requests_per_second": 1438.49
+        }
+      ],
+      "breaking_point": {
+        "users": 50,
+        "success_rate": 100.0,
+        "avg_response_time": 0.095
+      }
+    },
+    "spike_test": {
+      "test_type": "spike_test",
+      "configuration": {
+        "normal_load": 15,
+        "spike_load": 75,
+        "target_spike_duration": 10,
+        "actual_spike_duration": 0.17
+      },
+      "phases": {
+        "normal_baseline": {
+          "avg_response_time": 0.035,
+          "min_response_time": 0.018,
+          "max_response_time": 0.05,
+          "p50_response_time": 0.034,
+          "p95_response_time": 0.048,
+          "p99_response_time": 0.049
+        },
+        "spike_load": {
+          "avg_response_time": 0.091,
+          "min_response_time": 0.029,
+          "max_response_time": 0.148,
+          "p50_response_time": 0.09,
+          "p95_response_time": 0.145,
+          "p99_response_time": 0.148
+        },
+        "recovery": {
+          "avg_response_time": 0.033,
+          "min_response_time": 0.011,
+          "max_response_time": 0.051,
+          "p50_response_time": 0.033,
+          "p95_response_time": 0.047,
+          "p99_response_time": 0.049
+        }
+      },
+      "spike_impact": {
+        "performance_degradation": 160.0,
+        "recovery_successful": true
+      }
+    },
+    "volume_test": {
+      "test_type": "volume_test",
+      "configuration": {
+        "batch_size": 200
+      },
+      "execution": {
+        "test_duration": 0.121,
+        "throughput": 1659.44
+      },
+      "results": {
+        "total_requests": 200,
+        "successful_requests": 200,
+        "success_rate": 100.0
+      }
+    }
+  }
+}
