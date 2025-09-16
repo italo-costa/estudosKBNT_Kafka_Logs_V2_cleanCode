@@ -7,7 +7,7 @@
 
 # Server Configuration - Optimized for high concurrency
 server:
-  port: 8080
+  port: 8084
   tomcat:
     # Thread pool tuning for high throughput
     threads:

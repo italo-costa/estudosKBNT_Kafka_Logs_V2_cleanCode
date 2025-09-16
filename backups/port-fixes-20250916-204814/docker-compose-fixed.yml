@@ -1,0 +1,125 @@
+version: '3.8'
+
+networks:
+  kbnt-network:
+    driver: bridge
+
+services:
+  # PostgreSQL Database
+  postgres-db:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: virtualstock
+      POSTGRES_USER: kbnt
+      POSTGRES_PASSWORD: kbnt123
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - kbnt-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kbnt -d virtualstock"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Zookeeper
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - kbnt-network
+
+  # Kafka
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    networks:
+      - kbnt-network
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+  # Virtual Stock Service
+  virtual-stock-service:
+    build:
+      context: ./microservices/virtual-stock-service
+      dockerfile: Dockerfile
+    container_name: virtual-stock-service
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    ports:
+      - "8084:8084"
+    networks:
+      - kbnt-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/virtualstock
+      - SPRING_DATASOURCE_USERNAME=kbnt
+      - SPRING_DATASOURCE_PASSWORD=kbnt123
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8084/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Log Producer Service
+  log-producer-service:
+    build:
+      context: ./microservices/log-producer-service
+      dockerfile: Dockerfile
+    container_name: log-producer-service
+    depends_on:
+      kafka:
+        condition: service_started
+    ports:
+      - "8081:8080"
+    networks:
+      - kbnt-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+    restart: unless-stopped
+
+  # Log Consumer Service  
+  log-consumer-service:
+    build:
+      context: ./microservices/log-consumer-service
+      dockerfile: Dockerfile
+    container_name: log-consumer-service
+    depends_on:
+      kafka:
+        condition: service_started
+    ports:
+      - "8082:8080"
+    networks:
+      - kbnt-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

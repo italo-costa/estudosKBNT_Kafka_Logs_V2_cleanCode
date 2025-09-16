@@ -2,7 +2,7 @@
 # API GATEWAY CONFIGURATION - DEFAULT/DOCKER ENVIRONMENT
 # =============================================================================
 server:
-  port: 8080
+  port: 8084
 
 spring:
   application:

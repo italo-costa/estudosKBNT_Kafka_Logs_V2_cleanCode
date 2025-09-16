@@ -1,0 +1,100 @@
+version: '3.8'
+
+networks:
+  kbnt-safe-network:
+    driver: bridge
+
+services:
+  # PostgreSQL Database - Porta customizada para evitar conflitos
+  postgres-db-safe:
+    image: postgres:15-alpine
+    container_name: postgres-db-safe
+    environment:
+      POSTGRES_DB: virtualstock
+      POSTGRES_USER: kbnt_user
+      POSTGRES_PASSWORD: kbnt_password
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "15432:5432"  # Porta externa customizada
+    volumes:
+      - postgres_data_safe:/var/lib/postgresql/data
+    networks:
+      - kbnt-safe-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kbnt_user -d virtualstock"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Zookeeper - Porta customizada
+  zookeeper-safe:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: zookeeper-safe
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "12181:2181"  # Porta externa customizada
+    networks:
+      - kbnt-safe-network
+    restart: unless-stopped
+
+  # Kafka - Porta customizada  
+  kafka-safe:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka-safe
+    depends_on:
+      - zookeeper-safe
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-safe:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:19092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    ports:
+      - "19092:9092"  # Porta externa customizada
+    networks:
+      - kbnt-safe-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Virtual Stock Service - Porta customizada
+  virtual-stock-service-safe:
+    build: 
+      context: ./virtual-stock-service
+      dockerfile: Dockerfile
+    container_name: virtual-stock-service-safe
+    depends_on:
+      - postgres-db-safe
+      - kafka-safe
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db-safe:5432/virtualstock
+      SPRING_DATASOURCE_USERNAME: kbnt_user
+      SPRING_DATASOURCE_PASSWORD: kbnt_password
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-safe:9092
+      SERVER_PORT: 8080
+      MANAGEMENT_SERVER_PORT: 9080
+    ports:
+      - "18084:8080"   # API port - customizada
+      - "19084:9080"   # Management port - customizada
+    networks:
+      - kbnt-safe-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8084/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  postgres_data_safe:
+    driver: local

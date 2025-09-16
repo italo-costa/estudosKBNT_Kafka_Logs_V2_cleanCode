@@ -1,0 +1,366 @@
+{
+  "info": {
+    "name": "KBNT Virtual Stock Service API",
+    "description": "Complete API collection for Virtual Stock Service - Microservices Architecture with Clean Code principles",
+    "version": "2.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://172.30.221.62:8080",
+      "type": "string"
+    },
+    {
+      "key": "apiVersion",
+      "value": "v1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Checks",
+      "item": [
+        {
+          "name": "Actuator Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            },
+            "description": "Spring Boot Actuator health check endpoint"
+          }
+        },
+        {
+          "name": "Service Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/virtual-stock/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "{{apiVersion}}",
+                "virtual-stock",
+                "health"
+              ]
+            },
+            "description": "Custom service health check endpoint"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stock Management",
+      "item": [
+        {
+          "name": "Create Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PROD-001\",\n  \"symbol\": \"AAPL\",\n  \"productName\": \"Apple Inc. Stock\",\n  \"quantity\": 100,\n  \"unitPrice\": 150.75,\n  \"createdBy\": \"admin\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/virtual-stock/stocks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "{{apiVersion}}",
+                "virtual-stock",
+                "stocks"
+              ]
+            },
+            "description": "Create a new stock entry"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Stocks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/virtual-stock/stocks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "{{apiVersion}}",
+                "virtual-stock",
+                "stocks"
+              ]
+            },
+            "description": "Retrieve all stocks in the system"
+          }
+        },
+        {
+          "name": "Get Stock by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/virtual-stock/stocks/STOCK-001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "{{apiVersion}}",
+                "virtual-stock",
+                "stocks",
+                "STOCK-001"
+              ]
+            },
+            "description": "Retrieve a specific stock by its ID"
+          }
+        },
+        {
+          "name": "Update Stock Price",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newPrice\": 155.50,\n  \"updatedBy\": \"trader\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/virtual-stock/stocks/STOCK-001/price",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "{{apiVersion}}",
+                "virtual-stock",
+                "stocks",
+                "STOCK-001",
+                "price"
+              ]
+            },
+            "description": "Update the price of a specific stock"
+          }
+        },
+        {
+          "name": "Update Stock Quantity",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newQuantity\": 75,\n  \"updatedBy\": \"inventory_manager\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/virtual-stock/stocks/STOCK-001/quantity",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "{{apiVersion}}",
+                "virtual-stock",
+                "stocks",
+                "STOCK-001",
+                "quantity"
+              ]
+            },
+            "description": "Update the quantity of a specific stock"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sample Test Data",
+      "item": [
+        {
+          "name": "Create Apple Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"AAPL-STOCK\",\n  \"symbol\": \"AAPL\",\n  \"productName\": \"Apple Inc. Common Stock\",\n  \"quantity\": 500,\n  \"unitPrice\": 175.25,\n  \"createdBy\": \"system\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/virtual-stock/stocks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "{{apiVersion}}",
+                "virtual-stock",
+                "stocks"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Microsoft Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"MSFT-STOCK\",\n  \"symbol\": \"MSFT\",\n  \"productName\": \"Microsoft Corporation\",\n  \"quantity\": 300,\n  \"unitPrice\": 332.50,\n  \"createdBy\": \"system\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/virtual-stock/stocks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "{{apiVersion}}",
+                "virtual-stock",
+                "stocks"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Google Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"GOOGL-STOCK\",\n  \"symbol\": \"GOOGL\",\n  \"productName\": \"Alphabet Inc. Class A\",\n  \"quantity\": 250,\n  \"unitPrice\": 125.75,\n  \"createdBy\": \"system\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/{{apiVersion}}/virtual-stock/stocks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "{{apiVersion}}",
+                "virtual-stock",
+                "stocks"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Service Information",
+      "item": [
+        {
+          "name": "Application Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/info",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "info"
+              ]
+            },
+            "description": "Get application information"
+          }
+        },
+        {
+          "name": "Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/metrics",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "metrics"
+              ]
+            },
+            "description": "Get application metrics"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Log request details",
+          "console.log('Request URL: ' + request.url);",
+          "console.log('Request Method: ' + request.method);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Basic response validation",
+          "pm.test('Status code is success', function () {",
+          "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+          "});",
+          "",
+          "pm.test('Response time is less than 5000ms', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});",
+          "",
+          "// Log response details",
+          "console.log('Response Status: ' + pm.response.status);",
+          "console.log('Response Time: ' + pm.response.responseTime + 'ms');"
+        ]
+      }
+    }
+  ]
+}

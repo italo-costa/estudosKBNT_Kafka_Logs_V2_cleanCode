@@ -1,0 +1,134 @@
+# =============================================================================
+# Docker Configuration - Virtual Stock Service (Timeout Optimized)
+# =============================================================================
+
+server:
+  port: 8084
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+  error:
+    include-message: always
+    include-binding-errors: always
+  # Configurações de timeout e performance para Tomcat
+  tomcat:
+    connection-timeout: 60000
+    keep-alive-timeout: 60000
+    max-keep-alive-requests: 100
+    threads:
+      max: 200
+      min-spare: 10
+    accept-count: 100
+    max-connections: 8192
+
+spring:
+  application:
+    name: virtual-stock-service
+    
+  # PostgreSQL Database Configuration for Docker
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://postgres:5432/virtualstock}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
+      validation-timeout: 5000
+      initialization-fail-timeout: -1
+      
+  # JPA Configuration for PostgreSQL
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: false
+        use_sql_comments: false
+        generate_statistics: false
+        session:
+          events:
+            log:
+              LOG_QUERIES_SLOWER_THAN_MS: 0
+        jdbc:
+          batch_size: 20
+        
+  # Jackson Configuration
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+      fail-on-empty-beans: false
+    deserialization:
+      fail-on-unknown-properties: false
+      accept-empty-string-as-null-object: true
+    default-property-inclusion: non_null
+
+# Logging Configuration
+logging:
+  level:
+    com.kbnt.virtualstock: INFO
+    org.springframework.kafka: WARN
+    org.apache.kafka: WARN
+    org.hibernate.SQL: ERROR
+    org.hibernate.type: ERROR
+    org.springframework.boot.actuator: INFO
+    root: INFO
+    
+# Business Configuration
+business:
+  stock:
+    default-quantity: 100
+    min-reservation-percentage: 10
+    max-reservation-percentage: 80
+    
+  performance:
+    async-processing: true
+    batch-size: 100
+
+# Management and Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,loggers
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      cache:
+        time-to-live: 10s
+    metrics:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5,0.9,0.95,0.99
+  server:
+    port: 8084
+    
+# OpenAPI Documentation
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    doc-expansion: none
+  packages-to-scan: com.kbnt.virtualstock.adapter.in.web
+  paths-to-match: /api/**

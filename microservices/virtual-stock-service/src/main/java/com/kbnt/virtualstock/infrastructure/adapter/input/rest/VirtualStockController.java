@@ -1,246 +1,274 @@
 package com.kbnt.virtualstock.infrastructure.adapter.input.rest;
 
-import com.kbnt.virtualstock.domain.model.Stock;
 import com.kbnt.virtualstock.domain.port.input.StockManagementUseCase;
-import com.kbnt.virtualstock.infrastructure.config.EnhancedLoggingConfig;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import com.kbnt.virtualstock.domain.port.input.StockManagementUseCase.*;
+import com.kbnt.virtualstock.domain.model.Stock;
+import com.kbnt.virtualstock.infrastructure.adapter.input.rest.dto.ApiResponse;
+import com.kbnt.virtualstock.infrastructure.adapter.input.rest.dto.CreateStockRequest;
+import com.kbnt.virtualstock.infrastructure.adapter.input.rest.dto.UpdatePriceRequest;
+import com.kbnt.virtualstock.infrastructure.adapter.input.rest.dto.UpdateQuantityRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
- * Virtual Stock REST Controller
+ * REST Controller for Virtual Stock Service.
  * 
- * REST adapter that exposes stock management operations via HTTP APIs.
- * Implements hexagonal architecture input adapter pattern.
+ * Provides endpoints for complete stock management operations.
+ * Following Clean Architecture principles with proper error handling.
  */
 @RestController
 @RequestMapping("/api/v1/virtual-stock")
-@RequiredArgsConstructor
-@Slf4j
+@CrossOrigin(origins = "*")
 public class VirtualStockController {
-    
+
+    private static final Logger logger = LoggerFactory.getLogger(VirtualStockController.class);
+
     private final StockManagementUseCase stockManagementUseCase;
-    
+
+    @Autowired
+    public VirtualStockController(StockManagementUseCase stockManagementUseCase) {
+        this.stockManagementUseCase = stockManagementUseCase;
+    }
+
     /**
-     * Create new stock item
+     * Create a new stock item.
      */
     @PostMapping("/stocks")
-    public ResponseEntity<ApiResponse<StockResponse>> createStock(@Valid @RequestBody CreateStockRequest request) {
+    public ResponseEntity<ApiResponse<Stock>> createStock(@RequestBody CreateStockRequest request) {
         try {
-            // Set enhanced logging context
-            EnhancedLoggingConfig.LoggingUtils.setServiceContext("VIRTUAL-STOCK", "RestController");
-            EnhancedLoggingConfig.LoggingUtils.setMessageContext(request.getProductId(), null);
+            logger.info("Creating stock with symbol: {}", request.getSymbol());
             
-            long startTime = System.currentTimeMillis();
+            CreateStockCommand command = new CreateStockCommandImpl(
+                request.getProductId(),
+                request.getSymbol(),
+                request.getProductName(),
+                request.getQuantity(),
+                request.getUnitPrice(),
+                request.getCreatedBy()
+            );
             
-            EnhancedLoggingConfig.LoggingUtils.logApiCall("POST", "/api/v1/virtual-stock/stocks", 0, 0);
-            EnhancedLoggingConfig.LoggingUtils.logWorkflowStep("CREATE_STOCK", "STARTED", 
-                "Processing create stock request");
-            
-            // Convert request to command
-            StockManagementUseCase.CreateStockCommand command = new CreateStockCommandImpl(request);
-            
-            // Execute use case
-            StockManagementUseCase.StockCreationResult result = stockManagementUseCase.createStock(command);
-            
-            long duration = System.currentTimeMillis() - startTime;
+            StockCreationResult result = stockManagementUseCase.createStock(command);
             
             if (result.isSuccess()) {
-                StockResponse response = StockResponse.fromDomain(result.getStock());
-                
-                EnhancedLoggingConfig.LoggingUtils.logPerformanceMetrics("CREATE_STOCK", duration);
-                EnhancedLoggingConfig.LoggingUtils.logWorkflowStep("CREATE_STOCK", "COMPLETED", 
-                    "Stock created successfully");
-                EnhancedLoggingConfig.LoggingUtils.logApiCall("POST", "/api/v1/virtual-stock/stocks", 201, duration);
-                
+                logger.info("Stock created successfully: {}", result.getStock().getStockId());
                 return ResponseEntity.status(HttpStatus.CREATED)
-                        .body(ApiResponse.success(response, "Stock created successfully"));
+                    .body(ApiResponse.success(result.getStock(), "Stock created successfully"));
             } else {
-                EnhancedLoggingConfig.LoggingUtils.logWorkflowStep("CREATE_STOCK", "FAILED", 
-                    result.getErrorMessage());
-                EnhancedLoggingConfig.LoggingUtils.logApiCall("POST", "/api/v1/virtual-stock/stocks", 400, duration);
-                
-                return ResponseEntity.badRequest()
-                        .body(ApiResponse.error(result.getErrorMessage()));
+                logger.error("Failed to create stock: {}", result.getErrorMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error(result.getErrorMessage()));
             }
             
         } catch (Exception e) {
-            EnhancedLoggingConfig.LoggingUtils.logError("CREATE_STOCK", 
-                "Unexpected error creating stock", e, request.getProductId());
-            
+            logger.error("Error creating stock", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("Internal server error: " + e.getMessage()));
-        } finally {
-            EnhancedLoggingConfig.LoggingUtils.clearContext();
+                .body(ApiResponse.error("Internal server error: " + e.getMessage()));
         }
     }
-    
+
     /**
-     * Update stock quantity
-     */
-    @PutMapping("/stocks/{stockId}/quantity")
-    public ResponseEntity<ApiResponse<StockResponse>> updateStockQuantity(
-            @PathVariable String stockId,
-            @Valid @RequestBody UpdateQuantityRequest request) {
-        try {
-            // Set enhanced logging context
-            EnhancedLoggingConfig.LoggingUtils.setServiceContext("VIRTUAL-STOCK", "RestController");
-            EnhancedLoggingConfig.LoggingUtils.setMessageContext(stockId, null);
-            
-            long startTime = System.currentTimeMillis();
-            
-            EnhancedLoggingConfig.LoggingUtils.logWorkflowStep("UPDATE_QUANTITY", "STARTED", 
-                String.format("Updating quantity to %d", request.getNewQuantity()));
-            
-            // Convert request to command
-            StockManagementUseCase.UpdateStockQuantityCommand command = 
-                new UpdateStockQuantityCommandImpl(stockId, request);
-            
-            // Execute use case
-            StockManagementUseCase.StockUpdateResult result = stockManagementUseCase.updateStockQuantity(command);
-            
-            long duration = System.currentTimeMillis() - startTime;
-            
-            if (result.isSuccess()) {
-                StockResponse response = StockResponse.fromDomain(result.getUpdatedStock());
-                
-                EnhancedLoggingConfig.LoggingUtils.logPerformanceMetrics("UPDATE_QUANTITY", duration);
-                EnhancedLoggingConfig.LoggingUtils.logApiCall("PUT", "/stocks/" + stockId + "/quantity", 200, duration);
-                
-                return ResponseEntity.ok(ApiResponse.success(response, "Stock quantity updated successfully"));
-            } else {
-                EnhancedLoggingConfig.LoggingUtils.logApiCall("PUT", "/stocks/" + stockId + "/quantity", 400, duration);
-                return ResponseEntity.badRequest().body(ApiResponse.error(result.getErrorMessage()));
-            }
-            
-        } catch (Exception e) {
-            EnhancedLoggingConfig.LoggingUtils.logError("UPDATE_QUANTITY", 
-                "Unexpected error updating quantity", e, stockId);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("Internal server error: " + e.getMessage()));
-        } finally {
-            EnhancedLoggingConfig.LoggingUtils.clearContext();
-        }
-    }
-    
-    /**
-     * Reserve stock
-     */
-    @PostMapping("/stocks/{stockId}/reserve")
-    public ResponseEntity<ApiResponse<StockReservationResponse>> reserveStock(
-            @PathVariable String stockId,
-            @Valid @RequestBody ReserveStockRequest request) {
-        try {
-            // Set enhanced logging context
-            EnhancedLoggingConfig.LoggingUtils.setServiceContext("VIRTUAL-STOCK", "RestController");
-            EnhancedLoggingConfig.LoggingUtils.setMessageContext(stockId, null);
-            
-            long startTime = System.currentTimeMillis();
-            
-            EnhancedLoggingConfig.LoggingUtils.logWorkflowStep("RESERVE_STOCK", "STARTED", 
-                String.format("Reserving %d units", request.getQuantityToReserve()));
-            
-            // Convert request to command
-            StockManagementUseCase.ReserveStockCommand command = 
-                new ReserveStockCommandImpl(stockId, request);
-            
-            // Execute use case
-            StockManagementUseCase.StockReservationResult result = stockManagementUseCase.reserveStock(command);
-            
-            long duration = System.currentTimeMillis() - startTime;
-            
-            if (result.isSuccess()) {
-                StockReservationResponse response = StockReservationResponse.builder()
-                        .stock(StockResponse.fromDomain(result.getUpdatedStock()))
-                        .reservedQuantity(result.getReservedQuantity())
-                        .reservedAt(LocalDateTime.now())
-                        .build();
-                
-                EnhancedLoggingConfig.LoggingUtils.logPerformanceMetrics("RESERVE_STOCK", duration);
-                EnhancedLoggingConfig.LoggingUtils.logApiCall("POST", "/stocks/" + stockId + "/reserve", 200, duration);
-                
-                return ResponseEntity.ok(ApiResponse.success(response, "Stock reserved successfully"));
-            } else {
-                EnhancedLoggingConfig.LoggingUtils.logApiCall("POST", "/stocks/" + stockId + "/reserve", 400, duration);
-                return ResponseEntity.badRequest().body(ApiResponse.error(result.getErrorMessage()));
-            }
-            
-        } catch (Exception e) {
-            EnhancedLoggingConfig.LoggingUtils.logError("RESERVE_STOCK", 
-                "Unexpected error reserving stock", e, stockId);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("Internal server error: " + e.getMessage()));
-        } finally {
-            EnhancedLoggingConfig.LoggingUtils.clearContext();
-        }
-    }
-    
-    /**
-     * Get stock by ID
-     */
-    @GetMapping("/stocks/{stockId}")
-    public ResponseEntity<ApiResponse<StockResponse>> getStock(@PathVariable String stockId) {
-        try {
-            EnhancedLoggingConfig.LoggingUtils.setServiceContext("VIRTUAL-STOCK", "RestController");
-            long startTime = System.currentTimeMillis();
-            
-            Optional<Stock> stockOpt = stockManagementUseCase.getStockById(Stock.StockId.builder().value(stockId).build());
-            
-            long duration = System.currentTimeMillis() - startTime;
-            
-            if (stockOpt.isPresent()) {
-                StockResponse response = StockResponse.fromDomain(stockOpt.get());
-                EnhancedLoggingConfig.LoggingUtils.logApiCall("GET", "/stocks/" + stockId, 200, duration);
-                return ResponseEntity.ok(ApiResponse.success(response, "Stock retrieved successfully"));
-            } else {
-                EnhancedLoggingConfig.LoggingUtils.logApiCall("GET", "/stocks/" + stockId, 404, duration);
-                return ResponseEntity.notFound().build();
-            }
-            
-        } catch (Exception e) {
-            EnhancedLoggingConfig.LoggingUtils.logError("GET_STOCK", 
-                "Error retrieving stock", e, stockId);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("Internal server error: " + e.getMessage()));
-        } finally {
-            EnhancedLoggingConfig.LoggingUtils.clearContext();
-        }
-    }
-    
-    /**
-     * Get all stocks
+     * Get all stocks.
      */
     @GetMapping("/stocks")
-    public ResponseEntity<ApiResponse<List<StockResponse>>> getAllStocks() {
+    public ResponseEntity<ApiResponse<List<Stock>>> getAllStocks() {
         try {
-            EnhancedLoggingConfig.LoggingUtils.setServiceContext("VIRTUAL-STOCK", "RestController");
-            long startTime = System.currentTimeMillis();
-            
+            logger.info("Retrieving all stocks");
             List<Stock> stocks = stockManagementUseCase.getAllStocks();
-            List<StockResponse> responses = stocks.stream()
-                    .map(StockResponse::fromDomain)
-                    .collect(Collectors.toList());
             
-            long duration = System.currentTimeMillis() - startTime;
-            EnhancedLoggingConfig.LoggingUtils.logApiCall("GET", "/stocks", 200, duration);
-            
-            return ResponseEntity.ok(ApiResponse.success(responses, "Stocks retrieved successfully"));
+            return ResponseEntity.ok(
+                ApiResponse.success(stocks, "Stocks retrieved successfully")
+            );
             
         } catch (Exception e) {
-            EnhancedLoggingConfig.LoggingUtils.logError("GET_ALL_STOCKS", 
-                "Error retrieving all stocks", e, null);
+            logger.error("Error retrieving stocks", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("Internal server error: " + e.getMessage()));
-        } finally {
-            EnhancedLoggingConfig.LoggingUtils.clearContext();
+                .body(ApiResponse.error("Internal server error: " + e.getMessage()));
         }
+    }
+
+    /**
+     * Get stock by ID.
+     */
+    @GetMapping("/stocks/{stockId}")
+    public ResponseEntity<ApiResponse<Stock>> getStock(@PathVariable String stockId) {
+        try {
+            logger.info("Retrieving stock with ID: {}", stockId);
+            
+            Optional<Stock> stock = stockManagementUseCase.getStockById(new Stock.StockId(stockId));
+            
+            if (stock.isPresent()) {
+                return ResponseEntity.ok(
+                    ApiResponse.success(stock.get(), "Stock retrieved successfully")
+                );
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.error("Stock not found with ID: " + stockId));
+            }
+            
+        } catch (Exception e) {
+            logger.error("Error retrieving stock with ID: {}", stockId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error("Internal server error: " + e.getMessage()));
+        }
+    }
+
+    /**
+     * Update stock price.
+     */
+    @PutMapping("/stocks/{stockId}/price")
+    public ResponseEntity<ApiResponse<Stock>> updatePrice(
+            @PathVariable String stockId, 
+            @RequestBody UpdatePriceRequest request) {
+        try {
+            logger.info("Updating price for stock ID: {} to {}", stockId, request.getPrice());
+            
+            UpdateStockPriceCommand command = new UpdateStockPriceCommandImpl(
+                new Stock.StockId(stockId),
+                request.getPrice(),
+                request.getUpdatedBy(),
+                request.getReason()
+            );
+            
+            StockUpdateResult result = stockManagementUseCase.updateStockPrice(command);
+            
+            if (result.isSuccess()) {
+                logger.info("Stock price updated successfully: {}", stockId);
+                return ResponseEntity.ok(
+                    ApiResponse.success(result.getUpdatedStock(), "Stock price updated successfully")
+                );
+            } else {
+                logger.error("Failed to update stock price: {}", result.getErrorMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error(result.getErrorMessage()));
+            }
+            
+        } catch (Exception e) {
+            logger.error("Error updating stock price for ID: {}", stockId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error("Internal server error: " + e.getMessage()));
+        }
+    }
+
+    /**
+     * Update stock quantity.
+     */
+    @PutMapping("/stocks/{stockId}/quantity")
+    public ResponseEntity<ApiResponse<Stock>> updateQuantity(
+            @PathVariable String stockId, 
+            @RequestBody UpdateQuantityRequest request) {
+        try {
+            logger.info("Updating quantity for stock ID: {} to {}", stockId, request.getQuantity());
+            
+            UpdateStockQuantityCommand command = new UpdateStockQuantityCommandImpl(
+                new Stock.StockId(stockId),
+                request.getQuantity(),
+                request.getUpdatedBy(),
+                request.getReason()
+            );
+            
+            StockUpdateResult result = stockManagementUseCase.updateStockQuantity(command);
+            
+            if (result.isSuccess()) {
+                logger.info("Stock quantity updated successfully: {}", stockId);
+                return ResponseEntity.ok(
+                    ApiResponse.success(result.getUpdatedStock(), "Stock quantity updated successfully")
+                );
+            } else {
+                logger.error("Failed to update stock quantity: {}", result.getErrorMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error(result.getErrorMessage()));
+            }
+            
+        } catch (Exception e) {
+            logger.error("Error updating stock quantity for ID: {}", stockId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error("Internal server error: " + e.getMessage()));
+        }
+    }
+
+    /**
+     * Health check endpoint.
+     */
+    @GetMapping("/health")
+    public ResponseEntity<ApiResponse<String>> health() {
+        return ResponseEntity.ok(
+            ApiResponse.success("OK", "Virtual Stock Service is healthy")
+        );
+    }
+
+    // Command Implementation Classes
+    private static class CreateStockCommandImpl implements CreateStockCommand {
+        private final Stock.ProductId productId;
+        private final String symbol;
+        private final String productName;
+        private final Integer initialQuantity;
+        private final BigDecimal unitPrice;
+        private final String createdBy;
+
+        public CreateStockCommandImpl(Stock.ProductId productId, String symbol, String productName,
+                                    Integer initialQuantity, BigDecimal unitPrice, String createdBy) {
+            this.productId = productId;
+            this.symbol = symbol;
+            this.productName = productName;
+            this.initialQuantity = initialQuantity;
+            this.unitPrice = unitPrice;
+            this.createdBy = createdBy;
+        }
+
+        @Override public Stock.ProductId getProductId() { return productId; }
+        @Override public String getSymbol() { return symbol; }
+        @Override public String getProductName() { return productName; }
+        @Override public Integer getInitialQuantity() { return initialQuantity; }
+        @Override public BigDecimal getUnitPrice() { return unitPrice; }
+        @Override public String getCreatedBy() { return createdBy; }
+    }
+
+    private static class UpdateStockPriceCommandImpl implements UpdateStockPriceCommand {
+        private final Stock.StockId stockId;
+        private final BigDecimal newPrice;
+        private final String updatedBy;
+        private final String reason;
+
+        public UpdateStockPriceCommandImpl(Stock.StockId stockId, BigDecimal newPrice, 
+                                         String updatedBy, String reason) {
+            this.stockId = stockId;
+            this.newPrice = newPrice;
+            this.updatedBy = updatedBy;
+            this.reason = reason;
+        }
+
+        @Override public Stock.StockId getStockId() { return stockId; }
+        @Override public BigDecimal getNewPrice() { return newPrice; }
+        @Override public String getUpdatedBy() { return updatedBy; }
+        @Override public String getReason() { return reason; }
+    }
+
+    private static class UpdateStockQuantityCommandImpl implements UpdateStockQuantityCommand {
+        private final Stock.StockId stockId;
+        private final Integer newQuantity;
+        private final String updatedBy;
+        private final String reason;
+
+        public UpdateStockQuantityCommandImpl(Stock.StockId stockId, Integer newQuantity, 
+                                            String updatedBy, String reason) {
+            this.stockId = stockId;
+            this.newQuantity = newQuantity;
+            this.updatedBy = updatedBy;
+            this.reason = reason;
+        }
+
+        @Override public Stock.StockId getStockId() { return stockId; }
+        @Override public Integer getNewQuantity() { return newQuantity; }
+        @Override public String getUpdatedBy() { return updatedBy; }
+        @Override public String getReason() { return reason; }
     }
 }

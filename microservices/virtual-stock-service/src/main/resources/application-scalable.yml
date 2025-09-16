@@ -5,7 +5,7 @@
 
 # Server Configuration for High Throughput
 server:
-  port: 8080
+  port: 8084
   tomcat:
     threads:
       max: 200          # Increased thread pool
@@ -42,10 +42,8 @@ spring:
         connection:
           provider_disables_autocommit: true
         cache:
-          use_second_level_cache: true
-          use_query_cache: true
-          region:
-            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+          use_second_level_cache: false
+          use_query_cache: false
 
   # Database Connection Pool (Optimized for Scalability)
   datasource:

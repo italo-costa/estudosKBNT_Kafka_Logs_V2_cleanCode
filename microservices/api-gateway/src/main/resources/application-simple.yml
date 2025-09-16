@@ -1,0 +1,86 @@
+# =============================================================================
+# API Gateway - Simple Configuration for Docker Environment  
+# =============================================================================
+
+server:
+  port: 8084
+
+spring:
+  application:
+    name: api-gateway
+  
+  main:
+    web-application-type: reactive
+    
+  cloud:
+    gateway:
+      routes:
+        # Virtual Stock Service Route  
+        - id: virtual-stock-service
+          uri: http://172.30.221.62:8084
+          predicates:
+            - Path=/api/v1/virtual-stock/**
+          filters:
+            - StripPrefix=0
+            - AddRequestHeader=X-Gateway-Source, api-gateway
+            
+        # Virtual Stock Service Route - Instance 2
+        - id: virtual-stock-service-2  
+          uri: http://virtual-stock-service-2:8080
+          predicates:
+            - Path=/api/v1/virtual-stock-2/**
+          filters:
+            - StripPrefix=1
+            - AddRequestHeader=X-Gateway-Source, api-gateway
+            
+        # Log Producer Service Route
+        - id: log-producer-service
+          uri: http://log-producer-service-1:8080  
+          predicates:
+            - Path=/api/v1/logs/**
+          filters:
+            - StripPrefix=0
+            - AddRequestHeader=X-Gateway-Source, api-gateway
+            
+        # Log Consumer Service Route  
+        - id: log-consumer-service
+          uri: http://log-consumer-service-1:8080
+          predicates:
+            - Path=/api/v1/analytics/**
+          filters:
+            - StripPrefix=0
+            - AddRequestHeader=X-Gateway-Source, api-gateway
+            
+      # Global CORS Configuration
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: 
+              - "*"
+            allowedMethods:
+              - GET
+              - POST  
+              - PUT
+              - DELETE
+              - OPTIONS
+              - PATCH
+            allowedHeaders: "*"
+            allowCredentials: false
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+  endpoint:
+    health:
+      show-details: always
+
+# Logging configuration      
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+    org.springframework.web.reactive: INFO
+    reactor.netty: INFO
+    com.kbnt.apigateway: DEBUG

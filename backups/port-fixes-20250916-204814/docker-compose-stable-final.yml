@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-kbnt-stable
+    environment:
+      POSTGRES_DB: virtualstock
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d virtualstock"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - kbnt-network
+    restart: always
+
+  virtual-stock-service:
+    build:
+      context: ./microservices/virtual-stock-service
+      dockerfile: Dockerfile
+    container_name: virtual-stock-stable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/virtualstock
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    ports:
+      - "8084:8084"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8084/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - kbnt-network
+    restart: always
+
+networks:
+  kbnt-network:
+    driver: bridge
+    name: kbnt-stable-network
+
+volumes:
+  postgres_data:
+    name: postgres_kbnt_data

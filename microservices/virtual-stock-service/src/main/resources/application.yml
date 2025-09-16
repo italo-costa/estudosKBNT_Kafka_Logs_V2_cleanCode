@@ -2,7 +2,7 @@
 # Hexagonal Architecture Microservice A
 
 server:
-  port: 8080
+  port: 8084
   servlet:
     context-path: /
   compression:
@@ -61,17 +61,17 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      acks: all
-      retries: 3
+      acks: 1
+      retries: 1
       batch-size: 16384
       linger-ms: 5
       buffer-memory: 33554432
       compression-type: snappy
-      enable-idempotence: true
+      enable-idempotence: false
       properties:
         max.in.flight.requests.per.connection: 1
-        delivery.timeout.ms: 30000
-        request.timeout.ms: 25000
+        delivery.timeout.ms: 5000
+        request.timeout.ms: 3000
         
   # JSON Serialization
   jackson:

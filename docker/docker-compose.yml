@@ -50,7 +50,7 @@ services:
       - kafka
       - elasticsearch
     ports:
-      - "8084:8080"
+      - "8084:8084"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092

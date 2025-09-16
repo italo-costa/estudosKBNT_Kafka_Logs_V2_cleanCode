@@ -1,0 +1,7 @@
+{
+  "symbol": "TEST",
+  "productName": "Test Stock Performance",
+  "quantity": 100,
+  "unitPrice": 50.0,
+  "productId": "TEST-001"
+}

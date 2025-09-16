@@ -1,0 +1,212 @@
+# =============================================================================
+# KBNT Kafka Logs - Free Tier Deployment
+# =============================================================================
+version: '3.8'
+
+networks:
+  kbnt-free-tier-network:
+    driver: bridge
+
+volumes:
+  postgres-free-data:
+  elasticsearch-free-data:
+  zookeeper-free-data:
+  kafka-free-data:
+
+services:
+  # =============================================================================
+  # Database Service
+  # =============================================================================
+  postgres-free:
+    image: postgres:15-alpine
+    container_name: postgres-free
+    environment:
+      POSTGRES_DB: kbnt_db
+      POSTGRES_USER: kbnt_user
+      POSTGRES_PASSWORD: kbnt_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-free-data:/var/lib/postgresql/data
+    networks:
+      - kbnt-free-tier-network
+    mem_limit: 256m
+    cpus: '0.5'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kbnt_user -d kbnt_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # =============================================================================
+  # Message Broker Services
+  # =============================================================================
+  zookeeper-free:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: zookeeper-free
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    volumes:
+      - zookeeper-free-data:/var/lib/zookeeper/data
+    networks:
+      - kbnt-free-tier-network
+    mem_limit: 256m
+    cpus: '0.5'
+
+  kafka-free:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka-free
+    depends_on:
+      - zookeeper-free
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper-free:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-free:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_JVM_PERFORMANCE_OPTS: "-server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -XX:+ExplicitGCInvokesConcurrent -Djava.awt.headless=true -Xms256m -Xmx256m"
+    ports:
+      - "9092:9092"
+    volumes:
+      - kafka-free-data:/var/lib/kafka/data
+    networks:
+      - kbnt-free-tier-network
+    mem_limit: 512m
+    cpus: '1.0'
+
+  # =============================================================================
+  # Search and Analytics Service
+  # =============================================================================
+  elasticsearch-free:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    container_name: elasticsearch-free
+    environment:
+      - node.name=elasticsearch-free
+      - cluster.name=kbnt-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch-free-data:/usr/share/elasticsearch/data
+    networks:
+      - kbnt-free-tier-network
+    mem_limit: 512m
+    cpus: '1.0'
+
+  # =============================================================================
+  # Microservices
+  # =============================================================================
+  virtual-stock-service-free:
+    build:
+      context: ./microservices/virtual-stock-service
+      dockerfile: Dockerfile
+    image: docker-virtual-stock-service
+    container_name: virtual-stock-service-free
+    depends_on:
+      - postgres-free
+      - kafka-free
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-free:5432/kbnt_db
+      - SPRING_DATASOURCE_USERNAME=kbnt_user
+      - SPRING_DATASOURCE_PASSWORD=kbnt_password
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka-free:9092
+      - JAVA_OPTS=-server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -Xms256m -Xmx384m
+    ports:
+      - "8086:8080"
+      - "8087:8081"
+    networks:
+      - kbnt-free-tier-network
+    mem_limit: 512m
+    cpus: '1.0'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  log-producer-service-free:
+    build:
+      context: ./microservices/log-producer-service
+      dockerfile: Dockerfile
+    image: docker-log-producer-service
+    container_name: log-producer-service-free
+    depends_on:
+      - kafka-free
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka-free:9092
+      - JAVA_OPTS=-server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -Xms256m -Xmx384m
+    ports:
+      - "8085:8080"
+      - "8091:8081"
+    networks:
+      - kbnt-free-tier-network
+    mem_limit: 512m
+    cpus: '1.0'
+
+  log-consumer-service-free:
+    build:
+      context: ./microservices/log-consumer-service
+      dockerfile: Dockerfile
+    image: docker-log-consumer-service
+    container_name: log-consumer-service-free
+    depends_on:
+      - kafka-free
+      - elasticsearch-free
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka-free:9092
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch-free:9200
+      - JAVA_OPTS=-server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -Xms256m -Xmx384m
+    ports:
+      - "8084:8084"
+      - "8088:8081"
+    networks:
+      - kbnt-free-tier-network
+    mem_limit: 512m
+    cpus: '1.0'
+
+  api-gateway-free:
+    build:
+      context: ./microservices/api-gateway
+      dockerfile: Dockerfile
+    image: docker-api-gateway
+    container_name: api-gateway-free
+    depends_on:
+      - virtual-stock-service-free
+      - log-producer-service-free
+      - log-consumer-service-free
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - VIRTUAL_STOCK_SERVICE_URL=http://virtual-stock-service-free:8084
+      - LOG_PRODUCER_SERVICE_URL=http://log-producer-service-free:8080
+      - LOG_CONSUMER_SERVICE_URL=http://log-consumer-service-free:8080
+      - JAVA_OPTS=-server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -Xms256m -Xmx384m
+    ports:
+      - "8090:8080"
+      - "8089:8081"
+    networks:
+      - kbnt-free-tier-network
+    mem_limit: 512m
+    cpus: '1.0'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s

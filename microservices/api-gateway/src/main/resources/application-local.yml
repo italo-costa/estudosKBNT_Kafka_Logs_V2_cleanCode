@@ -1,0 +1,125 @@
+# =============================================================================
+# API GATEWAY CONFIGURATION - LOCAL ENVIRONMENT
+# =============================================================================
+server:
+  port: 8084
+
+spring:
+  application:
+    name: api-gateway
+  profiles:
+    active: local
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      routes:
+        # Virtual Stock Service Route
+        - id: virtual-stock-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/v1/virtual-stock/**
+          filters:
+            - StripPrefix=0
+            - AddRequestHeader=X-Gateway-Source, api-gateway
+            - AddRequestHeader=X-Environment, local
+            
+        # Log Producer Service Route  
+        - id: log-producer-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/v1/logs/**
+          filters:
+            - StripPrefix=0
+            - AddRequestHeader=X-Gateway-Source, api-gateway
+            - AddRequestHeader=X-Environment, local
+            
+        # KBNT Log Service Route
+        - id: kbnt-log-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/v1/kbnt-logs/**
+          filters:
+            - StripPrefix=0
+            - AddRequestHeader=X-Gateway-Source, api-gateway
+            - AddRequestHeader=X-Environment, local
+            
+        # Health Check Routes
+        - id: virtual-stock-health
+          uri: http://localhost:9084
+          predicates:
+            - Path=/actuator/health/virtual-stock
+          filters:
+            - RewritePath=/actuator/health/virtual-stock, /actuator/health
+            
+        - id: log-producer-health
+          uri: http://localhost:9081
+          predicates:
+            - Path=/actuator/health/log-producer
+          filters:
+            - RewritePath=/actuator/health/log-producer, /actuator/health
+
+      # Global CORS Configuration
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: 
+              - "http://localhost:3000"
+              - "http://localhost:8080"
+              - "http://127.0.0.1:3000"
+              - "http://127.0.0.1:8080"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+              - PATCH
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 3600
+
+# Management Endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+    gateway:
+      enabled: true
+  server:
+    port: 9080
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.web.reactive: INFO
+    reactor.netty: INFO
+    com.kbnt: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%logger{36}] - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%logger{36}] - %msg%n"
+  file:
+    name: logs/api-gateway-local.log
+
+# Circuit Breaker Configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      virtual-stock-service:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30000
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+      log-producer-service:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30000
+        sliding-window-size: 10
+        minimum-number-of-calls: 5

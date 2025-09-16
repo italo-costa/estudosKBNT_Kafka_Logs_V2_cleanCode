@@ -1,0 +1,272 @@
+version: '3.8'
+
+# =============================================================================
+# MICROSERVICES ARCHITECTURE WITH PROPER DECOUPLING
+# =============================================================================
+# This configuration ensures structural independence between services
+# Each service can be started/stopped independently
+# No hard dependencies - uses health checks and retry mechanisms
+# =============================================================================
+
+services:
+  # =============================================================================
+  # INFRASTRUCTURE LAYER - DATABASE
+  # =============================================================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: kbnt-postgres
+    environment:
+      POSTGRES_DB: loganalytics
+      POSTGRES_USER: loguser
+      POSTGRES_PASSWORD: logpass123
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256 --auth-local=scram-sha-256"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - kbnt-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U loguser -d loganalytics"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    labels:
+      - "service.type=infrastructure"
+      - "service.layer=data"
+
+  # =============================================================================
+  # INFRASTRUCTURE LAYER - CACHE
+  # =============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: kbnt-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass redispass123
+    networks:
+      - kbnt-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "redispass123", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    labels:
+      - "service.type=infrastructure"
+      - "service.layer=cache"
+
+  # =============================================================================
+  # INFRASTRUCTURE LAYER - MESSAGE BROKER
+  # =============================================================================
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    container_name: kbnt-zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ZOOKEEPER_TICK_TIME=2000
+    networks:
+      - kbnt-network
+    healthcheck:
+      test: ["CMD", "zkServer.sh", "status"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+    restart: unless-stopped
+    labels:
+      - "service.type=infrastructure"
+      - "service.layer=messaging"
+
+  kafka:
+    image: bitnami/kafka:latest
+    container_name: kbnt-kafka
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      # Basic Kafka Configuration with Zookeeper
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      
+      # Listener Configuration
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      
+      # Topic Configuration
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_CFG_LOG_RETENTION_HOURS=168
+      - KAFKA_CFG_NUM_PARTITIONS=3
+      
+      # Disable KRaft mode (use Zookeeper mode)
+      - KAFKA_ENABLE_KRAFT=no
+      - KAFKA_CFG_PROCESS_ROLES=""
+    networks:
+      - kbnt-network
+    # NO DEPENDS_ON - Service will retry connection until Zookeeper is available
+    healthcheck:
+      test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 30s
+      timeout: 15s
+      retries: 10
+      start_period: 60s
+    restart: unless-stopped
+    labels:
+      - "service.type=infrastructure"
+      - "service.layer=messaging"
+
+  # =============================================================================
+  # APPLICATION LAYER - API GATEWAY
+  # =============================================================================
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: kbnt-api-gateway
+    ports:
+      - "8080:8080"  # Main API Gateway port for Postman access
+      - "9080:9080"  # Management/actuator port
+    environment:
+      # Spring Boot Configuration
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=8080
+      - MANAGEMENT_SERVER_PORT=9080
+      
+      # Logging Configuration
+      - LOGGING_LEVEL_ROOT=INFO
+      - LOGGING_LEVEL_COM_KBNT=DEBUG
+      
+    networks:
+      - kbnt-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 45s
+    restart: unless-stopped
+    labels:
+      - "service.type=api-gateway"
+      - "service.layer=api"
+      - "service.access=external"
+
+  # =============================================================================
+  # APPLICATION LAYER - CORE BUSINESS SERVICES
+  # =============================================================================
+  virtual-stock-service:
+    build:
+      context: ./virtual-stock-service
+      dockerfile: Dockerfile
+    container_name: kbnt-virtual-stock
+    ports:
+      - "8084:8084"
+      - "9084:9080"  # Management/actuator port
+    environment:
+      # Spring Boot Configuration
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=8080
+      - MANAGEMENT_SERVER_PORT=9080
+      
+      # Database Configuration - With Retry Logic
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/loganalytics
+      - SPRING_DATASOURCE_USERNAME=loguser
+      - SPRING_DATASOURCE_PASSWORD=logpass123
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      
+      # JPA/Hibernate Configuration
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=false
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+      
+      # Kafka Configuration - With Graceful Degradation
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_KAFKA_PRODUCER_RETRIES=3
+      - SPRING_KAFKA_PRODUCER_RETRY_BACKOFF_MS=1000
+      
+      # Connection Pool Configuration
+      - SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT=20000
+      - SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE=5
+      - SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE=1
+      
+      # Logging Configuration
+      - LOGGING_LEVEL_COM_KBNT=DEBUG
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK=INFO
+      - LOGGING_PATTERN_CONSOLE=%d{HH:mm:ss.SSS} [%thread] %-5level [VIRTUAL-STOCK] %logger{36} - %msg%n
+    networks:
+      - kbnt-network
+    # NO DEPENDS_ON - Service handles unavailable dependencies gracefully
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s  # Allow time for startup and database connection
+    restart: unless-stopped
+    labels:
+      - "service.type=application"
+      - "service.layer=business"
+      - "service.name=virtual-stock"
+
+  # =============================================================================
+  # APPLICATION LAYER - LOG PRODUCER SERVICE (INDEPENDENT)
+  # =============================================================================
+  log-producer-service:
+    build:
+      context: ./log-producer-service
+      dockerfile: Dockerfile
+    container_name: kbnt-log-producer
+    ports:
+      - "8081:8081"
+      - "9081:9081"  # Management port
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=8081
+      - MANAGEMENT_SERVER_PORT=9081
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_TOPIC_LOGS=application-logs
+    networks:
+      - kbnt-network
+    # NO DEPENDS_ON - Can start independently and wait for Kafka
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+    labels:
+      - "service.type=application"
+      - "service.layer=integration"
+      - "service.name=log-producer"
+
+volumes:
+  postgres-data:
+    driver: local
+    labels:
+      - "volume.type=database"
+
+networks:
+  kbnt-network:
+    driver: bridge
+    name: kbnt-microservices-network
+    labels:
+      - "network.type=microservices"
+
+# =============================================================================
+# DESIGN PRINCIPLES IMPLEMENTED:
+# =============================================================================
+# 1. NO HARD DEPENDENCIES: Services don't use depends_on
+# 2. GRACEFUL DEGRADATION: Services handle missing dependencies
+# 3. RETRY MECHANISMS: Built-in retry logic for connections
+# 4. HEALTH CHECKS: Proper monitoring and restart policies
+# 5. INDEPENDENT SCALING: Each service can be scaled independently
+# 6. CIRCUIT BREAKER PATTERN: Services fail gracefully when dependencies are down
+# 7. PROPER TIMEOUTS: Reasonable timeouts for all operations
+# 8. CLEAR SEPARATION: Infrastructure vs Application layers
+# =============================================================================

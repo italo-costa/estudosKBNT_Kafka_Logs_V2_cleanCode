@@ -25,7 +25,7 @@ services:
       POSTGRES_USER: kbnt_user
       POSTGRES_PASSWORD: kbnt_password
     ports:
-      - "5432:5432"
+      - "15432:5432"
     volumes:
       - postgres-free-data:/var/lib/postgresql/data
     networks:
@@ -174,7 +174,7 @@ services:
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch-free:9200
       - JAVA_OPTS=-server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -Xms256m -Xmx384m
     ports:
-      - "8084:8080"
+      - "8084:8084"
       - "8088:8081"
     networks:
       - kbnt-free-tier-network
@@ -193,7 +193,7 @@ services:
       - log-consumer-service-free
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - VIRTUAL_STOCK_SERVICE_URL=http://virtual-stock-service-free:8080
+      - VIRTUAL_STOCK_SERVICE_URL=http://virtual-stock-service-free:8084
       - LOG_PRODUCER_SERVICE_URL=http://log-producer-service-free:8080
       - LOG_CONSUMER_SERVICE_URL=http://log-consumer-service-free:8080
       - JAVA_OPTS=-server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -Xms256m -Xmx384m

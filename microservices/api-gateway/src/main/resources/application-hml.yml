@@ -1,0 +1,160 @@
+# =============================================================================
+# API GATEWAY CONFIGURATION - HOMOLOGATION ENVIRONMENT
+# =============================================================================
+server:
+  port: 8084
+
+spring:
+  application:
+    name: api-gateway
+  profiles:
+    active: hml
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      routes:
+        # Virtual Stock Service Route
+        - id: virtual-stock-service
+          uri: http://virtual-stock-service:8080
+          predicates:
+            - Path=/api/v1/virtual-stock/**
+          filters:
+            - StripPrefix=0
+            - AddRequestHeader=X-Gateway-Source, api-gateway
+            - AddRequestHeader=X-Environment, hml
+            - name: CircuitBreaker
+              args:
+                name: virtual-stock-service
+                fallbackUri: forward:/fallback/virtual-stock
+            - name: Retry
+              args:
+                retries: 3
+                statuses: BAD_GATEWAY,GATEWAY_TIMEOUT
+            
+        # Log Producer Service Route  
+        - id: log-producer-service
+          uri: http://log-producer-service:8080
+          predicates:
+            - Path=/api/v1/logs/**
+          filters:
+            - StripPrefix=0
+            - AddRequestHeader=X-Gateway-Source, api-gateway
+            - AddRequestHeader=X-Environment, hml
+            - name: CircuitBreaker
+              args:
+                name: log-producer-service
+                fallbackUri: forward:/fallback/log-producer
+            - name: Retry
+              args:
+                retries: 3
+                statuses: BAD_GATEWAY,GATEWAY_TIMEOUT
+            
+        # KBNT Log Service Route
+        - id: kbnt-log-service
+          uri: http://kbnt-log-service:8081
+          predicates:
+            - Path=/api/v1/kbnt-logs/**
+          filters:
+            - StripPrefix=0
+            - AddRequestHeader=X-Gateway-Source, api-gateway
+            - AddRequestHeader=X-Environment, hml
+            - name: CircuitBreaker
+              args:
+                name: kbnt-log-service
+                fallbackUri: forward:/fallback/kbnt-logs
+
+      # Rate Limiting
+      default-filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenish-rate: 10
+            redis-rate-limiter.burst-capacity: 20
+            redis-rate-limiter.requested-tokens: 1
+
+      # Global CORS Configuration
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: 
+              - "https://hml-frontend.kbnt.com"
+              - "https://testing.kbnt.com"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+              - PATCH
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 3600
+
+# Management Endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+      show-components: always
+    gateway:
+      enabled: true
+  server:
+    port: 9080
+
+# Logging Configuration
+logging:
+  level:
+    root: WARN
+    org.springframework.cloud.gateway: INFO
+    org.springframework.web.reactive: WARN
+    reactor.netty: WARN
+    com.kbnt: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%logger{36}] - %msg%n"
+  file:
+    name: logs/api-gateway-hml.log
+
+# Circuit Breaker Configuration - More Conservative
+resilience4j:
+  circuitbreaker:
+    instances:
+      virtual-stock-service:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30000
+        sliding-window-size: 100
+        minimum-number-of-calls: 20
+        slow-call-rate-threshold: 80
+        slow-call-duration-threshold: 2000
+      log-producer-service:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30000
+        sliding-window-size: 100
+        minimum-number-of-calls: 20
+        slow-call-rate-threshold: 80
+        slow-call-duration-threshold: 2000
+      kbnt-log-service:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30000
+        sliding-window-size: 100
+        minimum-number-of-calls: 20
+  retry:
+    instances:
+      virtual-stock-service:
+        max-attempts: 3
+        wait-duration: 2000
+        exponential-backoff-multiplier: 2
+      log-producer-service:
+        max-attempts: 3
+        wait-duration: 2000
+        exponential-backoff-multiplier: 2
+  ratelimiter:
+    instances:
+      default:
+        limit-for-period: 100
+        limit-refresh-period: 60s
+        timeout-duration: 5s

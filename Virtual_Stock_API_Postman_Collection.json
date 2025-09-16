@@ -1,0 +1,347 @@
+{
+	"info": {
+		"_postman_id": "virtual-stock-api-collection",
+		"name": "Virtual Stock Service API - Direto WSL2",
+		"description": "Coleção completa para testar o Virtual Stock Service diretamente no WSL2\n\n**✅ FUNCIONANDO:**\n- Virtual Stock Service: http://172.30.221.62:8084\n- API Endpoints: /api/v1/virtual-stock/**\n- Ambiente: Docker WSL2 Ubuntu\n- Conectividade: Windows ↔ WSL2 ✅\n\n**🚀 TESTADO E APROVADO**\n- Health checks: OK\n- CRUD operations: Disponível\n- JSON responses: Formatadas\n\n**Autenticação:** Não requerida (desenvolvimento)\n**Headers padrão:** Content-Type: application/json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://172.30.221.62:8084",
+			"type": "string",
+			"description": "Virtual Stock Service - DIRETO (FUNCIONANDO)"
+		},
+		{
+			"key": "gateway_url",
+			"value": "http://172.30.221.62:8080",
+			"type": "string",
+			"description": "API Gateway - ROTEAMENTO (teste se necessário)"
+		},
+		{
+			"key": "api_path",
+			"value": "/api/v1/virtual-stock",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Virtual Stock Service Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/actuator/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"actuator",
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stock Management",
+			"item": [
+				{
+					"name": "Create New Stock",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": \"PROD-001\",\n  \"symbol\": \"AAPL\",\n  \"productName\": \"Apple Inc. Stock\",\n  \"quantity\": 100,\n  \"unitPrice\": 150.25,\n  \"createdBy\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}{{api_path}}/stocks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_path}}",
+								"stocks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Stocks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}{{api_path}}/stocks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_path}}",
+								"stocks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Stock by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}{{api_path}}/stocks/{{stock_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_path}}",
+								"stocks",
+								"{{stock_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Stock Price",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"newPrice\": 155.75,\n  \"updatedBy\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}{{api_path}}/stocks/{{stock_id}}/price",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_path}}",
+								"stocks",
+								"{{stock_id}}",
+								"price"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Stock Quantity",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"newQuantity\": 75,\n  \"updatedBy\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}{{api_path}}/stocks/{{stock_id}}/quantity",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_path}}",
+								"stocks",
+								"{{stock_id}}",
+								"quantity"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Test Scenarios",
+			"item": [
+				{
+					"name": "Create Technology Stock",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": \"TECH-001\",\n  \"symbol\": \"GOOGL\",\n  \"productName\": \"Alphabet Inc. Class A\",\n  \"quantity\": 50,\n  \"unitPrice\": 2750.00,\n  \"createdBy\": \"trader001\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}{{api_path}}/stocks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_path}}",
+								"stocks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Financial Stock",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": \"FIN-001\",\n  \"symbol\": \"JPM\",\n  \"productName\": \"JPMorgan Chase & Co.\",\n  \"quantity\": 200,\n  \"unitPrice\": 145.50,\n  \"createdBy\": \"trader002\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}{{api_path}}/stocks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_path}}",
+								"stocks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bulk Price Update Test",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"newPrice\": 2800.00,\n  \"updatedBy\": \"market_update_bot\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}{{api_path}}/stocks/TECH-001/price",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_path}}",
+								"stocks",
+								"TECH-001",
+								"price"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Error Testing",
+			"item": [
+				{
+					"name": "Get Non-existent Stock",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}{{api_path}}/stocks/NON-EXISTENT",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_path}}",
+								"stocks",
+								"NON-EXISTENT"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Stock with Invalid Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": \"\",\n  \"symbol\": \"\",\n  \"productName\": \"\",\n  \"quantity\": -10,\n  \"unitPrice\": -5.00,\n  \"createdBy\": \"\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}{{api_path}}/stocks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_path}}",
+								"stocks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Price with Invalid Value",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"newPrice\": -100.00,\n  \"updatedBy\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}{{api_path}}/stocks/PROD-001/price",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_path}}",
+								"stocks",
+								"PROD-001",
+								"price"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

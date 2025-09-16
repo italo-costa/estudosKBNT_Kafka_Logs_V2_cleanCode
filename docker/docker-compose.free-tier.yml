@@ -161,7 +161,7 @@ services:
       - kafka
       - elasticsearch
     ports:
-      - "8084:8080"
+      - "8084:8084"
     environment:
       - SPRING_PROFILES_ACTIVE=docker,free-tier
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
@@ -191,7 +191,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker,scalable
       - JAVA_OPTS=-Xmx384m -Xms192m -XX:+UseG1GC -XX:MaxGCPauseMillis=50
       # Service discovery for load balancing
-      - VIRTUAL_STOCK_SERVICE_URL=http://virtual-stock-service:8080
+      - VIRTUAL_STOCK_SERVICE_URL=http://virtual-stock-service:8084
       - LOG_PRODUCER_SERVICE_URL=http://log-producer-service:8080
       - LOG_CONSUMER_SERVICE_URL=http://log-consumer-service:8080
     deploy:

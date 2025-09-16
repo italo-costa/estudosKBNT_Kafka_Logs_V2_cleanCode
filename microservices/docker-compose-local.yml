@@ -1,0 +1,85 @@
+# =============================================================================
+# KBNT MICROSERVICES - LOCAL DEVELOPMENT ENVIRONMENT
+# =============================================================================
+version: '3.8'
+
+networks:
+  kbnt-network:
+    driver: bridge
+    name: kbnt-local-network
+
+services:
+  # =============================================================================
+  # INFRASTRUCTURE LAYER - DATABASE
+  # =============================================================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: kbnt-postgres-local
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=loganalytics
+      - POSTGRES_USER=loguser
+      - POSTGRES_PASSWORD=logpass123
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - postgres_data_local:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      - kbnt-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U loguser -d loganalytics"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # =============================================================================
+  # INFRASTRUCTURE LAYER - CACHE
+  # =============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: kbnt-redis-local
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass redispass123
+    volumes:
+      - redis_data_local:/data
+    networks:
+      - kbnt-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # =============================================================================
+  # APPLICATION LAYER - API GATEWAY
+  # =============================================================================
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: kbnt-api-gateway-local
+    ports:
+      - "8080:8080"  # Main API Gateway port for Postman access
+      - "9080:9080"  # Management/actuator port
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+      - SERVER_PORT=8080
+      - MANAGEMENT_SERVER_PORT=9080
+    networks:
+      - kbnt-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+volumes:
+  postgres_data_local:
+    driver: local
+  redis_data_local:
+    driver: local
